@@ -1,0 +1,43 @@
+# Variables de entorno y configuración
+.env
+.env.local
+.env.production
+*.env
+
+# Dependencias Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.cache/
+
+# Dependencias Backend
+backend/node_modules/
+backend/dist/
+backend/build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDEs y editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+
+# Base de datos local
+*.sqlite
+*.db
