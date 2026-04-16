@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, ConflictException } from '@nestjs/common
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from 'src/database/entities/client.entity';
+import { Extintor } from 'src/database/entities/extintor.entity';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 
@@ -10,6 +11,8 @@ export class ClientsService {
   constructor(
     @InjectRepository(Client)
     private clientsRepository: Repository<Client>,
+    @InjectRepository(Extintor)
+    private extintoresRepository: Repository<Extintor>,
   ) {}
 
   // Crear nuevo cliente
@@ -43,6 +46,34 @@ export class ClientsService {
     return {
       total: clientes.length,
       clientes,
+    };
+  }
+
+  // NUEVO: Obtener todos los clientes CON sus números de equipo
+  async findAllWithEquipos() {
+    const clientes = await this.clientsRepository.find({
+      order: { createdAt: 'DESC' },
+    });
+
+    // Para cada cliente, obtener sus números de equipo
+    const clientesConEquipos = await Promise.all(
+      clientes.map(async (cliente) => {
+        const extintores = await this.extintoresRepository.find({
+          where: { clienteId: cliente.id },
+          select: ['numeroEquipo'],
+          order: { numeroEquipo: 'ASC' },
+        });
+
+        return {
+          ...cliente,
+          numerosEquipo: extintores.map((ext) => ext.numeroEquipo),
+        };
+      }),
+    );
+
+    return {
+      total: clientesConEquipos.length,
+      clientes: clientesConEquipos,
     };
   }
 

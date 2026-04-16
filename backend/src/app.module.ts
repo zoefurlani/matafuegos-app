@@ -9,7 +9,11 @@ import { ClientsModule } from './modules/clients/clients.module';
 import { ExtintoresModule } from './modules/extintores/extintores.module';
 import { RecargasModule } from './modules/recargas/recargas.module';
 import { InventarioModule } from './modules/inventario/inventario.module';
-import { ComprobantesModule } from './modules/comprobantes/comprobantes.module'; // AGREGAR
+import { UsuariosModule } from './modules/usuarios/usuarios.module';
+import { TestimoniosModule } from './modules/testimonios/testimonios.module';
+import { VentasModule } from './modules/ventas/ventas.module';
+import { ComprobantesModule } from './modules/comprobantes/comprobantes.module';
+import { RecursosEducativosModule } from './modules/recursos-educativos/recursos-educativos.module';
 
 @Module({
   imports: [
@@ -27,7 +31,11 @@ import { ComprobantesModule } from './modules/comprobantes/comprobantes.module';
     ExtintoresModule,
     RecargasModule,
     InventarioModule,
-    ComprobantesModule, // AGREGAR
+    UsuariosModule, 
+    TestimoniosModule,
+    VentasModule,
+    RecursosEducativosModule,
+    ComprobantesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

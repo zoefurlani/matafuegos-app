@@ -8,30 +8,19 @@ function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
   const [ref, isVisible] = useScrollAnimation(0.2);
 
+  // ⭐ Solo 3 preguntas
   const faqs = [
     {
       question: '¿Cada cuánto debo recargar mi matafuego?',
-      answer: 'La recarga debe realizarse anualmente o cuando el manómetro indique baja presión. También es obligatoria después de cada uso, sin importar la cantidad de agente extintor utilizado.'
+      answer: 'La recarga debe realizarse anualmente o cuando el manómetro indique baja presión. También es obligatoria después de cualquier uso, aunque sea parcial. El mantenimiento preventivo anual garantiza que el equipo funcione correctamente en caso de emergencia.'
     },
     {
       question: '¿Qué tipo de extintor necesito para mi negocio?',
-      answer: 'Depende del tipo de actividad. Para oficinas se recomienda ABC, para cocinas K (grasa), para equipos electrónicos CO2. Nuestros técnicos realizan una evaluación gratuita para determinar tus necesidades específicas.'
-    },
-    {
-      question: '¿Hacen servicio de emergencia?',
-      answer: 'Sí, contamos con servicio de emergencia 24/7 los 365 días del año. Ante cualquier urgencia, comunicate inmediatamente y un técnico se dirigirá a tu ubicación.'
-    },
-    {
-      question: '¿Entregan certificado después del servicio?',
-      answer: 'Sí, todos nuestros servicios incluyen certificado oficial firmado por técnico matriculado, con validez legal para presentar ante inspecciones y auditorías.'
-    },
-    {
-      question: '¿Realizan capacitaciones para empresas?',
-      answer: 'Sí, ofrecemos capacitaciones in-company sobre uso correcto de extintores, evacuación y primeros auxilios. Incluye certificados para cada participante.'
+      answer: 'Depende del tipo de actividad. Para oficinas se recomienda ABC, para cocinas K (grasa), para equipos electrónicos CO2, y para comercios generalmente ABC. Te asesoramos sin cargo para determinar el extintor más adecuado según las características de tu establecimiento.'
     },
     {
       question: '¿Cuál es la vida útil de un matafuego?',
-      answer: 'Los matafuegos tienen una vida útil de aproximadamente 20 años desde su fabricación, siempre que reciban el mantenimiento adecuado anual. Luego de ese período deben ser reemplazados.'
+      answer: 'Los matafuegos tienen una vida útil de aproximadamente 20 años desde su fabricación, siempre que reciban el mantenimiento adecuado. Es fundamental realizar la recarga anual y la prueba hidráulica cada 5 años para garantizar su correcto funcionamiento.'
     }
   ];
 

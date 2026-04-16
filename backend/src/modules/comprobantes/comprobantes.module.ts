@@ -2,15 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ComprobantesService } from './comprobantes.service';
 import { ComprobantesController } from './comprobantes.controller';
-import { Comprobante } from 'src/database/entities/comprobante.entity';
-import { Recarga } from 'src/database/entities/recarga.entity';
-import { Client } from 'src/database/entities/client.entity';
-import { Extintor } from 'src/database/entities/extintor.entity';
+import { Comprobante } from './comprobantes.entity';
+import { PdfService } from './pdf.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comprobante, Recarga, Client, Extintor])],
+  imports: [TypeOrmModule.forFeature([Comprobante])],
   controllers: [ComprobantesController],
-  providers: [ComprobantesService],
+  providers: [ComprobantesService, PdfService],
   exports: [ComprobantesService],
 })
 export class ComprobantesModule {}

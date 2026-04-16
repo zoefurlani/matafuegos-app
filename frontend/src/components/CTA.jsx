@@ -10,15 +10,15 @@ function CTA() {
     <div ref={ref} className={containerClass}>
       <div className="cta-content">
         <h2>¿Necesitás asesoramiento?</h2>
-        <p>Contactanos ahora y un especialista te atenderá</p>
+        <p>Contactanos ahora</p>
 
         <div className="cta-buttons">
-          <a href="tel:+5491234567890" className="cta-phone-btn">
+          <a href="tel:+5493482445650" className="cta-phone-btn">
             <Phone size={20} />
             Llamar Ahora
           </a>
 
-          <a href="mailto:info@zdmatafuegos.com" className="cta-email-btn">
+          <a href="mailto:zdmatafuegos@gmail.com" className="cta-email-btn">
             <Mail size={20} />
             Enviar Email
           </a>

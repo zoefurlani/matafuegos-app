@@ -18,25 +18,27 @@ export function ThemeProvider({ children }) {
 
   const colors = theme === 'light' ? {
     // MODO CLARO
-    background: '#ffffff',                      // Fondo BLANCO PURO
+    background: '#ffffff',
+    backgroundAlt: '#f3f4f6',
     text: '#111827',
     textSecondary: '#6b7280',
     cardBg: '#f9fafb',
     border: '#e5e7eb',
     hover: '#f3f4f6',
-    navbar: 'rgba(235, 236, 238, 0.95)',       // Navbar GRIS MUY CLARITO
-    navbarScrolled: 'rgba(249, 250, 251, 0.98)',
+    navbar: '#ffffff',                          // ⭐ SÓLIDO (sin transparencia)
+    navbarScrolled: '#f9fafb',                  // ⭐ SÓLIDO
     shadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
   } : {
     // MODO OSCURO
-    background: '#111827',                      // Fondo NEGRO/OSCURO
+    background: '#111827',
+    backgroundAlt: '#0f172a',
     text: '#f9fafb',
     textSecondary: '#d1d5db',
     cardBg: '#1f2937',
     border: '#374151',
     hover: '#374151',
-    navbar: 'rgba(52, 59, 68, 0.95)',          // Navbar GRIS CLARO
-    navbarScrolled: 'rgba(75, 85, 99, 0.98)',
+    navbar: '#1f2937',                          // ⭐ SÓLIDO (sin transparencia)
+    navbarScrolled: '#374151',                  // ⭐ SÓLIDO
     shadow: '0 4px 6px rgba(0, 0, 0, 0.3)'
   };
 

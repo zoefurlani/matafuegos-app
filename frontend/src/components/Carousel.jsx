@@ -9,20 +9,20 @@ const Carousel = () => {
     {
       id: 1,
       image: '/img/carousel/slide1.jpg',
-      title: 'CUMPLÍ CON LAS NORMAS',
-      subtitle: 'CUIDÁ TU SEGURIDAD'
+      title: 'COMPROMISO CON TU SEGURIDAD',
+      subtitle: 'Mantenimiento y venta de matafuegos bajo normativa vigente'
     },
     {
       id: 2,
       image: '/img/carousel/slide2.jpg',
-      title: 'PROTECCIÓN PROFESIONAL',
-      subtitle: 'Equipos certificados y garantizados'
+      title: 'PREVENCIÓN QUE DA TRANQUILIDAD',
+      subtitle: 'Cuidamos tus equipos para que estés siempre protegido'
     },
     {
       id: 3,
       image: '/img/carousel/slide3.jpg',
-      title: 'CAPACITACIÓN EXPERTA',
-      subtitle: 'Entrenamiento para tu equipo'
+      title: 'MANTENIMIENTO RESPONSABLE',
+      subtitle: 'Porque la seguridad comienza con la prevención'
     }
   ];
 

@@ -1,453 +1,414 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Lock, User, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ArrowRight, AlertCircle, Flame } from 'lucide-react';
 
 function LoginPage() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [particles, setParticles] = useState([]);
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  // Generar partículas de fuego
-  useEffect(() => {
-    const particleCount = 40;
-    const newParticles = [];
-    
-    for (let i = 0; i < particleCount; i++) {
-      newParticles.push({
-        id: i,
-        x: Math.random() * 100,
-        delay: Math.random() * 5,
-        duration: 3 + Math.random() * 4,
-        size: 4 + Math.random() * 8
-      });
-    }
-    
-    setParticles(newParticles);
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+    
+    if (!email || !password) {
+      setError('Por favor completa todos los campos');
+      return;
+    }
 
-    setTimeout(() => {
-      const success = login(username, password);
-      
+    setLoading(true);
+    
+    try {
+      const success = await login(email, password);
       if (success) {
-        navigate('/admin/dashboard');
+        navigate('/admin-zd-m8k3x7p2/dashboard');
       } else {
-        setError('Usuario o contraseña incorrectos');
-        setPassword('');
+        setError('Email o contraseña incorrectos');
       }
+    } catch (err) {
+      setError('Error al iniciar sesión. Intenta nuevamente.');
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   return (
     <div style={{
       minHeight: '100vh',
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#0a0a0a',
-      padding: '20px',
+      background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Efecto de fuego con partículas */}
       <div style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflow: 'hidden',
+        top: '-10%',
+        right: '-5%',
+        width: '400px',
+        height: '400px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(239,68,68,0.15) 0%, transparent 70%)',
+        filter: 'blur(60px)'
+      }}></div>
+      
+      <div style={{
+        position: 'absolute',
+        bottom: '-10%',
+        left: '-5%',
+        width: '500px',
+        height: '500px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(239,68,68,0.1) 0%, transparent 70%)',
+        filter: 'blur(80px)'
+      }}></div>
+
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '80px',
+        position: 'relative',
         zIndex: 1
       }}>
-        {/* Gradiente de fuego de fondo */}
-        <div style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '60%',
-          background: 'radial-gradient(ellipse at bottom, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.08) 30%, transparent 70%)',
-          animation: 'pulse 4s ease-in-out infinite'
-        }} />
-
-        {/* Partículas de fuego */}
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            style={{
-              position: 'absolute',
-              bottom: '-20px',
-              left: `${particle.x}%`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-              borderRadius: '50%',
-              background: `radial-gradient(circle, rgba(255, 100, 50, 0.8) 0%, rgba(239, 68, 68, 0.4) 50%, transparent 100%)`,
-              animation: `float ${particle.duration}s ease-in infinite`,
-              animationDelay: `${particle.delay}s`,
-              boxShadow: '0 0 20px rgba(239, 68, 68, 0.6)',
-              filter: 'blur(1px)'
-            }}
-          />
-        ))}
-
-        {/* Ondas de calor */}
-        <div style={{
-          position: 'absolute',
-          bottom: '0',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '150%',
-          height: '100%',
-          background: 'radial-gradient(ellipse at bottom, rgba(239, 68, 68, 0.05) 0%, transparent 50%)',
-          animation: 'wave 8s ease-in-out infinite'
-        }} />
-      </div>
-
-      {/* Login Card */}
-      <div style={{
-        width: '100%',
-        maxWidth: '440px',
-        backgroundColor: 'rgba(31, 41, 55, 0.95)',
-        padding: '48px 40px',
-        borderRadius: '16px',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.7), 0 0 100px rgba(239, 68, 68, 0.1)',
-        backdropFilter: 'blur(10px)',
-        border: '1px solid rgba(239, 68, 68, 0.1)',
-        position: 'relative',
-        zIndex: 10
-      }}>
-        {/* Logo */}
         <div style={{
           textAlign: 'center',
-          marginBottom: '40px'
+          maxWidth: '400px'
         }}>
           <div style={{
-            width: '80px',
-            height: '80px',
-            margin: '0 auto 20px',
-            backgroundColor: '#ef4444',
-            borderRadius: '50%',
+            width: '140px',
+            height: '140px',
+            margin: '0 auto 50px',
+            background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+            borderRadius: '35px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 24px rgba(239, 68, 68, 0.4), 0 0 40px rgba(239, 68, 68, 0.2)',
-            animation: 'glow 2s ease-in-out infinite'
+            boxShadow: '0 25px 70px rgba(239,68,68,0.5)',
+            animation: 'float 3s ease-in-out infinite'
           }}>
-            <Lock size={40} color="white" />
+            <Flame size={70} color="white" />
           </div>
+          
           <h1 style={{
-            fontSize: '28px',
+            fontSize: '56px',
             fontWeight: 'bold',
             color: 'white',
-            marginBottom: '8px',
-            textShadow: '0 2px 10px rgba(0,0,0,0.3)'
+            marginBottom: '20px',
+            letterSpacing: '-2px'
           }}>
-            Panel de Administración
+            ZD Matafuegos
           </h1>
+          
           <p style={{
-            color: '#9ca3af',
-            fontSize: '14px'
+            fontSize: '22px',
+            color: '#94a3b8',
+            margin: 0,
+            fontWeight: '500'
           }}>
-            ZD Matafuegos - Acceso Restringido
+            Panel Administrativo
           </p>
-        </div>
-
-        {/* Error Message */}
-        {error && (
-          <div style={{
-            backgroundColor: 'rgba(127, 29, 29, 0.9)',
-            border: '2px solid #ef4444',
-            padding: '14px 16px',
-            borderRadius: '8px',
-            marginBottom: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            animation: 'shake 0.5s, fadeIn 0.3s'
-          }}>
-            <AlertCircle size={20} color="#ef4444" />
-            <span style={{ color: '#fca5a5', fontSize: '14px', fontWeight: '500' }}>
-              {error}
-            </span>
-          </div>
-        )}
-
-        {/* Form */}
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{
-              display: 'block',
-              marginBottom: '8px',
-              color: '#d1d5db',
-              fontSize: '14px',
-              fontWeight: 'bold'
-            }}>
-              Usuario
-            </label>
-            <div style={{ position: 'relative' }}>
-              <User 
-                size={20} 
-                color="#6b7280" 
-                style={{
-                  position: 'absolute',
-                  left: '14px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  zIndex: 1
-                }}
-              />
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-                autoComplete="username"
-                placeholder="Ingresá tu usuario"
-                style={{
-                  width: '100%',
-                  padding: '14px 14px 14px 48px',
-                  backgroundColor: 'rgba(55, 65, 81, 0.8)',
-                  border: '2px solid #4b5563',
-                  borderRadius: '8px',
-                  color: 'white',
-                  fontSize: '16px',
-                  outline: 'none',
-                  transition: 'all 0.3s ease',
-                  position: 'relative'
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#ef4444';
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.2)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = '#4b5563';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              />
-            </div>
-          </div>
-
-          <div style={{ marginBottom: '32px' }}>
-            <label style={{
-              display: 'block',
-              marginBottom: '8px',
-              color: '#d1d5db',
-              fontSize: '14px',
-              fontWeight: 'bold'
-            }}>
-              Contraseña
-            </label>
-            <div style={{ position: 'relative' }}>
-              <Lock 
-                size={20} 
-                color="#6b7280" 
-                style={{
-                  position: 'absolute',
-                  left: '14px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  zIndex: 1
-                }}
-              />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-                placeholder="Ingresá tu contraseña"
-                style={{
-                  width: '100%',
-                  padding: '14px 48px 14px 48px',
-                  backgroundColor: 'rgba(55, 65, 81, 0.8)',
-                  border: '2px solid #4b5563',
-                  borderRadius: '8px',
-                  color: 'white',
-                  fontSize: '16px',
-                  outline: 'none',
-                  transition: 'all 0.3s ease'
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#ef4444';
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.2)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = '#4b5563';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '14px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: '4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  zIndex: 1
-                }}
-              >
-                {showPassword ? (
-                  <EyeOff size={20} color="#6b7280" />
-                ) : (
-                  <Eye size={20} color="#6b7280" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: '100%',
-              padding: '16px',
-              backgroundColor: loading ? '#6b7280' : '#ef4444',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: loading ? 'none' : '0 4px 12px rgba(239, 68, 68, 0.4)'
-            }}
-            onMouseOver={(e) => {
-              if (!loading) {
-                e.currentTarget.style.backgroundColor = '#dc2626';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 6px 20px rgba(239, 68, 68, 0.5)';
-              }
-            }}
-            onMouseOut={(e) => {
-              if (!loading) {
-                e.currentTarget.style.backgroundColor = '#ef4444';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.4)';
-              }
-            }}
-          >
-            {loading ? (
-              <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  border: '3px solid rgba(255,255,255,0.3)',
-                  borderTop: '3px solid white',
-                  borderRadius: '50%',
-                  animation: 'spin 0.8s linear infinite'
-                }} />
-                Verificando...
-              </span>
-            ) : (
-              'Iniciar Sesión'
-            )}
-          </button>
-        </form>
-
-        {/* Back to Home */}
-        <div style={{
-          textAlign: 'center',
-          marginTop: '28px',
-          paddingTop: '28px',
-          borderTop: '1px solid rgba(55, 65, 81, 0.8)'
-        }}>
-          <a 
-            href="/"
-            style={{
-              color: '#9ca3af',
-              fontSize: '14px',
-              textDecoration: 'none',
-              transition: 'color 0.3s ease',
-              fontWeight: '500'
-            }}
-            onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
-            onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}
-          >
-            ← Volver al sitio público
-          </a>
         </div>
       </div>
 
-      {/* Animaciones CSS */}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '40px',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        <div style={{
+          width: '100%',
+          maxWidth: '480px',
+          backgroundColor: 'rgba(255, 255, 255, 0.98)',
+          borderRadius: '24px',
+          padding: '50px',
+          boxShadow: '0 30px 90px rgba(0,0,0,0.3)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.2)'
+        }}>
+          <div style={{ marginBottom: '40px' }}>
+            <div style={{
+              width: '60px',
+              height: '60px',
+              backgroundColor: '#fee2e2',
+              borderRadius: '16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '24px'
+            }}>
+              <Lock size={28} color="#ef4444" />
+            </div>
+            
+            <h2 style={{
+              fontSize: '32px',
+              fontWeight: 'bold',
+              color: '#111827',
+              marginBottom: '12px',
+              letterSpacing: '-0.5px'
+            }}>
+              Iniciar Sesión
+            </h2>
+            
+            <p style={{
+              fontSize: '16px',
+              color: '#6b7280',
+              margin: 0
+            }}>
+              Accede al panel de administración
+            </p>
+          </div>
+
+          {error && (
+            <div style={{
+              padding: '16px',
+              backgroundColor: '#fee2e2',
+              border: '1px solid #fecaca',
+              borderRadius: '12px',
+              marginBottom: '24px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              animation: 'shake 0.5s ease-in-out'
+            }}>
+              <AlertCircle size={20} color="#ef4444" />
+              <p style={{ color: '#991b1b', margin: 0, fontSize: '14px', fontWeight: '500' }}>
+                {error}
+              </p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#374151',
+                marginBottom: '8px'
+              }}>
+                Email
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Mail 
+                  size={20} 
+                  color="#9ca3af"
+                  style={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    pointerEvents: 'none'
+                  }}
+                />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="tu@email.com"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px 14px 48px',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '12px',
+                    fontSize: '16px',
+                    outline: 'none',
+                    transition: 'all 0.3s ease',
+                    backgroundColor: '#f9fafb'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#ef4444';
+                    e.target.style.backgroundColor = 'white';
+                    e.target.style.boxShadow = '0 0 0 4px rgba(239,68,68,0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.backgroundColor = '#f9fafb';
+                    e.target.style.boxShadow = 'none';
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ marginBottom: '32px' }}>
+              <label style={{
+                display: 'block',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#374151',
+                marginBottom: '8px'
+              }}>
+                Contraseña
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Lock 
+                  size={20} 
+                  color="#9ca3af"
+                  style={{
+                    position: 'absolute',
+                    left: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    pointerEvents: 'none'
+                  }}
+                />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '14px 50px 14px 48px',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '12px',
+                    fontSize: '16px',
+                    outline: 'none',
+                    transition: 'all 0.3s ease',
+                    backgroundColor: '#f9fafb'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#ef4444';
+                    e.target.style.backgroundColor = 'white';
+                    e.target.style.boxShadow = '0 0 0 4px rgba(239,68,68,0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.backgroundColor = '#f9fafb';
+                    e.target.style.boxShadow = 'none';
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '16px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '4px',
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  {showPassword ? 
+                    <EyeOff size={20} color="#9ca3af" /> : 
+                    <Eye size={20} color="#9ca3af" />
+                  }
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: '100%',
+                padding: '16px',
+                backgroundColor: loading ? '#fca5a5' : '#ef4444',
+                color: 'white',
+                border: 'none',
+                borderRadius: '12px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 20px rgba(239,68,68,0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px'
+              }}
+              onMouseOver={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundColor = '#dc2626';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 8px 30px rgba(239,68,68,0.5)';
+                }
+              }}
+              onMouseOut={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundColor = '#ef4444';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(239,68,68,0.4)';
+                }
+              }}
+            >
+              {loading ? (
+                <>
+                  <div style={{
+                    width: '20px',
+                    height: '20px',
+                    border: '3px solid rgba(255,255,255,0.3)',
+                    borderTop: '3px solid white',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }}></div>
+                  Iniciando sesión...
+                </>
+              ) : (
+                <>
+                  Iniciar Sesión
+                  <ArrowRight size={20} />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div style={{
+            marginTop: '32px',
+            paddingTop: '32px',
+            borderTop: '1px solid #e5e7eb',
+            textAlign: 'center'
+          }}>
+            <a
+              href="/"
+              style={{
+                color: '#6b7280',
+                textDecoration: 'none',
+                fontSize: '14px',
+                fontWeight: '500',
+                transition: 'color 0.3s ease'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+              onMouseOut={(e) => e.currentTarget.style.color = '#6b7280'}
+            >
+              ← Volver al sitio público
+            </a>
+          </div>
+        </div>
+      </div>
+
       <style>{`
-        @keyframes float {
-          0% {
-            transform: translateY(0) translateX(0) scale(1);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 0.8;
-          }
-          100% {
-            transform: translateY(-100vh) translateX(${Math.random() * 100 - 50}px) scale(0);
-            opacity: 0;
-          }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
-
-        @keyframes pulse {
-          0%, 100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.8;
-            transform: scale(1.05);
-          }
-        }
-
-        @keyframes wave {
-          0%, 100% {
-            transform: translateX(-50%) translateY(0);
-          }
-          50% {
-            transform: translateX(-50%) translateY(-20px);
-          }
-        }
-
-        @keyframes glow {
-          0%, 100% {
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4), 0 0 40px rgba(239, 68, 68, 0.2);
-          }
-          50% {
-            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.6), 0 0 60px rgba(239, 68, 68, 0.3);
-          }
-        }
-
+        
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-10px); }
           75% { transform: translateX(10px); }
         }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
         }
       `}</style>
     </div>

@@ -5,73 +5,106 @@ import {
   Body,
   Param,
   Delete,
-  UseGuards,
-  ParseIntPipe,
-  HttpCode,
-  HttpStatus,
-  Res,
   Patch,
+  Query,
+  UseGuards,
+  Res,
 } from '@nestjs/common';
 import type { Response } from 'express';
-import { ApiBearerAuth } from '@nestjs/swagger';
 import { ComprobantesService } from './comprobantes.service';
+import { PdfService } from './pdf.service';
 import { CreateComprobanteDto } from './dto/create-comprobante.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @Controller('comprobantes')
-//@UseGuards(JwtAuthGuard)
-@ApiBearerAuth('JWT')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class ComprobantesController {
-  constructor(private readonly comprobantesService: ComprobantesService) {}
+  constructor(
+    private readonly comprobantesService: ComprobantesService,
+    private readonly pdfService: PdfService,
+  ) {}
 
+  // ===== CREAR COMPROBANTE =====
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.CREATED)
+  @Roles('admin', 'super_admin')
   create(@Body() createComprobanteDto: CreateComprobanteDto) {
     return this.comprobantesService.create(createComprobanteDto);
   }
 
+  // ===== OBTENER TODOS =====
   @Get()
-  @UseGuards(JwtAuthGuard) 
+  @Roles('admin', 'super_admin')
   findAll() {
     return this.comprobantesService.findAll();
   }
 
-  @Get('client/:clienteId')
-  @UseGuards(JwtAuthGuard)
-  findByClient(@Param('clienteId', ParseIntPipe) clienteId: number) {
-    return this.comprobantesService.findByClient(clienteId);
-  }
-  @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.comprobantesService.findOne(id);
+  // ===== OBTENER ESTADÍSTICAS =====
+  @Get('stats')
+  @Roles('admin', 'super_admin')
+  getStats() {
+    return this.comprobantesService.getStats();
   }
 
-  @Get(':id/pdf')
-  async downloadPDF(
-    @Param('id', ParseIntPipe) id: number,
-    @Res() res: Response,
+  // ===== BUSCAR POR CLIENTE =====
+  @Get('cliente/:nombre')
+  @Roles('admin', 'super_admin')
+  findByCliente(@Param('nombre') nombre: string) {
+    return this.comprobantesService.findByCliente(nombre);
+  }
+
+  // ===== BUSCAR POR RANGO DE FECHAS =====
+  @Get('date-range')
+  @Roles('admin', 'super_admin')
+  findByDateRange(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
   ) {
-    const pdfBuffer = await this.comprobantesService.generatePDF(id);
-    const comprobante = await this.comprobantesService.findOne(id);
+    return this.comprobantesService.findByDateRange(startDate, endDate);
+  }
+
+  // ===== BUSCAR POR NÚMERO =====
+  @Get('numero/:numero')
+  @Roles('admin', 'super_admin')
+  findByNumero(@Param('numero') numero: string) {
+    return this.comprobantesService.findByNumero(numero);
+  }
+
+  // ===== DESCARGAR PDF =====
+  @Get(':id/pdf')
+  @Roles('admin', 'super_admin')
+  async downloadPDF(@Param('id') id: string, @Res() res: Response) {
+    const comprobante = await this.comprobantesService.findOne(+id);
+    const pdfBuffer = await this.pdfService.generarComprobantePDF(comprobante);
 
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename=comprobante-${comprobante.numeroComprobante}.pdf`,
+      'Content-Disposition': `attachment; filename=Comprobante_${comprobante.numero}.pdf`,
       'Content-Length': pdfBuffer.length,
     });
 
     res.end(pdfBuffer);
   }
 
-  @Patch(':id/anular')
-  anular(@Param('id', ParseIntPipe) id: number) {
-    return this.comprobantesService.anular(id);
+  // ===== OBTENER POR ID =====
+  @Get(':id')
+  @Roles('admin', 'super_admin')
+  findOne(@Param('id') id: string) {
+    return this.comprobantesService.findOne(+id);
   }
 
+  // ===== ANULAR COMPROBANTE =====
+  @Patch(':id/anular')
+  @Roles('admin', 'super_admin')
+  anular(@Param('id') id: string) {
+    return this.comprobantesService.anular(+id);
+  }
+
+  // ===== ELIMINAR COMPROBANTE =====
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.comprobantesService.remove(id);
+  @Roles('super_admin')
+  remove(@Param('id') id: string) {
+    return this.comprobantesService.remove(+id);
   }
 }

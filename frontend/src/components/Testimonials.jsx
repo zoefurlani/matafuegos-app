@@ -1,132 +1,268 @@
 import { useState, useEffect } from 'react';
-import { Star, Quote, Send } from 'lucide-react';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { Star, Quote, Send, Trash2, Filter, X } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import axios from 'axios';
+
+const API_URL = 'http://localhost:3000/api/testimonios';
 
 const Testimonials = () => {
   const [testimonials, setTestimonials] = useState([]);
+  const [filteredTestimonials, setFilteredTestimonials] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [filterRating, setFilterRating] = useState(0);
+  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [testimonialToDelete, setTestimonialToDelete] = useState(null);
+  const [deleteEmail, setDeleteEmail] = useState('');
   const { colors } = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     company: '',
     text: '',
-    rating: 5
+    rating: 5,
+    userEmail: ''
   });
 
-  // Detectar si estamos usando window.storage o localStorage
-  const isClaudeStorage = typeof window !== 'undefined' && window.storage;
-
-  // Cargar testimonios al iniciar
   useEffect(() => {
     loadTestimonials();
   }, []);
 
+  useEffect(() => {
+    if (filterRating === 0) {
+      setFilteredTestimonials(testimonials);
+    } else {
+      setFilteredTestimonials(testimonials.filter(t => t.rating === filterRating));
+    }
+  }, [filterRating, testimonials]);
+
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: '', type: '' }), 3000);
+  };
+
   const loadTestimonials = async () => {
     try {
-      if (isClaudeStorage) {
-        // Usar window.storage (Claude Artifacts)
-        const result = await window.storage.list('testimonial:');
-        if (result && result.keys && result.keys.length > 0) {
-          const testimonialPromises = result.keys.map(async (key) => {
-            try {
-              const data = await window.storage.get(key);
-              if (data && data.value) {
-                return JSON.parse(data.value);
-              }
-            } catch (error) {
-              console.error('Error al cargar testimonio:', key, error);
-            }
-            return null;
-          });
-          
-          const loadedTestimonials = await Promise.all(testimonialPromises);
-          const validTestimonials = loadedTestimonials.filter(t => t !== null);
-          validTestimonials.sort((a, b) => b.id - a.id);
-          setTestimonials(validTestimonials);
-        }
-      } else {
-        // Usar localStorage (desarrollo local)
-        const stored = localStorage.getItem('testimonials');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          parsed.sort((a, b) => b.id - a.id);
-          setTestimonials(parsed);
-        }
-      }
+      const response = await axios.get(`${API_URL}/public`);
+      setTestimonials(response.data);
     } catch (error) {
-      console.log('Error al cargar testimonios:', error);
-      setTestimonials([]);
+      console.error('Error al cargar testimonios:', error);
+      showToast('Error al cargar testimonios', 'error');
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.text) {
-      alert('Por favor completa todos los campos obligatorios');
+    if (!formData.name || !formData.text || !formData.userEmail) {
+      showToast('Por favor completa todos los campos obligatorios', 'error');
       return;
     }
 
     setLoading(true);
 
     try {
-      const newTestimonial = {
-        ...formData,
-        id: Date.now(),
-        date: new Date().toLocaleDateString('es-AR')
-      };
-
-      if (isClaudeStorage) {
-        // Guardar en window.storage (Claude Artifacts)
-        await window.storage.set(
-          `testimonial:${newTestimonial.id}`,
-          JSON.stringify(newTestimonial),
-          true
-        );
-      } else {
-        // Guardar en localStorage (desarrollo local)
-        const currentTestimonials = [...testimonials, newTestimonial];
-        localStorage.setItem('testimonials', JSON.stringify(currentTestimonials));
-      }
-
-      // Actualizar lista local
-      setTestimonials([newTestimonial, ...testimonials]);
-
-      // Resetear formulario
-      setFormData({
-        name: '',
-        company: '',
-        text: '',
-        rating: 5
-      });
+      await axios.post(API_URL, formData);
+      
+      await loadTestimonials();
+      setFormData({ name: '', company: '', text: '', rating: 5, userEmail: '' });
       setShowForm(false);
-
-      alert('¡Gracias por tu comentario! 🎉');
+      showToast('¡Gracias por tu comentario!', 'success');
     } catch (error) {
       console.error('Error al guardar:', error);
-      alert('❌ Error al guardar tu comentario. Por favor intenta nuevamente.');
+      showToast('Error al guardar tu comentario', 'error');
     } finally {
       setLoading(false);
     }
   };
 
+  const openDeleteModal = (testimonial) => {
+    setTestimonialToDelete(testimonial);
+    setDeleteEmail('');
+    setShowDeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+    setTestimonialToDelete(null);
+    setDeleteEmail('');
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteEmail) {
+      showToast('Por favor ingresa tu email', 'error');
+      return;
+    }
+
+    try {
+      await axios.delete(`${API_URL}/own/${testimonialToDelete.id}`, {
+        data: { userEmail: deleteEmail }
+      });
+
+      await loadTestimonials();
+      closeDeleteModal();
+      showToast('Comentario eliminado correctamente', 'success');
+    } catch (error) {
+      console.error('Error al eliminar:', error);
+      if (error.response?.status === 403) {
+        showToast('Email incorrecto. No se puede eliminar el comentario', 'error');
+      } else {
+        showToast('Error al eliminar el comentario', 'error');
+      }
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
     <div style={{ marginBottom: '64px' }}>
+      {/* Toast */}
+      {toast.show && (
+        <div style={{
+          position: 'fixed',
+          top: '24px',
+          right: '24px',
+          backgroundColor: toast.type === 'success' ? '#10b981' : '#ef4444',
+          color: 'white',
+          padding: '16px 24px',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+          zIndex: 9999,
+          animation: 'slideInRight 0.3s ease-out'
+        }}>
+          {toast.message}
+        </div>
+      )}
+
+      {/* Modal de confirmación de eliminación */}
+      {showDeleteModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 9998,
+          animation: 'fadeIn 0.3s ease-out'
+        }}>
+          <div style={{
+            backgroundColor: colors.cardBg,
+            padding: '32px',
+            borderRadius: '16px',
+            maxWidth: '500px',
+            width: '90%',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
+            border: `2px solid ${colors.border}`,
+            animation: 'scaleIn 0.3s ease-out'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '24px'
+            }}>
+              <h3 style={{
+                fontSize: '24px',
+                fontWeight: 'bold',
+                color: colors.text,
+                margin: 0
+              }}>
+                Confirmar eliminación
+              </h3>
+              <button
+                onClick={closeDeleteModal}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: '4px',
+                  color: colors.textSecondary
+                }}
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <p style={{
+              color: colors.textSecondary,
+              marginBottom: '24px',
+              lineHeight: '1.6'
+            }}>
+              Para eliminar tu comentario, por favor ingresá el email que usaste al crearlo:
+            </p>
+
+            <input
+              type="email"
+              value={deleteEmail}
+              onChange={(e) => setDeleteEmail(e.target.value)}
+              placeholder="tu@email.com"
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: `2px solid ${colors.border}`,
+                borderRadius: '8px',
+                fontSize: '16px',
+                backgroundColor: colors.background,
+                color: colors.text,
+                marginBottom: '24px'
+              }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') confirmDelete();
+              }}
+            />
+
+            <div style={{
+              display: 'flex',
+              gap: '12px',
+              justifyContent: 'flex-end'
+            }}>
+              <button
+                onClick={closeDeleteModal}
+                style={{
+                  padding: '12px 24px',
+                  backgroundColor: colors.cardBg,
+                  color: colors.text,
+                  border: `2px solid ${colors.border}`,
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDelete}
+                style={{
+                  padding: '12px 24px',
+                  backgroundColor: '#ef4444',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer'
+                }}
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '48px',
+        marginBottom: '24px',
         flexWrap: 'wrap',
         gap: '16px'
       }}>
@@ -163,13 +299,62 @@ const Testimonials = () => {
         </button>
       </div>
 
-      {/* Formulario para nuevo comentario */}
+      {/* Filtro */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        marginBottom: '32px',
+        flexWrap: 'wrap'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Filter size={20} color={colors.text} />
+          <span style={{ color: colors.text, fontWeight: 'bold' }}>Filtrar:</span>
+        </div>
+        <button
+          onClick={() => setFilterRating(0)}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: filterRating === 0 ? '#ef4444' : colors.cardBg,
+            color: filterRating === 0 ? 'white' : colors.text,
+            border: `2px solid ${filterRating === 0 ? '#ef4444' : colors.border}`,
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold'
+          }}
+        >
+          Todos
+        </button>
+        {[5, 4, 3, 2, 1].map((rating) => (
+          <button
+            key={rating}
+            onClick={() => setFilterRating(rating)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '8px 16px',
+              backgroundColor: filterRating === rating ? '#ef4444' : colors.cardBg,
+              color: filterRating === rating ? 'white' : colors.text,
+              border: `2px solid ${filterRating === rating ? '#ef4444' : colors.border}`,
+              borderRadius: '8px',
+              cursor: 'pointer'
+            }}
+          >
+            <Star size={16} fill={filterRating === rating ? 'white' : '#fbbf24'} color="#fbbf24" />
+            {rating}
+          </button>
+        ))}
+      </div>
+
+      {/* Formulario */}
       {showForm && (
         <div style={{
           backgroundColor: colors.cardBg,
           padding: '32px',
           borderRadius: '12px',
-          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+          boxShadow: colors.shadow,
+          border: `2px solid ${colors.border}`,
           marginBottom: '32px',
           animation: 'slideDown 0.3s ease-out'
         }}>
@@ -198,6 +383,7 @@ const Testimonials = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                maxLength={100}
                 placeholder="Tu nombre"
                 style={{
                   width: '100%',
@@ -205,12 +391,37 @@ const Testimonials = () => {
                   border: '2px solid ' + colors.border,
                   borderRadius: '8px',
                   fontSize: '16px',
-                  transition: 'border-color 0.3s ease',
                   backgroundColor: colors.background,
                   color: colors.text
                 }}
-                onFocus={(e) => e.currentTarget.style.borderColor = '#ef4444'}
-                onBlur={(e) => e.currentTarget.style.borderColor = colors.border}
+              />
+            </div>
+
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{
+                display: 'block',
+                marginBottom: '8px',
+                fontWeight: 'bold',
+                color: colors.text
+              }}>
+                Email * (para poder borrar tu comentario después)
+              </label>
+              <input
+                type="email"
+                name="userEmail"
+                value={formData.userEmail}
+                onChange={handleChange}
+                required
+                placeholder="tu@email.com"
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  border: '2px solid ' + colors.border,
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  backgroundColor: colors.background,
+                  color: colors.text
+                }}
               />
             </div>
 
@@ -228,6 +439,7 @@ const Testimonials = () => {
                 name="company"
                 value={formData.company}
                 onChange={handleChange}
+                maxLength={100}
                 placeholder="Nombre de tu empresa"
                 style={{
                   width: '100%',
@@ -235,12 +447,9 @@ const Testimonials = () => {
                   border: '2px solid ' + colors.border,
                   borderRadius: '8px',
                   fontSize: '16px',
-                  transition: 'border-color 0.3s ease',
                   backgroundColor: colors.background,
                   color: colors.text
                 }}
-                onFocus={(e) => e.currentTarget.style.borderColor = '#ef4444'}
-                onBlur={(e) => e.currentTarget.style.borderColor = colors.border}
               />
             </div>
 
@@ -258,6 +467,7 @@ const Testimonials = () => {
                 value={formData.text}
                 onChange={handleChange}
                 required
+                maxLength={1000}
                 rows={4}
                 placeholder="Cuéntanos tu experiencia..."
                 style={{
@@ -268,12 +478,9 @@ const Testimonials = () => {
                   fontSize: '16px',
                   resize: 'vertical',
                   fontFamily: 'inherit',
-                  transition: 'border-color 0.3s ease',
                   backgroundColor: colors.background,
                   color: colors.text
                 }}
-                onFocus={(e) => e.currentTarget.style.borderColor = '#ef4444'}
-                onBlur={(e) => e.currentTarget.style.borderColor = colors.border}
               />
             </div>
 
@@ -296,11 +503,8 @@ const Testimonials = () => {
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
-                      padding: 0,
-                      transition: 'transform 0.2s ease'
+                      padding: 0
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
-                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                   >
                     <Star
                       size={32}
@@ -326,14 +530,7 @@ const Testimonials = () => {
                 borderRadius: '8px',
                 fontSize: '16px',
                 fontWeight: 'bold',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseOver={(e) => {
-                if (!loading) e.currentTarget.style.backgroundColor = '#dc2626';
-              }}
-              onMouseOut={(e) => {
-                if (!loading) e.currentTarget.style.backgroundColor = '#ef4444';
+                cursor: loading ? 'not-allowed' : 'pointer'
               }}
             >
               <Send size={20} />
@@ -343,26 +540,30 @@ const Testimonials = () => {
         </div>
       )}
 
-      {/* Lista de testimonios */}
-      {testimonials.length === 0 ? (
+      {/* Lista */}
+      {filteredTestimonials.length === 0 ? (
         <div style={{
           textAlign: 'center',
           padding: '64px 32px',
           backgroundColor: colors.cardBg,
           borderRadius: '12px',
+          border: `2px solid ${colors.border}`,
           color: colors.textSecondary
         }}>
           <p style={{ fontSize: '18px' }}>
-            Todavía no hay comentarios. ¡Sé el primero en dejar uno!
+            {filterRating === 0 
+              ? 'Todavía no hay comentarios. ¡Sé el primero en dejar uno!'
+              : `No hay comentarios con ${filterRating} estrellas`
+            }
           </p>
         </div>
       ) : (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
           gap: '24px'
         }}>
-          {testimonials.map((testimonial) => (
+          {filteredTestimonials.map((testimonial) => (
             <div
               key={testimonial.id}
               style={{
@@ -370,20 +571,11 @@ const Testimonials = () => {
                 padding: '32px',
                 borderRadius: '12px',
                 boxShadow: colors.shadow,
-                position: 'relative',
-                transition: 'all 0.3s ease'
+                border: `2px solid ${colors.border}`,
+                position: 'relative'
               }}
             >
-              <Quote 
-                size={40} 
-                color="#ef4444" 
-                style={{ 
-                  position: 'absolute', 
-                  top: '16px', 
-                  right: '16px',
-                  opacity: 0.2
-                }} 
-              />
+              <Quote size={40} color="#ef4444" style={{ position: 'absolute', top: '16px', right: '16px', opacity: 0.2 }} />
               
               <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
                 {[...Array(testimonial.rating)].map((_, i) => (
@@ -391,29 +583,46 @@ const Testimonials = () => {
                 ))}
               </div>
               
-              <p style={{ 
-                fontSize: '16px', 
-                lineHeight: '1.6',
-                color: colors.text,
-                marginBottom: '16px',
-                fontStyle: 'italic'
-              }}>
+              <p style={{ fontSize: '16px', lineHeight: '1.6', color: colors.text, marginBottom: '16px', fontStyle: 'italic' }}>
                 "{testimonial.text}"
               </p>
               
-              <div>
-                <p style={{ fontWeight: 'bold', color: colors.text }}>
-                  {testimonial.name}
-                </p>
-                {testimonial.company && (
-                  <p style={{ fontSize: '14px', color: colors.textSecondary }}>
-                    {testimonial.company}
-                  </p>
-                )}
+              <div style={{ marginBottom: '16px' }}>
+                <p style={{ fontWeight: 'bold', color: colors.text }}>{testimonial.name}</p>
+                {testimonial.company && <p style={{ fontSize: '14px', color: colors.textSecondary }}>{testimonial.company}</p>}
                 <p style={{ fontSize: '12px', color: colors.textSecondary, marginTop: '4px' }}>
-                  {testimonial.date}
+                  {new Date(testimonial.createdAt).toLocaleDateString('es-AR')}
                 </p>
               </div>
+
+              <button
+                onClick={() => openDeleteModal(testimonial)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '8px 12px',
+                  backgroundColor: 'transparent',
+                  color: '#ef4444',
+                  border: `2px solid #ef4444`,
+                  borderRadius: '6px',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ef4444';
+                  e.currentTarget.style.color = 'white';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = '#ef4444';
+                }}
+              >
+                <Trash2 size={16} />
+                Eliminar
+              </button>
             </div>
           ))}
         </div>
@@ -421,14 +630,20 @@ const Testimonials = () => {
 
       <style>{`
         @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(-20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(100px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.9); }
+          to { opacity: 1; transform: scale(1); }
         }
       `}</style>
     </div>

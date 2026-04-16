@@ -9,7 +9,11 @@ import {
   LogOut,
   Menu,
   X,
-  Flame
+  Flame,
+  Shield,
+  ShoppingCart,
+  FileText,
+  BookOpen
 } from 'lucide-react';
 
 function AdminLayout({ children }) {
@@ -19,12 +23,22 @@ function AdminLayout({ children }) {
   const location = useLocation();
 
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/admin/dashboard' },
-    { icon: Users, label: 'Clientes', path: '/admin/clientes' },
-    { icon: Flame, label: 'Extintores', path: '/admin/extintores' },
-    { icon: RefreshCw, label: 'Recargas', path: '/admin/recargas' },
-    { icon: Package, label: 'Inventario', path: '/admin/inventario' }
+    { icon: LayoutDashboard, label: 'Dashboard', path: '/admin-zd-m8k3x7p2/dashboard' },
+    { icon: Users, label: 'Clientes', path: '/admin-zd-m8k3x7p2/clientes' },
+    { icon: Flame, label: 'Extintores', path: '/admin-zd-m8k3x7p2/extintores' },
+    { icon: RefreshCw, label: 'Recargas', path: '/admin-zd-m8k3x7p2/recargas' },
+    { icon: ShoppingCart, label: 'Ventas', path: '/admin-zd-m8k3x7p2/ventas' },
+    { icon: FileText, label: 'Comprobantes', path: '/admin-zd-m8k3x7p2/comprobantes' },
+    { icon: BookOpen, label: 'Recursos Educativos', path: '/admin-zd-m8k3x7p2/recursos-educativos' },
+    { icon: Package, label: 'Inventario', path: '/admin-zd-m8k3x7p2/inventario' }
   ];
+
+  const usuariosItem = { 
+    icon: Shield, 
+    label: 'Usuarios', 
+    path: '/admin-zd-m8k3x7p2/usuarios',
+    onlySuperAdmin: true
+  };
 
   const handleLogout = () => {
     logout();
@@ -39,24 +53,26 @@ function AdminLayout({ children }) {
       minHeight: '100vh',
       backgroundColor: '#f3f4f6'
     }}>
-      {/* Sidebar */}
+      {/* SIDEBAR */}
       <aside style={{
         width: sidebarOpen ? '280px' : '80px',
         backgroundColor: '#1f2937',
         transition: 'width 0.3s ease',
         position: 'fixed',
         height: '100vh',
-        overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
         zIndex: 1000,
         boxShadow: '4px 0 12px rgba(0,0,0,0.1)'
       }}>
-        {/* Header */}
+        {/* HEADER */}
         <div style={{
           padding: '24px',
           borderBottom: '1px solid #374151',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          flexShrink: 0
         }}>
           {sidebarOpen && (
             <div>
@@ -101,9 +117,14 @@ function AdminLayout({ children }) {
             )}
           </button>
         </div>
-
-        {/* Menu Items */}
-        <nav style={{ padding: '16px' }}>
+        
+        {/* NAVEGACIÓN CON SCROLL */}
+        <nav style={{ 
+          padding: '16px',
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden'
+        }}>
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -141,17 +162,56 @@ function AdminLayout({ children }) {
               </button>
             );
           })}
+          
+          {user?.rol === 'super_admin' && (
+            <>
+              {sidebarOpen && (
+                <div style={{
+                  height: '1px',
+                  backgroundColor: '#374151',
+                  margin: '16px 0'
+                }}></div>
+              )}
+              
+              <button
+                onClick={() => navigate(usuariosItem.path)}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 16px',
+                  marginBottom: '8px',
+                  backgroundColor: isActive(usuariosItem.path) ? '#ef4444' : 'transparent',
+                  color: isActive(usuariosItem.path) ? 'white' : '#d1d5db',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: isActive(usuariosItem.path) ? 'bold' : '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  textAlign: 'left'
+                }}
+                onMouseOver={(e) => {
+                  if (!isActive(usuariosItem.path)) e.currentTarget.style.backgroundColor = '#374151';
+                }}
+                onMouseOut={(e) => {
+                  if (!isActive(usuariosItem.path)) e.currentTarget.style.backgroundColor = 'transparent';
+                }}
+              >
+                <usuariosItem.icon size={20} />
+                {sidebarOpen && <span>{usuariosItem.label}</span>}
+              </button>
+            </>
+          )}
         </nav>
-
-        {/* User Info & Logout */}
+        
+        {/* FOOTER FIJO AL FONDO */}
         <div style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
           padding: '16px',
           borderTop: '1px solid #374151',
-          backgroundColor: '#1f2937'
+          backgroundColor: '#1f2937',
+          flexShrink: 0
         }}>
           {sidebarOpen && (
             <div style={{
@@ -173,7 +233,9 @@ function AdminLayout({ children }) {
                 color: '#9ca3af',
                 margin: '4px 0 0 0'
               }}>
-                Administrador
+                {user?.rol === 'super_admin' ? 'Super Admin' :
+                  user?.rol === 'admin' ? 'Administrador' :
+                  'Usuario'}
               </p>
             </div>
           )}
@@ -210,8 +272,8 @@ function AdminLayout({ children }) {
           </button>
         </div>
       </aside>
-
-      {/* Main Content */}
+      
+      {/* CONTENIDO PRINCIPAL */}
       <main style={{
         marginLeft: sidebarOpen ? '280px' : '80px',
         width: sidebarOpen ? 'calc(100% - 280px)' : 'calc(100% - 80px)',
@@ -227,6 +289,32 @@ function AdminLayout({ children }) {
           {children}
         </div>
       </main>
+
+      {/* ESTILOS PARA SCROLLBAR NEGRA */}
+      <style>{`
+        aside::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        aside::-webkit-scrollbar-track {
+          background: #1f2937;
+        }
+        
+        aside::-webkit-scrollbar-thumb {
+          background: #374151;
+          border-radius: 4px;
+        }
+        
+        aside::-webkit-scrollbar-thumb:hover {
+          background: #4b5563;
+        }
+
+        /* Para Firefox */
+        aside {
+          scrollbar-width: thin;
+          scrollbar-color: #374151 #1f2937;
+        }
+      `}</style>
     </div>
   );
 }

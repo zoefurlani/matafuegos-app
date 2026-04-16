@@ -5,7 +5,7 @@ function WhatsAppButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleWhatsApp = () => {
-    window.open('https://wa.me/5491234567890?text=Hola,%20necesito%20información%20sobre%20matafuegos', '_blank');
+    window.open('https://wa.me/543482445650?text=Hola,%20necesito%20información%20sobre%20matafuegos', '_blank');
   };
 
   return (
@@ -52,7 +52,7 @@ function WhatsAppButton() {
                 <p>👋 ¡Hola! ¿En qué podemos ayudarte?</p>
               </div>
               <p style={{ fontSize: '12px', color: '#6b7280', margin: '12px 0 16px' }}>
-                Estamos disponibles para responder tus consultas sobre matafuegos, mantenimiento y capacitaciones.
+                Estamos disponibles para responder tus consultas sobre matafuegos y mantenimiento 
               </p>
               <button 
                 onClick={handleWhatsApp}
@@ -65,13 +65,28 @@ function WhatsAppButton() {
           </div>
         )}
 
-        <button 
-          className="whatsapp-btn"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
-          <span className="whatsapp-pulse"></span>
-        </button>
+        {/* ⭐ NUEVO: Contenedor con texto + botón (SE MUEVE JUNTO) */}
+        <div className="whatsapp-container">
+          {/* Texto al lado del botón */}
+          <div className="whatsapp-text">
+            Contactanos por WhatsApp
+          </div>
+
+          {/* Botón con logo de WhatsApp */}
+          <button 
+            className="whatsapp-btn"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? (
+              <X size={28} />
+            ) : (
+              <svg viewBox="0 0 32 32" width="32" height="32">
+                <path fill="white" d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 31.7l8-2.1C10.5 31.3 13.2 32 16 32c8.8 0 16-7.2 16-16S24.8 0 16 0zm7.8 22.8c-.3.9-1.8 1.7-2.9 1.9-.8.2-1.8.3-2.9-.2-.7-.3-1.5-.6-2.6-1.1-4.6-2-7.6-6.7-7.8-7-.2-.3-1.7-2.3-1.7-4.3s1.1-3.1 1.5-3.5c.3-.4.8-.5 1.1-.5h.8c.3 0 .6 0 .9.7.3.7 1.1 2.7 1.2 2.9.1.2.2.4.1.7-.1.3-.2.4-.4.6-.2.2-.4.5-.6.7-.2.2-.4.4-.2.8.2.4 1 1.6 2.1 2.6 1.5 1.3 2.7 1.7 3.1 1.9.4.2.6.1.8-.1.2-.2 1-1.2 1.3-1.6.3-.4.5-.3.9-.2.4.1 2.3 1.1 2.7 1.3.4.2.7.3.8.5.1.3.1 1.5-.2 2.4z"/>
+              </svg>
+            )}
+            <span className="whatsapp-pulse"></span>
+          </button>
+        </div>
       </div>
 
       <style>{`
@@ -84,6 +99,24 @@ function WhatsAppButton() {
           flex-direction: column;
           align-items: flex-end;
           gap: 16px;
+        }
+
+        .whatsapp-container {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          animation: bounce 2s infinite;
+        }
+
+        .whatsapp-text {
+          background: white;
+          color: #1f2937;
+          padding: 12px 20px;
+          border-radius: 50px;
+          font-size: 15px;
+          font-weight: 600;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          white-space: nowrap;
         }
 
         .whatsapp-btn {
@@ -100,7 +133,7 @@ function WhatsAppButton() {
           box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
           transition: all 0.3s ease;
           position: relative;
-          animation: bounce 2s infinite;
+          flex-shrink: 0;
         }
 
         .whatsapp-btn:hover {
@@ -217,6 +250,17 @@ function WhatsAppButton() {
           }
         }
 
+        @keyframes slideInRight {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
         @media (max-width: 768px) {
           .whatsapp-float {
             bottom: 16px;
@@ -226,6 +270,11 @@ function WhatsAppButton() {
           .whatsapp-btn {
             width: 56px;
             height: 56px;
+          }
+
+          /* Ocultar texto en móvil */
+          .whatsapp-text {
+            display: none;
           }
 
           .whatsapp-popup {

@@ -30,7 +30,7 @@ function HomePage() {
           maxWidth: '1400px',
           margin: '0 auto',
           padding: '32px'
-        }}>
+        }} className="home-container">
           <Carousel />
           <Stats />
           <WhyChooseUs />
@@ -39,36 +39,37 @@ function HomePage() {
             <div style={{
               textAlign: 'center',
               marginBottom: '48px'
-            }}>
+            }} className="services-header">
               <h2 style={{
                 fontSize: '36px',
                 fontWeight: 'bold',
                 color: colors.text,
                 marginBottom: '16px',
                 transition: 'color 0.3s ease'
-              }}>
+              }} className="services-title">
                 Nuestros Servicios
               </h2>
             </div>
 
+            {/* Grid de servicios - Desktop */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
               gridTemplateRows: 'repeat(2, 250px)',
               gap: '32px'
-            }}>
+            }} className="services-grid">
               {/* Card 1 - Arriba izquierda */}
-              <div style={{ gridColumn: '1', gridRow: '1' }}>
+              <div style={{ gridColumn: '1', gridRow: '1' }} className="service-card">
                 <InfoCard
-                  title="CENTRO DE CONOCIMIENTO"
+                  title="GUÍA TÉCNICA"
                   description="Información esencial sobre matafuegos"
                   image="/img/centro-conocimiento.jpg"
-                  link="/centro-conocimiento"
+                  link="/guia-tecnica"
                 />
               </div>
 
               {/* Card 3 - Centro, ocupa 2 filas (ALTA) */}
-              <div style={{ gridColumn: '2', gridRow: '1 / 3' }}>
+              <div style={{ gridColumn: '2', gridRow: '1 / 3' }} className="service-card service-card-tall">
                 <div style={{ height: '100%' }}>
                   <InfoCard
                     title="MANTENIMIENTO"
@@ -80,17 +81,17 @@ function HomePage() {
               </div>
 
               {/* Card 4 - Arriba derecha */}
-              <div style={{ gridColumn: '3', gridRow: '1' }}>
+              <div style={{ gridColumn: '3', gridRow: '1' }} className="service-card">
                 <InfoCard
                   title="UBICACIÓN"
-                  description="Encontranos en Malabrigo"
+                  description="Encontranos en Romang"
                   image="/img/ubicacion.jpg"
                   link="/ubicacion"
                 />
               </div>
 
               {/* Card 2 - Abajo izquierda */}
-              <div style={{ gridColumn: '1', gridRow: '2' }}>
+              <div style={{ gridColumn: '1', gridRow: '2' }} className="service-card">
                 <InfoCard
                   title="MANUAL PARA EL USUARIO"
                   description="Guía completa de uso"
@@ -100,7 +101,7 @@ function HomePage() {
               </div>
 
               {/* Card 5 - Abajo derecha */}
-              <div style={{ gridColumn: '3', gridRow: '2' }}>
+              <div style={{ gridColumn: '3', gridRow: '2' }} className="service-card">
                 <InfoCard
                   title="NUESTRA HISTORIA"
                   description="Conocé nuestra trayectoria"
@@ -123,15 +124,91 @@ function HomePage() {
       </div>
 
       <style>{`
-        @media (max-width: 1024px) {
-          div[style*="repeat(3, 1fr)"] {
-            grid-template-columns: 1fr !important;
-            grid-template-rows: auto !important;
+        /* Tablet - 2 columnas */
+        @media (max-width: 1024px) and (min-width: 769px) {
+          .home-container {
+            padding: 24px !important;
           }
 
-          div[style*="gridColumn"] {
+          .services-title {
+            font-size: 32px !important;
+          }
+
+          .services-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            grid-template-rows: auto !important;
+            gap: 24px !important;
+          }
+
+          .service-card {
+            grid-column: auto !important;
+            grid-row: auto !important;
+          }
+
+          .service-card-tall {
+            grid-row: auto !important;
+          }
+
+          .service-card-tall > div {
+            height: 250px !important;
+          }
+        }
+
+        /* Tablet pequeño y Mobile - 1 columna */
+        @media (max-width: 768px) {
+          .home-container {
+            padding: 20px 16px !important;
+          }
+
+          .services-header {
+            margin-bottom: 32px !important;
+          }
+
+          .services-title {
+            font-size: 28px !important;
+          }
+
+          .services-grid {
+            grid-template-columns: 1fr !important;
+            grid-template-rows: auto !important;
+            gap: 20px !important;
+          }
+
+          .service-card {
             grid-column: 1 !important;
             grid-row: auto !important;
+          }
+
+          .service-card-tall {
+            grid-row: auto !important;
+          }
+
+          .service-card-tall > div {
+            height: 250px !important;
+          }
+        }
+
+        /* Mobile pequeño */
+        @media (max-width: 480px) {
+          .home-container {
+            padding: 16px 12px !important;
+          }
+
+          .services-header {
+            margin-bottom: 24px !important;
+          }
+
+          .services-title {
+            font-size: 24px !important;
+            margin-bottom: 12px !important;
+          }
+
+          .services-grid {
+            gap: 16px !important;
+          }
+
+          .service-card-tall > div {
+            height: 220px !important;
           }
         }
       `}</style>

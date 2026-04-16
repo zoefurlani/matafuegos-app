@@ -1,6 +1,6 @@
 import { useTheme } from '../contexts/ThemeContext';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { Award, Shield, CheckCircle } from 'lucide-react';
+import { Award } from 'lucide-react';
 
 function Certifications() {
   const { colors } = useTheme();
@@ -12,18 +12,6 @@ function Certifications() {
       description: 'Normas Argentinas',
       icon: Award,
       color: '#ef4444'
-    },
-    { 
-      name: 'ART', 
-      description: 'Riesgos del Trabajo',
-      icon: Shield,
-      color: '#3b82f6'
-    },
-    { 
-      name: 'ISO 9001', 
-      description: 'Calidad Certificada',
-      icon: CheckCircle,
-      color: '#10b981'
     }
   ];
 
@@ -44,12 +32,7 @@ function Certifications() {
     fontSize: '36px',
     fontWeight: 'bold',
     color: colors.text,
-    marginBottom: '16px'
-  };
-
-  const subtitleStyle = {
-    fontSize: '18px',
-    color: colors.textSecondary
+    marginBottom: '0' // ⭐ Sin subtítulo
   };
 
   const gridStyle = {
@@ -64,7 +47,7 @@ function Certifications() {
     <div ref={ref} style={containerStyle}>
       <div style={headerStyle}>
         <h2 style={titleStyle}>Certificado por:</h2>
-        <p style={subtitleStyle}>Trabajamos bajo los más altos estándares de calidad</p>
+        {/* ⭐ REMOVIDO: subtítulo "Trabajamos bajo los más altos estándares de calidad" */}
       </div>
 
       <div style={gridStyle}>

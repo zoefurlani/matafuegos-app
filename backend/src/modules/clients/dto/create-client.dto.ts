@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEmail, IsOptional, MinLength, Matches } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, IsOptional, MinLength, Matches, ValidateIf } from 'class-validator';
 
 export class CreateClientDto {
   @IsString()
@@ -7,23 +7,25 @@ export class CreateClientDto {
   nombre: string;
 
   @IsOptional()
+  @ValidateIf((o) => o.cuit && o.cuit.trim() !== '')
   @IsString()
   @Matches(/^\d{2}-\d{8}-\d{1}$/, { 
     message: 'El CUIT debe tener formato XX-XXXXXXXX-X' 
   })
   cuit?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty({ message: 'El teléfono es obligatorio' })
-  telefono: string;
+  telefono?: string;
 
   @IsOptional()
+  @ValidateIf((o) => o.email && o.email.trim() !== '')
   @IsEmail({}, { message: 'Debe ser un email válido' })
   email?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty({ message: 'La dirección es obligatoria' })
-  direccion: string;
+  direccion?: string;
 
   @IsOptional()
   @IsString()

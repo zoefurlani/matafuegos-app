@@ -3,29 +3,29 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity('clientes')
 export class Client {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  nombre: string;
+  nombre!: string;
 
   @Column({ nullable: true })
-  cuit: string;
-
-  @Column()
-  telefono: string;
+  cuit?: string;
 
   @Column({ nullable: true })
-  email: string;
+  telefono?: string;
 
-  @Column()
-  direccion: string;
+  @Column({ nullable: true })
+  email?: string;
+
+  @Column({ nullable: true })
+  direccion?: string;
 
   @Column({ type: 'text', nullable: true })
-  observaciones: string;
+  observaciones?: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

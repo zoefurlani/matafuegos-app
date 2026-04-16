@@ -1,59 +1,64 @@
-// import { IsNumber, IsNotEmpty, IsOptional, IsDateString, IsString, IsArray } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsArray, IsNumber, IsDateString, ValidateNested, IsIn } from 'class-validator';
+import { Type } from 'class-transformer';
 
-// export class ItemComprobanteDto {
-  // descripcion: string;
-  // cantidad: number;
-  // importe: number;
-// }
+export class ComprobanteItemDto {
+  @IsString()
+  @IsIn(['Recarga', 'Venta', 'Servicio'])
+  tipoOperacion!: 'Recarga' | 'Venta' | 'Servicio';
 
-// export class CreateComprobanteDto {
-  // @IsNumber()
-  // @IsNotEmpty({ message: 'El ID de la recarga es obligatorio' })
-  // recargaId: number;
+  @IsString()
+  @IsNotEmpty()
+  descripcion!: string;
 
-  // @IsNumber()
-  // @IsNotEmpty({ message: 'El ID del cliente es obligatorio' })
-  // clienteId: number;
+  @IsNumber()
+  cantidad!: number;
 
-  // @IsDateString()
-  // @IsNotEmpty({ message: 'La fecha de emisión es obligatoria' })
-  // fechaEmision: string;
+  @IsNumber()
+  precioUnitario!: number;
 
-  // @IsArray()
-  // @IsNotEmpty({ message: 'Los items son obligatorios' })
-  // items: ItemComprobanteDto[];
-
-  // @IsOptional()
-  // @IsString()
-  // observaciones?: string;
-// }
-
-import { IsNumber, IsNotEmpty, IsOptional, IsDateString, IsString, IsArray } from 'class-validator';
-
-export class ItemComprobanteDto {
-  descripcion: string;
-  cantidad: number;
-  precioUnitario: number; // ← CAMBIADO de "importe" a "precioUnitario"
+  @IsNumber()
+  subtotal!: number;
 }
 
 export class CreateComprobanteDto {
-  @IsNumber()
-  @IsNotEmpty({ message: 'El ID de la recarga es obligatorio' })
-  recargaId: number;
-
-  @IsNumber()
-  @IsNotEmpty({ message: 'El ID del cliente es obligatorio' })
-  clienteId: number;
-
   @IsDateString()
-  @IsNotEmpty({ message: 'La fecha de emisión es obligatoria' })
-  fechaEmision: string;
+  fecha!: string;
+
+  // ✅ FOREIGN KEYS
+  @IsNumber()
+  @IsNotEmpty()
+  clienteId!: number;
+
+  @IsNumber()
+  @IsOptional()
+  ventaId?: number;
+
+  // Datos del cliente (para PDF)
+  @IsString()
+  @IsNotEmpty()
+  clienteNombre!: string;
+
+  @IsString()
+  @IsOptional()
+  clienteDni?: string;
+
+  @IsString()
+  @IsOptional()
+  clienteDireccion?: string;
+
+  @IsString()
+  @IsOptional()
+  clienteTelefono?: string;
 
   @IsArray()
-  @IsNotEmpty({ message: 'Los items son obligatorios' })
-  items: ItemComprobanteDto[];
+  @ValidateNested({ each: true })
+  @Type(() => ComprobanteItemDto)
+  items!: ComprobanteItemDto[];
 
-  @IsOptional()
+  @IsNumber()
+  total!: number;
+
   @IsString()
+  @IsOptional()
   observaciones?: string;
 }

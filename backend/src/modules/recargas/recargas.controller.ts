@@ -6,21 +6,16 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   Query,
   ParseIntPipe,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
 import { RecargasService } from './recargas.service';
 import { CreateRecargaDto } from './dto/create-recarga.dto';
 import { UpdateRecargaDto } from './dto/update-recarga.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('recargas')
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth('JWT')
 export class RecargasController {
   constructor(private readonly recargasService: RecargasService) {}
 
@@ -41,8 +36,8 @@ export class RecargasController {
   }
 
   @Get('client/:clienteId')
-  findByClient(@Param('clienteId', ParseIntPipe) clienteId: number) {
-    return this.recargasService.findByClient(clienteId);
+  findByCliente(@Param('clienteId', ParseIntPipe) clienteId: number) {
+    return this.recargasService.findByCliente(clienteId);
   }
 
   @Get('extintor/:extintorId')
@@ -55,7 +50,9 @@ export class RecargasController {
     @Query('fechaDesde') fechaDesde: string,
     @Query('fechaHasta') fechaHasta: string,
   ) {
-    return this.recargasService.findByDateRange(fechaDesde, fechaHasta);
+    const startDate = new Date(fechaDesde);
+    const endDate = new Date(fechaHasta);
+    return this.recargasService.findByDateRange(startDate, endDate);
   }
 
   @Get(':id')
@@ -72,6 +69,7 @@ export class RecargasController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.recargasService.remove(id);
   }

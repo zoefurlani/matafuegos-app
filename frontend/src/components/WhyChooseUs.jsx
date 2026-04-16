@@ -1,4 +1,4 @@
-import { Shield, Award, Clock, Users } from 'lucide-react';
+import { Shield, Award, Calendar, CheckCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
@@ -8,24 +8,24 @@ function WhyChooseUs() {
 
   const reasons = [
     {
-      icon: Shield,
-      title: 'Certificación Oficial',
-      description: 'Cumplimos con todas las normativas vigentes y estándares de calidad'
-    },
-    {
-      icon: Clock,
-      title: 'Servicio 24/7',
-      description: 'Disponibles para emergencias en cualquier momento del día'
-    },
-    {
       icon: Award,
-      title: 'Experiencia Comprobada',
-      description: 'Más de 15 años protegiendo hogares y empresas'
+      title: 'Certificación IRAM',
+      description: 'Trabajamos bajo las normativas vigentes y estándares de calidad'
     },
     {
-      icon: Users,
-      title: 'Garantía Total',
-      description: 'Todos nuestros servicios incluyen garantía certificada'
+      icon: Calendar,
+      title: 'Desde 2018',
+      description: '8 años de experiencia protegiendo hogares y empresas en la región'
+    },
+    {
+      icon: Shield,
+      title: 'Equipos Certificados',
+      description: 'Cumplimos con todas las normativas IRAM para tu seguridad'
+    },
+    {
+      icon: CheckCircle,
+      title: 'Garantía Incluida',
+      description: 'Respaldamos nuestro trabajo con garantía certificada'
     }
   ];
 
@@ -56,7 +56,7 @@ function WhyChooseUs() {
           margin: '0 auto',
           transition: 'color 0.3s ease'
         }}>
-          Somos tu mejor opción en seguridad contra incendios
+          Compromiso y calidad en cada servicio
         </p>
       </div>
 

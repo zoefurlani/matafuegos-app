@@ -1,68 +1,100 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from '../services/api';
+
 
 const AuthContext = createContext();
+
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Credenciales hardcodeadas (temporal - después usaremos base de datos)
-  const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    password: 'ZDMatafuegos2024!' // Cambiá esto por algo más seguro
-  };
 
   useEffect(() => {
     // Verificar si hay sesión guardada
-    const savedUser = sessionStorage.getItem('adminUser'); // Uso sessionStorage en vez de localStorage para más seguridad
+    const savedToken = sessionStorage.getItem('token');
+    const savedUser = sessionStorage.getItem('user');
     const loginTime = sessionStorage.getItem('loginTime');
     
-    if (savedUser && loginTime) {
+    if (savedToken && savedUser && loginTime) {
       // Verificar que no hayan pasado más de 8 horas
       const now = new Date().getTime();
       const elapsed = now - parseInt(loginTime);
       const EIGHT_HOURS = 8 * 60 * 60 * 1000;
       
       if (elapsed < EIGHT_HOURS) {
+        setToken(savedToken);
         setUser(JSON.parse(savedUser));
         setIsAuthenticated(true);
       } else {
-        // Sesión expirada
         logout();
       }
     }
     setLoading(false);
   }, []);
 
-  const login = (username, password) => {
-    if (username === ADMIN_CREDENTIALS.username && 
-        password === ADMIN_CREDENTIALS.password) {
-      const userData = { 
-        username, 
-        role: 'admin',
-        loginTime: new Date().toISOString()
+
+  const login = async (email, password) => {
+    try {
+      // Llamar al endpoint real de login
+      const response = await authAPI.login({ email, password });
+      
+      console.log('Login response:', response);
+      
+      // ⭐ CORREGIDO: El backend devuelve { access_token, usuario: { email, username, rol } }
+      const access_token = response.access_token;
+      const userData = {
+        id: response.usuario?.id,
+        email: response.usuario?.email || email,
+        username: response.usuario?.username || 'admin',
+        rol: response.usuario?.rol || 'usuario' // ⭐ CORREGIDO: response.usuario.rol
       };
+      
+      if (!access_token) {
+        console.error('No se recibió access_token:', response);
+        throw new Error('No se recibió token de autenticación');
+      }
+      
+      console.log('Token recibido:', access_token);
+      console.log('Usuario con rol:', userData);
+      
+      // Guardar en estado
+      setToken(access_token);
       setUser(userData);
       setIsAuthenticated(true);
-      sessionStorage.setItem('adminUser', JSON.stringify(userData));
+      
+      // Guardar en sessionStorage
+      sessionStorage.setItem('token', access_token);
+      sessionStorage.setItem('user', JSON.stringify(userData));
       sessionStorage.setItem('loginTime', new Date().getTime().toString());
+      
+      console.log('Token guardado en sessionStorage:', sessionStorage.getItem('token'));
+      
       return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
     }
-    return false;
   };
 
+
   const logout = () => {
+    setToken(null);
     setUser(null);
     setIsAuthenticated(false);
-    sessionStorage.removeItem('adminUser');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     sessionStorage.removeItem('loginTime');
   };
+
 
   return (
     <AuthContext.Provider value={{ 
       isAuthenticated, 
-      user, 
+      user,
+      token,
       login, 
       logout,
       loading 
@@ -71,6 +103,7 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
 
 export function useAuth() {
   const context = useContext(AuthContext);

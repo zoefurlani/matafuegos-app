@@ -6,10 +6,25 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Validación global de DTOs
-  app.useGlobalPipes(new ValidationPipe());
+  // ⭐ PREFIJO GLOBAL API
+  app.setGlobalPrefix('api');
 
-  // Configuración de Swagger
+  // ⭐ CORS
+  app.enableCors({
+    origin: ['http://localhost:5173', 'http://localhost:5174'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  });
+
+  // Validación global
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }));
+
+  // Swagger
   const config = new DocumentBuilder()
     .setTitle('API ZD Matafuegos')
     .setDescription('Sistema de gestión de recarga de extintores')

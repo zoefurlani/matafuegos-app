@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, Sun, Moon, Mail, User } from 'lucide-react';
+import { Menu, X, Sun, Moon, Mail } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
-import { useAuth } from '../contexts/AuthContext';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, toggleTheme, colors } = useTheme();
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,13 +19,17 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Cerrar menú móvil al cambiar de ruta
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
+
   const menuItems = [
     { label: 'Inicio', path: '/' },
-    { label: 'Centro de Conocimiento', path: '/centro-conocimiento' },
+    { label: 'Guía Técnica', path: '/guia-tecnica' },
     { label: 'Mantenimiento', path: '/mantenimiento' },
     { label: 'Manual de Usuario', path: '/manual-usuario' },
-    { label: 'Ubicación', path: '/ubicacion' },
-    { label: 'Nuestra Historia', path: '/nuestra-historia' }
+    { label: 'Ubicación', path: '/ubicacion' }
   ];
 
   const handleNavigation = (path) => {
@@ -56,7 +58,7 @@ function Navbar() {
           maxWidth: '1400px',
           margin: '0 auto',
           padding: '0 24px'
-        }}>
+        }} className="navbar-container">
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -72,6 +74,7 @@ function Navbar() {
                 gap: '12px',
                 cursor: 'pointer'
               }}
+              className="logo-container"
             >
               <img 
                 src="/logoof.png"
@@ -80,6 +83,7 @@ function Navbar() {
                   height: '55px',
                   width: 'auto'
                 }}
+                className="logo-img"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -97,7 +101,7 @@ function Navbar() {
                   letterSpacing: '0.5px',
                   transition: 'color 0.3s ease',
                   lineHeight: 1
-                }}>
+                }} className="logo-title">
                   ZD MATAFUEGOS
                 </h1>
                 <p style={{
@@ -107,13 +111,13 @@ function Navbar() {
                   fontWeight: 'bold',
                   marginTop: '6px',
                   lineHeight: 1
-                }}>
+                }} className="logo-subtitle">
                   Tu seguridad es nuestra prioridad
                 </p>
               </div>
             </div>
 
-            {/* Desktop Menu */}
+            {/* Desktop Menu + Action Buttons */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -164,8 +168,10 @@ function Navbar() {
                 marginLeft: '12px'
               }}>
                 {/* Contact Button */}
-                <button
-                  onClick={() => window.location.href = 'mailto:zdmatafuegos1@gmail.com'}
+                <a
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=zdmatafuegos@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     width: '48px',
                     height: '48px',
@@ -176,8 +182,10 @@ function Navbar() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    textDecoration: 'none'
                   }}
+                  className="contact-button"
                   onMouseOver={(e) => {
                     e.currentTarget.style.backgroundColor = '#dc2626';
                     e.currentTarget.style.transform = 'scale(1.1)';
@@ -186,9 +194,10 @@ function Navbar() {
                     e.currentTarget.style.backgroundColor = '#ef4444';
                     e.currentTarget.style.transform = 'scale(1)';
                   }}
+                  title="Enviar email a zdmatafuegos@gmail.com"
                 >
                   <Mail size={24} color="white" />
-                </button>
+                </a>
 
                 {/* Theme Toggle */}
                 <button
@@ -205,6 +214,7 @@ function Navbar() {
                     cursor: 'pointer',
                     transition: 'all 0.3s ease'
                   }}
+                  className="theme-button"
                   onMouseOver={(e) => {
                     e.currentTarget.style.backgroundColor = '#f59e0b';
                     e.currentTarget.style.transform = 'scale(1.1) rotate(15deg)';
@@ -218,48 +228,6 @@ function Navbar() {
                     <Moon size={24} color="white" />
                   ) : (
                     <Sun size={24} color="white" />
-                  )}
-                </button>
-
-                {/* User/Admin Button con indicador de sesión */}
-                <button
-                  onClick={() => navigate(isAuthenticated ? '/admin/dashboard' : '/login')}
-                  style={{
-                    width: '48px',
-                    height: '48px',
-                    borderRadius: '50%',
-                    backgroundColor: '#ef4444',
-                    border: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    position: 'relative'
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = '#dc2626';
-                    e.currentTarget.style.transform = 'scale(1.1)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = '#ef4444';
-                    e.currentTarget.style.transform = 'scale(1)';
-                  }}
-                >
-                  <User size={24} color="white" />
-                  {/* Indicador verde si está autenticado */}
-                  {isAuthenticated && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '2px',
-                      right: '2px',
-                      width: '12px',
-                      height: '12px',
-                      backgroundColor: '#10b981',
-                      borderRadius: '50%',
-                      border: '2px solid white',
-                      boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)'
-                    }} />
                   )}
                 </button>
 
@@ -346,8 +314,18 @@ function Navbar() {
         </div>
       </div>
 
-      {/* CSS for responsive menu */}
+      {/* CSS para responsive */}
       <style>{`
+        /* Por defecto: ocultar menú desktop, mostrar hamburguesa */
+        .desktop-menu {
+          display: none;
+        }
+        
+        .mobile-menu-button {
+          display: flex;
+        }
+
+        /* Desktop - Mostrar menú, ocultar hamburguesa */
         @media (min-width: 968px) {
           .desktop-menu {
             display: flex !important;
@@ -357,9 +335,53 @@ function Navbar() {
           }
         }
 
+        /* Mobile y Tablet - Ocultar menú desktop */
         @media (max-width: 967px) {
           .desktop-menu {
             display: none !important;
+          }
+          .mobile-menu-button {
+            display: flex !important;
+          }
+        }
+
+        /* Mobile pequeño - Ajustes de logo y botones */
+        @media (max-width: 480px) {
+          .navbar-container {
+            padding: 0 12px !important;
+          }
+          
+          .logo-img {
+            height: 40px !important;
+          }
+          
+          .logo-title {
+            font-size: 18px !important;
+          }
+          
+          .logo-subtitle {
+            font-size: 8px !important;
+          }
+          
+          .contact-button,
+          .theme-button,
+          .mobile-menu-button {
+            width: 40px !important;
+            height: 40px !important;
+          }
+          
+          .contact-button svg,
+          .theme-button svg,
+          .mobile-menu-button svg {
+            width: 20px !important;
+            height: 20px !important;
+          }
+        }
+
+        /* Tablet - Reducir gap entre botones */
+        @media (max-width: 768px) and (min-width: 481px) {
+          .logo-container {
+            gap: 8px !important;
           }
         }
       `}</style>

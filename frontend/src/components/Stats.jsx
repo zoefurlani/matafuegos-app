@@ -8,10 +8,10 @@ function Stats() {
   const { colors } = useTheme();
 
   const finalValues = {
-    exp: 15,
-    clients: 500,
-    services: 3000,
-    certified: 100
+    exp: 8,           // ⭐ Desde 2018
+    clients: 1000,    // ⭐ 1000+ clientes
+    services: 5000,   // ⭐ 5000+ servicios/recargas
+    certified: 100    // ⭐ 100% Cumplimiento normativo
   };
 
   useEffect(() => {
@@ -65,12 +65,12 @@ function Stats() {
   const statNumberStyle = {
     fontSize: '48px',
     fontWeight: 'bold',
-    color: '#ef4444',  // Siempre rojo
+    color: '#ef4444',
     marginBottom: '8px'
   };
 
   const statLabelStyle = {
-    color: colors.textSecondary,  // Cambiado para adaptarse al tema
+    color: colors.textSecondary,
     fontSize: '16px'
   };
 
@@ -87,7 +87,7 @@ function Stats() {
 
       <div style={statItemStyle}>
         <div style={statNumberStyle}>
-          {counts.clients}+
+          {counts.clients.toLocaleString()}+
         </div>
         <div style={statLabelStyle}>
           Clientes Satisfechos
@@ -108,7 +108,7 @@ function Stats() {
           {counts.certified}%
         </div>
         <div style={statLabelStyle}>
-          Certificado
+          Cumplimiento Normativo
         </div>
       </div>
     </div>

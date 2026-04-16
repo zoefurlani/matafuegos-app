@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Linkedin, Twitter, ArrowUp, X } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, ArrowUp, X } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -99,6 +99,7 @@ function ScrollToTopButton() {
           }
         }
 
+        /* Mobile */
         @media (max-width: 768px) {
           .scroll-top-btn {
             bottom: 80px;
@@ -121,6 +122,32 @@ function ScrollToTopButton() {
           .arrow-icon {
             width: 20px;
             height: 20px;
+          }
+        }
+
+        /* Mobile pequeño */
+        @media (max-width: 480px) {
+          .scroll-top-btn {
+            bottom: 70px;
+            right: 12px;
+            width: 44px;
+            height: 44px;
+          }
+
+          .progress-ring {
+            width: 44px;
+            height: 44px;
+          }
+
+          .progress-ring circle {
+            r: 18;
+            cx: 22;
+            cy: 22;
+          }
+
+          .arrow-icon {
+            width: 18px;
+            height: 18px;
           }
         }
       `}</style>
@@ -175,19 +202,6 @@ function Footer() {
     display: 'inline-block'
   };
 
-  const socialIconStyle = {
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    backgroundColor: colors.background,
-    border: '2px solid ' + colors.border,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'all 0.3s ease',
-    cursor: 'pointer'
-  };
-
   const modalOverlayStyle = {
     position: 'fixed',
     top: 0,
@@ -215,11 +229,10 @@ function Footer() {
 
   const links = [
     { label: 'Inicio', path: '/' },
-    { label: 'Centro de Conocimiento', path: '/centro-conocimiento' },
+    { label: 'Guía Técnica', path: '/guia-tecnica' },
     { label: 'Mantenimiento', path: '/mantenimiento' },
     { label: 'Manual del Usuario', path: '/manual-usuario' },
-    { label: 'Ubicación', path: '/ubicacion' },
-    { label: 'Nuestra Historia', path: '/nuestra-historia' }
+    { label: 'Ubicación', path: '/ubicacion' }
   ];
 
   const modalContent = {
@@ -269,7 +282,7 @@ function Footer() {
         <p>Usted tiene derecho a acceder, modificar o eliminar su información personal en cualquier momento.</p>
         
         <h3>6. Contacto</h3>
-        <p>Para consultas sobre privacidad, contacte a: info@zdmatafuegos.com</p>
+        <p>Para consultas sobre privacidad, contacte a: zdmatafuegos@gmail.com</p>
       `
     },
     cookies: {
@@ -300,27 +313,43 @@ function Footer() {
   return (
     <>
       <footer style={footerStyle}>
-        <div style={containerStyle}>
-          <div style={gridStyle}>
+        <div style={containerStyle} className="footer-container">
+          <div style={gridStyle} className="footer-grid">
             {/* Columna 1: Info empresa */}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                <img src="/logoof.png" alt="ZD Matafuegos" style={{ height: '50px', filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.4))' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }} className="footer-logo-section">
+                <img 
+                  src="/logoof.png" 
+                  alt="ZD Matafuegos" 
+                  style={{ height: '50px', filter: 'drop-shadow(0 0 8px rgba(239, 68, 68, 0.4))' }}
+                  className="footer-logo"
+                />
                 <div>
-                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: colors.text, margin: 0 }}>ZD MATAFUEGOS</h3>
-                  <p style={{ fontSize: '12px', color: '#ef4444', margin: 0, fontWeight: '600' }}>Tu seguridad, nuestra prioridad</p>
+                  <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: colors.text, margin: 0 }} className="footer-title">
+                    ZD MATAFUEGOS
+                  </h3>
+                  <p style={{ fontSize: '12px', color: '#ef4444', margin: 0, fontWeight: '600' }} className="footer-subtitle">
+                    Tu seguridad, nuestra prioridad
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Columna 2: Enlaces */}
             <div>
-              <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: colors.text, marginBottom: '20px' }}>Enlaces Rápidos</h4>
+              <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: colors.text, marginBottom: '20px' }} className="footer-section-title">
+                Enlaces Rápidos
+              </h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {links.map(function(link) {
                   return (
                     <li key={link.path} style={{ marginBottom: '12px' }}>
-                      <a onClick={function() { navigate(link.path); scrollToTop(); }} style={linkStyle}>
+                      <a 
+                        onClick={function() { navigate(link.path); scrollToTop(); }} 
+                        style={linkStyle}
+                        onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                        onMouseOut={(e) => e.currentTarget.style.color = colors.textSecondary}
+                      >
                         → {link.label}
                       </a>
                     </li>
@@ -331,21 +360,29 @@ function Footer() {
 
             {/* Columna 3: Contacto */}
             <div>
-              <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: colors.text, marginBottom: '20px' }}>Contacto</h4>
+              <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: colors.text, marginBottom: '20px' }} className="footer-section-title">
+                Contacto
+              </h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <MapPin size={20} color="#ef4444" style={{ flexShrink: 0, marginTop: '2px' }} />
                   <div>
                     <p style={{ color: colors.text, fontSize: '14px', margin: 0, fontWeight: '600' }}>Dirección</p>
-                    <p style={{ color: colors.textSecondary, fontSize: '14px', margin: '4px 0 0 0' }}>Malabrigo, Santa Fe, Argentina</p>
+                    <p style={{ color: colors.textSecondary, fontSize: '14px', margin: '4px 0 0 0' }}>25 de Mayo N°1675</p>
+                    <p style={{ color: colors.textSecondary, fontSize: '14px', margin: '2px 0 0 0' }}>Romang, Santa Fe (3555)</p>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                   <Phone size={20} color="#ef4444" style={{ flexShrink: 0, marginTop: '2px' }} />
                   <div>
-                    <p style={{ color: colors.text, fontSize: '14px', margin: 0, fontWeight: '600' }}>Teléfono</p>
-                    <a href="tel:+5491234567890" style={{ color: colors.textSecondary, fontSize: '14px', margin: '4px 0 0 0', textDecoration: 'none', display: 'block' }}>
-                      +54 9 123 456-7890
+                    <p style={{ color: colors.text, fontSize: '14px', margin: 0, fontWeight: '600' }}>Teléfono / WhatsApp</p>
+                    <a 
+                      href="tel:+5493482445650" 
+                      style={{ color: colors.textSecondary, fontSize: '14px', margin: '4px 0 0 0', textDecoration: 'none', display: 'block' }}
+                      onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                      onMouseOut={(e) => e.currentTarget.style.color = colors.textSecondary}
+                    >
+                      +54 9 3482 44-5650
                     </a>
                   </div>
                 </div>
@@ -353,8 +390,13 @@ function Footer() {
                   <Mail size={20} color="#ef4444" style={{ flexShrink: 0, marginTop: '2px' }} />
                   <div>
                     <p style={{ color: colors.text, fontSize: '14px', margin: 0, fontWeight: '600' }}>Email</p>
-                    <a href="mailto:info@zdmatafuegos.com" style={{ color: colors.textSecondary, fontSize: '14px', margin: '4px 0 0 0', textDecoration: 'none', display: 'block' }}>
-                      info@zdmatafuegos.com
+                    <a 
+                      href="mailto:zdmatafuegos@gmail.com" 
+                      style={{ color: colors.textSecondary, fontSize: '14px', margin: '4px 0 0 0', textDecoration: 'none', display: 'block' }}
+                      onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                      onMouseOut={(e) => e.currentTarget.style.color = colors.textSecondary}
+                    >
+                      zdmatafuegos@gmail.com
                     </a>
                   </div>
                 </div>
@@ -363,47 +405,49 @@ function Footer() {
                   <div>
                     <p style={{ color: colors.text, fontSize: '14px', margin: 0, fontWeight: '600' }}>Horarios</p>
                     <p style={{ color: colors.textSecondary, fontSize: '14px', margin: '4px 0 0 0' }}>
-                      Lun - Vie: 8:00 - 18:00
+                      Lunes a Sábado
                     </p>
                     <p style={{ color: colors.textSecondary, fontSize: '14px', margin: '2px 0 0 0' }}>
-                      Sáb: 9:00 - 13:00
+                      9:00 - 13:00 | 16:00 - 20:00
                     </p>
-                    <p style={{ color: '#ef4444', fontSize: '14px', margin: '2px 0 0 0', fontWeight: '600' }}>
-                      Emergencias 24/7
+                    <p style={{ color: '#ef4444', fontSize: '14px', margin: '4px 0 0 0', fontWeight: '600' }}>
+                      Domingo: Cerrado
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Columna 4: Certificaciones */}
-            <div>
-              <h4 style={{ fontSize: '18px', fontWeight: 'bold', color: colors.text, marginBottom: '20px' }}>Certificaciones</h4>
-              <p style={{ color: colors.textSecondary, fontSize: '14px', marginBottom: '16px' }}>
-                Trabajamos bajo las normativas vigentes y estándares de calidad.
-              </p>
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <div style={{ padding: '12px 20px', backgroundColor: colors.background, border: '2px solid ' + colors.border, borderRadius: '8px', fontSize: '14px', fontWeight: 'bold', color: colors.text }}>IRAM</div>
-                <div style={{ padding: '12px 20px', backgroundColor: colors.background, border: '2px solid ' + colors.border, borderRadius: '8px', fontSize: '14px', fontWeight: 'bold', color: colors.text }}>ART</div>
-                <div style={{ padding: '12px 20px', backgroundColor: colors.background, border: '2px solid ' + colors.border, borderRadius: '8px', fontSize: '14px', fontWeight: 'bold', color: colors.text }}>ISO 9001</div>
               </div>
             </div>
           </div>
 
           <div style={{ height: '1px', backgroundColor: colors.border, margin: '32px 0' }} />
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-            <div style={{ color: colors.textSecondary, fontSize: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }} className="footer-bottom">
+            <div style={{ color: colors.textSecondary, fontSize: '14px' }} className="footer-copyright">
               © {currentYear} ZD Matafuegos. Todos los derechos reservados.
             </div>
-            <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-              <a onClick={function() { openModal('terms'); }} style={{ color: colors.textSecondary, fontSize: '14px', textDecoration: 'none', cursor: 'pointer' }}>
+            <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }} className="footer-legal-links">
+              <a 
+                onClick={function() { openModal('terms'); }} 
+                style={{ color: colors.textSecondary, fontSize: '14px', textDecoration: 'none', cursor: 'pointer' }}
+                onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                onMouseOut={(e) => e.currentTarget.style.color = colors.textSecondary}
+              >
                 Términos y Condiciones
               </a>
-              <a onClick={function() { openModal('privacy'); }} style={{ color: colors.textSecondary, fontSize: '14px', textDecoration: 'none', cursor: 'pointer' }}>
+              <a 
+                onClick={function() { openModal('privacy'); }} 
+                style={{ color: colors.textSecondary, fontSize: '14px', textDecoration: 'none', cursor: 'pointer' }}
+                onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                onMouseOut={(e) => e.currentTarget.style.color = colors.textSecondary}
+              >
                 Política de Privacidad
               </a>
-              <a onClick={function() { openModal('cookies'); }} style={{ color: colors.textSecondary, fontSize: '14px', textDecoration: 'none', cursor: 'pointer' }}>
+              <a 
+                onClick={function() { openModal('cookies'); }} 
+                style={{ color: colors.textSecondary, fontSize: '14px', textDecoration: 'none', cursor: 'pointer' }}
+                onMouseOver={(e) => e.currentTarget.style.color = '#ef4444'}
+                onMouseOut={(e) => e.currentTarget.style.color = colors.textSecondary}
+              >
                 Política de Cookies
               </a>
             </div>
@@ -416,18 +460,32 @@ function Footer() {
       {/* Modal */}
       {activeModal && (
         <div style={modalOverlayStyle} onClick={closeModal}>
-          <div style={modalCardStyle} onClick={function(e) { e.stopPropagation(); }}>
-            <div style={{ padding: '24px', borderBottom: '2px solid ' + colors.border, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: colors.text, margin: 0 }}>
+          <div style={modalCardStyle} onClick={function(e) { e.stopPropagation(); }} className="modal-content">
+            <div style={{ padding: '24px', borderBottom: '2px solid ' + colors.border, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="modal-header">
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: colors.text, margin: 0 }} className="modal-title">
                 {modalContent[activeModal].title}
               </h2>
-              <button onClick={closeModal} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px' }}>
+              <button 
+                onClick={closeModal} 
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '8px' }}
+                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
                 <X size={24} color={colors.text} />
               </button>
             </div>
-            <div style={{ padding: '24px', color: colors.text, lineHeight: '1.8' }} dangerouslySetInnerHTML={{ __html: modalContent[activeModal].content }} />
-            <div style={{ padding: '24px', borderTop: '1px solid ' + colors.border, textAlign: 'right' }}>
-              <button onClick={closeModal} style={{ padding: '12px 24px', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: 'bold', cursor: 'pointer' }}>
+            <div 
+              style={{ padding: '24px', color: colors.text, lineHeight: '1.8' }} 
+              className="modal-body"
+              dangerouslySetInnerHTML={{ __html: modalContent[activeModal].content }} 
+            />
+            <div style={{ padding: '24px', borderTop: '1px solid ' + colors.border, textAlign: 'right' }} className="modal-footer">
+              <button 
+                onClick={closeModal} 
+                style={{ padding: '12px 24px', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s ease' }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#dc2626'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ef4444'}
+              >
                 Cerrar
               </button>
             </div>
@@ -447,10 +505,100 @@ function Footer() {
           }
         }
 
+        /* Tablet y Mobile - Grid a 1 columna */
         @media (max-width: 768px) {
-          footer > div > div:first-child {
+          .footer-container {
+            padding: 48px 24px 24px !important;
+          }
+
+          .footer-grid {
             grid-template-columns: 1fr !important;
             gap: 32px !important;
+          }
+
+          .footer-bottom {
+            flex-direction: column !important;
+            text-align: center !important;
+          }
+
+          .footer-legal-links {
+            justify-content: center !important;
+            gap: 16px !important;
+          }
+
+          .modal-content {
+            max-width: 95% !important;
+          }
+
+          .modal-header {
+            padding: 16px !important;
+          }
+
+          .modal-title {
+            font-size: 20px !important;
+          }
+
+          .modal-body {
+            padding: 20px 16px !important;
+          }
+
+          .modal-footer {
+            padding: 16px !important;
+          }
+        }
+
+        /* Mobile pequeño */
+        @media (max-width: 480px) {
+          .footer-container {
+            padding: 32px 16px 20px !important;
+          }
+
+          .footer-grid {
+            gap: 24px !important;
+          }
+
+          .footer-logo {
+            height: 40px !important;
+          }
+
+          .footer-title {
+            font-size: 18px !important;
+          }
+
+          .footer-subtitle {
+            font-size: 10px !important;
+          }
+
+          .footer-section-title {
+            font-size: 16px !important;
+            margin-bottom: 16px !important;
+          }
+
+          .footer-copyright {
+            font-size: 12px !important;
+          }
+
+          .footer-legal-links {
+            flex-direction: column !important;
+            gap: 12px !important;
+            align-items: center !important;
+          }
+
+          .footer-legal-links a {
+            font-size: 12px !important;
+          }
+
+          .modal-title {
+            font-size: 18px !important;
+          }
+
+          .modal-body {
+            font-size: 14px !important;
+            padding: 16px !important;
+          }
+
+          .modal-body h3 {
+            font-size: 16px !important;
           }
         }
       `}</style>
