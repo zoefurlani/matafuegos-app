@@ -3,31 +3,31 @@ import { IsString, IsNotEmpty, IsNumber, IsOptional, IsIn, Min } from 'class-val
 export class CreateProductoDto {
   @IsString()
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
-  nombre: string;
+  nombre!: string;
 
   @IsString()
   @IsNotEmpty({ message: 'La categoría es obligatoria' })
   @IsIn(['polvo', 'repuesto', 'accesorio'], {
     message: 'La categoría debe ser: polvo, repuesto o accesorio',
   })
-  categoria: string;
+  categoria!: string;
 
   @IsString()
   @IsNotEmpty({ message: 'La unidad de medida es obligatoria' })
   @IsIn(['kg', 'unidad', 'litro', 'metro'], {
     message: 'La unidad de medida debe ser: kg, unidad, litro o metro',
   })
-  unidadMedida: string;
+  unidadMedida!: string;
 
   @IsNumber()
   @IsNotEmpty({ message: 'El stock actual es obligatorio' })
   @Min(0)
-  stockActual: number;
+  stockActual!: number;
 
   @IsNumber()
   @IsNotEmpty({ message: 'El stock mínimo es obligatorio' })
   @Min(0)
-  stockMinimo: number;
+  stockMinimo!: number;
 
   @IsOptional()
   @IsNumber()

@@ -2,8 +2,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -21,16 +19,20 @@ export class Comprobante {
   @Column({ type: 'date' })
   fecha!: Date;
 
-  // ✅ RELACIONES
-  @ManyToOne(() => Client)
+  @ManyToOne(() => Client, { nullable: true })
   @JoinColumn({ name: 'clienteId' })
-  cliente!: Client;
+  cliente?: Client;
+
+  @Column({ nullable: true })
+  clienteId?: number;
 
   @ManyToOne(() => Venta, { nullable: true })
   @JoinColumn({ name: 'ventaId' })
   venta?: Venta;
 
-  // Datos del cliente (mantener para PDFs)
+  @Column({ nullable: true })
+  ventaId?: number;
+
   @Column()
   clienteNombre!: string;
 
@@ -43,9 +45,8 @@ export class Comprobante {
   @Column({ nullable: true })
   clienteTelefono?: string;
 
-  // Items del comprobante (JSON)
   @Column({ type: 'json' })
-  items!: ComprobanteItem[];
+  items!: any;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   total!: number;
@@ -56,17 +57,9 @@ export class Comprobante {
   @Column({ default: 'activo' })
   estado!: string;
 
-  @CreateDateColumn()
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
-}
-
-export interface ComprobanteItem {
-  tipoOperacion: 'Recarga' | 'Venta' | 'Servicio';
-  descripcion: string;
-  cantidad: number;
-  precioUnitario: number;
-  subtotal: number;
 }

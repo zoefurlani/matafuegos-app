@@ -2,21 +2,22 @@ import { IsNumber, IsString, IsOptional, Min } from 'class-validator';
 
 export class CreateVentaDto {
   @IsNumber()
-  clienteId: number;
+  clienteId!: number;
 
   @IsNumber()
-  productoId: number;
+  productoId!: number;
 
   @IsNumber()
   @Min(1)
-  cantidad: number;
+  cantidad!: number;
 
   @IsNumber()
   @Min(0)
-  precioUnitario: number;
+  precioUnitario!: number;
 
+  @IsOptional()
   @IsString()
-  numeroEquipo: string; // Número de equipo del extintor vendido
+  numeroEquipo?: string; 
 
   @IsOptional()
   @IsString()

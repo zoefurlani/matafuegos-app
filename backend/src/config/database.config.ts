@@ -8,7 +8,7 @@ import { Producto } from '../database/entities/producto.entity';
 import { Compra } from '../database/entities/compra.entity';
 import { LogActividad } from '../database/entities/log-actividad.entity';
 import { Testimonio } from '../database/entities/testimonio.entity'; 
-import { Venta } from 'src/modules/ventas/venta.entity';
+import { Venta } from '../modules/ventas/venta.entity';  // ✅ CAMBIO AQUÍ
 import { Comprobante } from '../modules/comprobantes/comprobantes.entity';
 import { RecursoEducativo } from '../modules/recursos-educativos/recurso-educativo.entity';
 
@@ -21,7 +21,19 @@ export const getDatabaseConfig = (
   username: configService.get<string>('DB_USER', 'root'),
   password: configService.get<string>('DB_PASSWORD', ''),
   database: configService.get<string>('DB_NAME', 'matafuegos_db'),
-  entities: [User, Client, Extintor, Recarga, Producto, Compra, LogActividad, Testimonio, Venta, Comprobante, RecursoEducativo],
-  synchronize: true,
-  logging: false,
+  entities: [
+    User, 
+    Client, 
+    Extintor, 
+    Recarga, 
+    Producto, 
+    Compra, 
+    LogActividad, 
+    Testimonio, 
+    Venta, 
+    Comprobante, 
+    RecursoEducativo
+  ],
+  synchronize: false,  // ✅ CAMBIO: true → false (IMPORTANTE para no perder datos)
+  logging: true,        // ✅ CAMBIO: false → true (para ver errores)
 });

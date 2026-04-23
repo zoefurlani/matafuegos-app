@@ -18,7 +18,7 @@ export class TestimoniosService {
 
   async findAllPublic(): Promise<Testimonio[]> {
     return await this.testimoniosRepository.find({
-      where: { isVisible: true },
+      where: { isVisible: 1 },  // ✅ Cambio: true → 1
       order: { createdAt: 'DESC' },
     });
   }
@@ -31,7 +31,7 @@ export class TestimoniosService {
 
   async findByRating(rating: number): Promise<Testimonio[]> {
     return await this.testimoniosRepository.find({
-      where: { rating, isVisible: true },
+      where: { rating, isVisible: 1 },  // ✅ Cambio: true → 1
       order: { createdAt: 'DESC' },
     });
   }
@@ -52,14 +52,25 @@ export class TestimoniosService {
   async toggleVisibility(id: number): Promise<Testimonio> {
     const testimonio = await this.testimoniosRepository.findOne({ where: { id } });
     if (!testimonio) throw new NotFoundException('Testimonio no encontrado');
-    testimonio.isVisible = !testimonio.isVisible;
+    testimonio.isVisible = testimonio.isVisible === 1 ? 0 : 1;  // ✅ Cambio: toggle entre 1 y 0
     return await this.testimoniosRepository.save(testimonio);
   }
 
   async getStats() {
     const total = await this.testimoniosRepository.count();
-    const visible = await this.testimoniosRepository.count({ where: { isVisible: true } });
+    const visible = await this.testimoniosRepository.count({ where: { isVisible: 1 } });  // ✅ Cambio: true → 1
     const byRating = await Promise.all([1,2,3,4,5].map(r => this.testimoniosRepository.count({ where: { rating: r } })));
-    return { total, visible, hidden: total - visible, byRating: { 1: byRating[0], 2: byRating[1], 3: byRating[2], 4: byRating[3], 5: byRating[4] } };
+    return { 
+      total, 
+      visible, 
+      hidden: total - visible, 
+      byRating: { 
+        1: byRating[0], 
+        2: byRating[1], 
+        3: byRating[2], 
+        4: byRating[3], 
+        5: byRating[4] 
+      } 
+    };
   }
 }

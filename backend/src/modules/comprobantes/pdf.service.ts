@@ -35,7 +35,7 @@ export class PdfService {
             console.log('Logo no encontrado en:', logoPath);
           }
         } catch (error) {
-          console.log('Error al cargar logo:', error.message);
+          console.log('Error al cargar logo:', (error as Error).message);
         }
 
         // ==================== ENCABEZADO ====================

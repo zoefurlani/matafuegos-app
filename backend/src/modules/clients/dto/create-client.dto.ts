@@ -4,7 +4,7 @@ export class CreateClientDto {
   @IsString()
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
   @MinLength(3, { message: 'El nombre debe tener al menos 3 caracteres' })
-  nombre: string;
+  nombre!: string;
 
   @IsOptional()
   @ValidateIf((o) => o.cuit && o.cuit.trim() !== '')

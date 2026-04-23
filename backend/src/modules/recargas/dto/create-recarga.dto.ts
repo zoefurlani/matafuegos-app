@@ -12,17 +12,17 @@ import {
 export class CreateRecargaDto {
   @IsNumber()
   @IsNotEmpty({ message: 'El ID del extintor es obligatorio' })
-  extintorId: number;
+  extintorId!: number;
 
 
   @IsNumber()
   @IsNotEmpty({ message: 'El ID del cliente es obligatorio' })
-  clienteId: number;
+  clienteId!: number;
 
 
   @IsDateString()
   @IsNotEmpty({ message: 'La fecha de recarga es obligatoria' })
-  fechaRecarga: string;
+  fechaRecarga!: string;
 
 
   @IsOptional()
@@ -139,7 +139,7 @@ export class CreateRecargaDto {
   @IsNumber()
   @IsNotEmpty({ message: 'El precio total es obligatorio' })
   @Min(0, { message: 'El precio debe ser mayor o igual a 0' })
-  precioTotal: number;
+  precioTotal!: number;
 
 
   @IsOptional()

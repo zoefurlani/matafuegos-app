@@ -3,15 +3,15 @@ import { IsString, IsNotEmpty, IsOptional, IsNumber, IsIn } from 'class-validato
 export class CreateRecursoEducativoDto {
   @IsString()
   @IsNotEmpty()
-  titulo: string;
+  titulo!: string;
 
   @IsString()
   @IsNotEmpty()
-  descripcion: string;
+  descripcion!: string;
 
   @IsString()
   @IsIn(['tipo_fuego', 'tipo_extintor', 'normativa', 'mantenimiento', 'uso'])
-  categoria: string;
+  categoria!: string;
 
   @IsString()
   @IsOptional()
@@ -31,7 +31,7 @@ export class CreateRecursoEducativoDto {
 
   @IsString()
   @IsNotEmpty()
-  contenidoDetallado: string;
+  contenidoDetallado!: string;
 
   @IsString()
   @IsOptional()

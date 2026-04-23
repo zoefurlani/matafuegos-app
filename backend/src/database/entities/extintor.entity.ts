@@ -4,40 +4,39 @@ import { Client } from './client.entity';
 @Entity('extintores')
 export class Extintor {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ unique: true })
-  numeroEquipo: string;
+  numeroEquipo!: string;
 
   @Column()
-  tipo: string; // ABC, CO2, AFFF, HCFC, K
+  tipo!: string;
 
   @Column('decimal', { precision: 5, scale: 2 })
-  capacidad: number; // en kg
+  capacidad!: number;
 
   @Column({ nullable: true })
-  marca: string;
+  marca?: string;
 
   @Column({ type: 'date', nullable: true })
-  fechaUltimaRecarga: Date;
+  fechaUltimaRecarga?: Date;
 
   @Column({ type: 'date', nullable: true })
-  fechaVencimiento: Date;
+  fechaVencimiento?: Date;
 
   @Column({ default: 'activo' })
-  estado: string; // activo, vencido, en_mantenimiento
+  estado!: string;
 
-  // Relación Many-to-One con Cliente
   @ManyToOne(() => Client, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'clienteId' })
-  cliente: Client;
+  cliente!: Client;
 
   @Column()
-  clienteId: number;
+  clienteId!: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

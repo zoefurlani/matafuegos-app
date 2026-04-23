@@ -3,10 +3,10 @@ import { IsString, IsEmail, IsInt, IsOptional, Min, Max, MaxLength } from 'class
 export class CreateTestimonioDto {
   @IsString()
   @MaxLength(100)
-  name: string;
+  name!: string;
 
   @IsEmail()
-  userEmail: string;
+  userEmail!: string;
 
   @IsString()
   @IsOptional()
@@ -15,10 +15,10 @@ export class CreateTestimonioDto {
 
   @IsString()
   @MaxLength(1000)
-  text: string;
+  text!: string;
 
   @IsInt()
   @Min(1)
   @Max(5)
-  rating: number;
+  ratings!: number;
 }

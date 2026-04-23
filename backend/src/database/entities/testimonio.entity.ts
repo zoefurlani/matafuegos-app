@@ -1,28 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('testimonios')
 export class Testimonio {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'varchar', length: 100 })
-  name: string;
+  name!: string;
 
   @Column({ type: 'varchar', length: 255 })
-  userEmail: string;
+  userEmail!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  company: string;
+  company?: string;
 
   @Column({ type: 'text' })
-  text: string;
+  text!: string;
 
   @Column({ type: 'int', default: 5 })
-  rating: number;
+  rating!: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt!: Date;
 
-  @Column({ type: 'boolean', default: true })
-  isVisible: boolean;
+  @Column({ type: 'tinyint', default: 1 })
+  isVisible!: number;
 }

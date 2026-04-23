@@ -4,39 +4,39 @@ import { Producto } from './producto.entity';
 @Entity('compras')
 export class Compra {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @ManyToOne(() => Producto, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'productoId' })
-  producto: Producto;
+  producto!: Producto;
 
   @Column()
-  productoId: number;
+  productoId!: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  cantidad: number;
+  cantidad!: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  precioUnitario: number;
+  precioUnitario!: number;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  precioTotal: number;
+  precioTotal!: number;
 
   @Column({ type: 'date' })
-  fechaCompra: Date;
+  fechaCompra!: Date;
 
   @Column({ nullable: true })
-  proveedor: string;
+  proveedor?: string;
 
   @Column({ nullable: true })
-  numeroFactura: string;
+  numeroFactura?: string;
 
   @Column({ type: 'text', nullable: true })
-  observaciones: string;
+  observaciones?: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updatedAt!: Date;
 }

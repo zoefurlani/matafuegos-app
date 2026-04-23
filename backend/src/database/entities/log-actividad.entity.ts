@@ -1,31 +1,30 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity('logs_actividad')
 export class LogActividad {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  usuarioId: number; // ⭐ Campo directo para el ID
+  usuarioId!: number;
 
   @Column({ length: 100 })
-  accion: string;
+  accion!: string;
 
   @Column({ length: 50 })
-  modulo: string;
+  modulo!: string;
 
   @Column({ type: 'text', nullable: true })
-  descripcion: string;
+  descripcion?: string;
 
   @Column({ length: 50, nullable: true })
-  ip: string;
+  ip?: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt!: Date;
 
-  // ⭐ Relación con User (solo para consultas)
   @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: 'usuarioId' })
-  usuario: User;
+  usuario!: User;
 }

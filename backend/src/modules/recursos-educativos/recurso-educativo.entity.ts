@@ -2,8 +2,6 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
@@ -50,14 +48,17 @@ export class RecursoEducativo {
   @Column({ default: 'activo' })
   estado!: string;
 
-  // ✅ NUEVA RELACIÓN
+  // ✅ RELACIÓN
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'usuarioId' })
   usuario?: User;
 
-  @CreateDateColumn()
+  @Column({ nullable: true })
+  usuarioId?: number;
+
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updatedAt!: Date;
 }

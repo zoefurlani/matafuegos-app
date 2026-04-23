@@ -1,9 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
+// ⭐ EXPORTAR los enums
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
   ADMIN = 'admin',
+  VENDEDOR = 'vendedor',
   USUARIO = 'usuario'
 }
 
@@ -16,35 +18,27 @@ export enum UserEstado {
 @Entity('usuarios')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ unique: true })
-  username: string;
+  username!: string;
 
   @Exclude()
   @Column()
-  password: string;
+  password!: string;
 
   @Column()
-  email: string;
+  email!: string;
 
-  @Column({ 
-    type: 'varchar',
-    length: 20,
-    default: UserRole.USUARIO 
-  })
-  rol: string;
-
-  @Column({ 
-    type: 'varchar',
-    length: 20,
-    default: UserEstado.ACTIVO 
-  })
-  estado: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  ultimoLogin: Date;
+  @Column()
+  rol!: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  createdAt!: Date;
+
+  @Column({ default: 'activo' })
+  estado!: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  ultimoLogin?: Date;
 }
