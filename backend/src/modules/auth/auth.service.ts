@@ -23,11 +23,10 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  // ⭐ Método para REGISTRAR un nuevo usuario (BLOQUEADO si ya existe un super_admin)
+  // para registrar un nuevo usuario solo si no existe un superadmin
   async registro(createUsuarioDto: CreateUsuarioDto) {
     const { email, username, password } = createUsuarioDto;
 
-    // 🔒 VERIFICAR: ¿Ya existe un super_admin?
     const superAdminExiste = await this.usersRepository.findOne({
       where: { rol: UserRole.SUPER_ADMIN },
     });
@@ -38,7 +37,7 @@ export class AuthService {
       );
     }
 
-    // Verificar si el usuario ya existe
+    // verificar si el usuario ya existe
     const usuarioExistente = await this.usersRepository.findOne({
       where: [{ email }, { username }],
     });
@@ -49,14 +48,11 @@ export class AuthService {
       );
     }
 
-    // Hashear la contraseña
     const passwordHasheada = await bcrypt.hash(password, 10);
 
-    // ⭐ PRIMER USUARIO = SUPER ADMIN
     const totalUsuarios = await this.usersRepository.count();
     const rol = totalUsuarios === 0 ? UserRole.SUPER_ADMIN : UserRole.USUARIO;
 
-    // Crear nuevo usuario
     const nuevoUsuario = this.usersRepository.create({
       username,
       email,
@@ -67,7 +63,6 @@ export class AuthService {
 
     const usuarioGuardado = await this.usersRepository.save(nuevoUsuario);
 
-    // Log de actividad
     await this.registrarLog(
       usuarioGuardado.id,
       'REGISTRO',
@@ -86,11 +81,9 @@ export class AuthService {
     };
   }
 
-  // Método para LOGIN
   async login(loginDto: LoginDto, ip?: string) {
     const { email, password } = loginDto;
 
-    // Buscar usuario por email
     const usuario = await this.usersRepository.findOne({
       where: { email },
     });
@@ -99,25 +92,22 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    // 🔒 Verificar si el usuario está activo
+    //para verificar si el usuraio esta activo
     if (usuario.estado !== UserEstado.ACTIVO) {
       throw new ForbiddenException(
         'Tu cuenta ha sido desactivada. Contacta al administrador.',
       );
     }
 
-    // Comparar contraseña
     const contraseñaValida = await bcrypt.compare(password, usuario.password);
 
     if (!contraseñaValida) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
-    // Actualizar último login
     usuario.ultimoLogin = new Date();
     await this.usersRepository.save(usuario);
 
-    // Log de actividad
     await this.registrarLog(
       usuario.id,
       'LOGIN',
@@ -126,7 +116,7 @@ export class AuthService {
       ip,
     );
 
-    // Generar JWT
+    // generar jwt
     const payload = { 
       sub: usuario.id, 
       email: usuario.email, 
@@ -145,13 +135,13 @@ export class AuthService {
     };
   }
 
-  // ⭐ NUEVO: Verificar si el registro está disponible
+  // p verificar si el registro esta disponible
   async isRegistroDisponible(): Promise<boolean> {
     const totalUsuarios = await this.usersRepository.count();
     return totalUsuarios === 0;
   }
 
-  // ⭐ NUEVO: Registrar log de actividad
+  // registrar actividad
   private async registrarLog(
     usuarioId: number,
     accion: string,

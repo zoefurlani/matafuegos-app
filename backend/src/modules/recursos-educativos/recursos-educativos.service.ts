@@ -106,7 +106,7 @@ export class RecursosEducativosService {
   }
 
   async getStats() {
-    const total = await this.recursosRepository.count({ where: { estado: 'activo' } });
+    const total = await this.recursosRepository.count();
     
     const porCategoria = await this.recursosRepository
       .createQueryBuilder('recurso')

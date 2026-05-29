@@ -104,7 +104,7 @@ function FAQ() {
         }
 
         .faq-container {
-          max-width: 800px;
+          max-width: 950px;
           margin: 0 auto;
         }
 

@@ -15,9 +15,7 @@ export class ClientsService {
     private extintoresRepository: Repository<Extintor>,
   ) {}
 
-  // Crear nuevo cliente
   async create(createClientDto: CreateClientDto) {
-    // Verificar si ya existe un cliente con el mismo CUIT (si se proporciona)
     if (createClientDto.cuit) {
       const clienteExistente = await this.clientsRepository.findOne({
         where: { cuit: createClientDto.cuit },
@@ -37,7 +35,6 @@ export class ClientsService {
     };
   }
 
-  // Obtener todos los clientes
   async findAll() {
     const clientes = await this.clientsRepository.find({
       order: { createdAt: 'DESC' },
@@ -49,13 +46,13 @@ export class ClientsService {
     };
   }
 
-  // NUEVO: Obtener todos los clientes CON sus números de equipo
+  //para obtener todos los clientes por su numero de equipo
   async findAllWithEquipos() {
     const clientes = await this.clientsRepository.find({
       order: { createdAt: 'DESC' },
     });
 
-    // Para cada cliente, obtener sus números de equipo
+    // para obtener el numero de equipo de cada cliente
     const clientesConEquipos = await Promise.all(
       clientes.map(async (cliente) => {
         const extintores = await this.extintoresRepository.find({
@@ -77,7 +74,7 @@ export class ClientsService {
     };
   }
 
-  // Obtener un cliente por ID
+  // para obtener un cliente por id
   async findOne(id: number) {
     const cliente = await this.clientsRepository.findOne({ where: { id } });
 
@@ -88,7 +85,7 @@ export class ClientsService {
     return cliente;
   }
 
-  // Buscar clientes por nombre
+  // para buscar clientes por nombre
   async searchByName(nombre: string) {
     const clientes = await this.clientsRepository
       .createQueryBuilder('cliente')
@@ -101,11 +98,11 @@ export class ClientsService {
     };
   }
 
-  // Actualizar cliente
+  // p actualizar cliente
   async update(id: number, updateClientDto: UpdateClientDto) {
     const cliente = await this.findOne(id);
 
-    // Si se está actualizando el CUIT, verificar que no exista otro cliente con ese CUIT
+    // por si se esta actualizando el cuit, verificar que no exista otro con ese cuit
     if (updateClientDto.cuit && updateClientDto.cuit !== cliente.cuit) {
       const clienteConCuit = await this.clientsRepository.findOne({
         where: { cuit: updateClientDto.cuit },
@@ -125,7 +122,7 @@ export class ClientsService {
     };
   }
 
-  // Eliminar cliente
+  // para eliminar cliente
   async remove(id: number) {
     const cliente = await this.findOne(id);
     await this.clientsRepository.remove(cliente);

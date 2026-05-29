@@ -445,7 +445,8 @@ function ClientesPage() {
             maxWidth: '600px',
             maxHeight: '90vh',
             overflow: 'auto',
-            boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+            
           }}>
             {/* Header del modal */}
             <div style={{
@@ -453,19 +454,23 @@ function ClientesPage() {
               borderBottom: '1px solid #e5e7eb',
               display: 'flex',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              backgroundColor: '#ef4444',
+              color: 'white',
+              borderRadius: '16px 16px 0 0'
             }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white' }}>
                 {editingCliente ? 'Editar Cliente' : 'Nuevo Cliente'}
               </h2>
               <button
                 onClick={() => setShowModal(false)}
                 style={{
                   padding: '8px',
-                  backgroundColor: '#f3f4f6',
+                  backgroundColor: 'rgba(255,255,255,0.2)',
                   border: 'none',
                   borderRadius: '6px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  color: 'white'
                 }}
               >
                 <X size={20} />

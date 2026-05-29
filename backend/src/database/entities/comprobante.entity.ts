@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Client } from './client.entity';
-import { Venta } from '../../modules/ventas/venta.entity'; // ← Import correcto
+import { Venta } from '../../modules/ventas/venta.entity'; 
 
 @Entity('comprobantes')
 export class Comprobante {

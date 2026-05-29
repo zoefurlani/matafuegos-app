@@ -4,7 +4,6 @@ import Stats from '../components/Stats';
 import WhyChooseUs from '../components/WhyChooseUs';
 import InfoCard from '../components/InfoCard';
 import Testimonials from '../components/Testimonials';
-import CTA from '../components/CTA';
 import Certifications from '../components/Certifications';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
@@ -51,14 +50,12 @@ function HomePage() {
               </h2>
             </div>
 
-            {/* Grid de servicios - Desktop */}
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
               gridTemplateRows: 'repeat(2, 250px)',
               gap: '32px'
             }} className="services-grid">
-              {/* Card 1 - Arriba izquierda */}
               <div style={{ gridColumn: '1', gridRow: '1' }} className="service-card">
                 <InfoCard
                   title="GUÍA TÉCNICA"
@@ -68,7 +65,6 @@ function HomePage() {
                 />
               </div>
 
-              {/* Card 3 - Centro, ocupa 2 filas (ALTA) */}
               <div style={{ gridColumn: '2', gridRow: '1 / 3' }} className="service-card service-card-tall">
                 <div style={{ height: '100%' }}>
                   <InfoCard
@@ -80,7 +76,6 @@ function HomePage() {
                 </div>
               </div>
 
-              {/* Card 4 - Arriba derecha */}
               <div style={{ gridColumn: '3', gridRow: '1' }} className="service-card">
                 <InfoCard
                   title="UBICACIÓN"
@@ -90,7 +85,6 @@ function HomePage() {
                 />
               </div>
 
-              {/* Card 2 - Abajo izquierda */}
               <div style={{ gridColumn: '1', gridRow: '2' }} className="service-card">
                 <InfoCard
                   title="MANUAL PARA EL USUARIO"
@@ -100,7 +94,6 @@ function HomePage() {
                 />
               </div>
 
-              {/* Card 5 - Abajo derecha */}
               <div style={{ gridColumn: '3', gridRow: '2' }} className="service-card">
                 <InfoCard
                   title="NUESTRA HISTORIA"
@@ -113,7 +106,6 @@ function HomePage() {
           </div>
 
           <Testimonials />
-          <CTA />
           <Certifications />
           <FAQ />
         </div>
@@ -124,7 +116,6 @@ function HomePage() {
       </div>
 
       <style>{`
-        /* Tablet - 2 columnas */
         @media (max-width: 1024px) and (min-width: 769px) {
           .home-container {
             padding: 24px !important;
@@ -154,7 +145,6 @@ function HomePage() {
           }
         }
 
-        /* Tablet pequeño y Mobile - 1 columna */
         @media (max-width: 768px) {
           .home-container {
             padding: 20px 16px !important;
@@ -188,7 +178,6 @@ function HomePage() {
           }
         }
 
-        /* Mobile pequeño */
         @media (max-width: 480px) {
           .home-container {
             padding: 16px 12px !important;

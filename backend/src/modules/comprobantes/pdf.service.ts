@@ -1,4 +1,4 @@
-import PDFDocument from 'pdfkit';
+import PDFDocument = require('pdfkit');
 import { Injectable } from '@nestjs/common';
 import { Comprobante } from './comprobantes.entity';
 import * as path from 'path';
@@ -19,15 +19,12 @@ export class PdfService {
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', reject);
 
-        // Ruta del logo (probamos varias opciones)
+        // ruta del logo 
         let logoPath = path.join(__dirname, '../../assets/logoof.png');
-        
-        // Si no existe, intentar desde la raíz del proyecto
         if (!require('fs').existsSync(logoPath)) {
           logoPath = path.join(process.cwd(), 'src/assets/logoof.png');
         }
 
-        // ==================== LOGO ====================
         try {
           if (require('fs').existsSync(logoPath)) {
             doc.image(logoPath, 50, 40, { width: 80, height: 80 });
@@ -38,8 +35,7 @@ export class PdfService {
           console.log('Error al cargar logo:', (error as Error).message);
         }
 
-        // ==================== ENCABEZADO ====================
-        // Advertencia NO VÁLIDO (movida un poco abajo por el logo)
+        // encabezado
         doc
           .fillColor('#dc2626')
           .fontSize(16)
@@ -58,7 +54,6 @@ export class PdfService {
             width: 395
           });
 
-        // Línea separadora
         doc
           .strokeColor('#dc2626')
           .lineWidth(2)
@@ -66,7 +61,7 @@ export class PdfService {
           .lineTo(545, 130)
           .stroke();
 
-        // ==================== DATOS ZD MATAFUEGOS ====================
+        // datos de zd
         let yPos = 145;
 
         doc
@@ -92,10 +87,10 @@ export class PdfService {
         yPos += 15;
         doc.text('Habilitación Municipal N° 70/2018', 50, yPos);
 
-        // ==================== DATOS DEL COMPROBANTE ====================
+        // datos del comprobante
         yPos += 30;
 
-        // Número de comprobante
+        // num de comprobante
         doc
           .fontSize(12)
           .font('Helvetica-Bold')
@@ -106,7 +101,7 @@ export class PdfService {
           .fontSize(14)
           .text(comprobante.numero, 180, yPos);
 
-        // Fecha
+        // fecha
         doc
           .fontSize(12)
           .text('FECHA:', 350, yPos);
@@ -116,10 +111,9 @@ export class PdfService {
           .fontSize(14)
           .text(fecha, 420, yPos);
 
-        // ==================== DATOS DEL CLIENTE ====================
+        // datos del cliente
         yPos += 35;
 
-        // Recuadro cliente
         doc
           .strokeColor('#e5e7eb')
           .lineWidth(1)
@@ -162,10 +156,9 @@ export class PdfService {
           doc.text(`Tel: ${comprobante.clienteTelefono}`, 60, yPos);
         }
 
-        // ==================== ITEMS ====================
         yPos += 40;
 
-        // Encabezado tabla
+        // encabezado tabla
         doc
           .fontSize(9)
           .font('Helvetica-Bold')
@@ -179,7 +172,6 @@ export class PdfService {
 
         yPos += 15;
 
-        // Línea debajo del encabezado
         doc
           .strokeColor('#e5e7eb')
           .lineWidth(1)
@@ -189,45 +181,39 @@ export class PdfService {
 
         yPos += 10;
 
-        // Items
+        // items
         doc
           .fontSize(9)
           .font('Helvetica')
           .fillColor('#111827');
 
         comprobante.items.forEach((item, index) => {
-          // Verificar si necesitamos una nueva página
+          // verificar si se nececita una nueva página
           if (yPos > 700) {
             doc.addPage();
             yPos = 50;
           }
 
-          // Tipo (badge)
           doc
             .fontSize(8)
             .fillColor('#aa0e0e')
             .text(item.tipoOperacion, 50, yPos, { width: 70 });
 
-          // Descripción
           doc
             .fontSize(9)
             .fillColor('#111827')
             .text(item.descripcion, 120, yPos, { width: 200 });
 
-          // Cantidad
           doc.text(item.cantidad.toString(), 320, yPos, { width: 50, align: 'center' });
 
-          // Precio unitario
           doc.text(`$${item.precioUnitario.toFixed(2)}`, 370, yPos, { width: 80, align: 'right' });
 
-          // Subtotal
           doc
             .font('Helvetica-Bold')
             .text(`$${item.subtotal.toFixed(2)}`, 450, yPos, { width: 95, align: 'right' });
 
           yPos += 20;
 
-          // Línea separadora entre items
           if (index < comprobante.items.length - 1) {
             doc
               .strokeColor('#f3f4f6')
@@ -239,10 +225,9 @@ export class PdfService {
           }
         });
 
-        // ==================== TOTAL ====================
+        // total
         yPos += 20;
 
-        // Línea antes del total
         doc
           .strokeColor('#e5e7eb')
           .lineWidth(2)
@@ -267,17 +252,15 @@ export class PdfService {
             align: 'right' 
           });
 
-        // ==================== OBSERVACIONES ====================
+        // observaciones
         if (comprobante.observaciones) {
           yPos += 50;
 
-          // Verificar espacio
           if (yPos > 700) {
             doc.addPage();
             yPos = 50;
           }
 
-          // Recuadro observaciones
           doc
             .strokeColor('#e5e7eb')
             .lineWidth(1)
@@ -303,7 +286,6 @@ export class PdfService {
             });
         }
 
-        // ==================== FOOTER ====================
         const pageHeight = doc.page.height;
         const footerY = pageHeight - 80;
 
@@ -325,7 +307,6 @@ export class PdfService {
             width: 495 
           });
 
-        // Finalizar PDF
         doc.end();
 
       } catch (error) {

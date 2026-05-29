@@ -480,7 +480,7 @@ function ExtintoresPage() {
                 {servicioClienteId && getClienteEquipos(servicioClienteId).length > 0 && (
                   <div style={{ marginTop: '12px', padding: '12px', backgroundColor: '#dbeafe', borderRadius: '8px', border: '1px solid #3b82f6' }}>
                     <p style={{ fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '6px' }}>
-                      📋 Equipos existentes de este cliente:
+                       Equipos existentes de este cliente:
                     </p>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {getClienteEquipos(servicioClienteId).map((equipo, idx) => (

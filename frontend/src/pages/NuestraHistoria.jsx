@@ -2,36 +2,32 @@ import Navbar from '../components/Navbar';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Footer from '../components/Footer';
 import { useTheme } from '../contexts/ThemeContext';
-import { Users, Award, Target, Heart, TrendingUp, Shield } from 'lucide-react';
+import { Users, Award, Heart, Shield } from 'lucide-react';
+
 
 function NuestraHistoria() {
   const { colors } = useTheme();
 
   const timeline = [
     {
-      year: '2008',
-      title: 'Nuestros Inicios',
-      description: 'Fundación de ZD Matafuegos con el objetivo de brindar seguridad a la comunidad de Malabrigo.'
-    },
-    {
-      year: '2012',
-      title: 'Certificación IRAM',
-      description: 'Obtuvimos la certificación IRAM, respaldando nuestro compromiso con la calidad.'
-    },
-    {
-      year: '2015',
-      title: 'Expansión de Servicios',
-      description: 'Incorporamos servicios de capacitación y asesoramiento en seguridad contra incendios.'
-    },
-    {
       year: '2018',
-      title: 'Tecnología de Vanguardia',
-      description: 'Renovamos nuestro equipamiento con tecnología de última generación para ofrecer mejor servicio.'
+      title: 'Nuestros Inicios',
+      description: 'Comenzamos como emprendimiento familiar ofreciendo servicios de recarga en Romang'
     },
     {
-      year: '2023',
-      title: 'Más de 500 Clientes',
-      description: 'Alcanzamos la confianza de más de 500 clientes satisfechos en toda la región.'
+      year: '2019',
+      title: 'Primeros Clientes',
+      description: 'Ganamos la confianza de comercios y vecinos de la zona con trabajo honesto y dedicado'
+    },
+    {
+      year: '2020',
+      title: 'Incorporamos Ventas',
+      description: 'Comenzamos a ofrecer venta de extintores nuevos para complementar el servicio de recarga'
+    },
+    {
+      year: '2021',
+      title: 'Servicio de Instalación',
+      description: 'Sumamos instalación de equipos en comercios y hogares para mayor comodidad de nuestros clientes'
     }
   ];
 
@@ -47,23 +43,24 @@ function NuestraHistoria() {
       description: 'Comprometidos con la calidad y el servicio de excelencia'
     },
     {
-      icon: Award,
-      title: 'Profesionalismo',
-      description: 'Equipo técnico certificado y altamente capacitado'
+      icon: Users,
+      title: 'Atención Personalizada',
+      description: 'Tratamos a cada cliente con dedicación y cercanía'
     },
     {
-      icon: TrendingUp,
-      title: 'Innovación',
-      description: 'Constantemente actualizados con las últimas tecnologías'
+      icon: Award,
+      title: 'Honestidad',
+      description: 'Trabajo transparente y precios justos'
     }
   ];
 
   const stats = [
-    { number: '15+', label: 'Años de Experiencia' },
-    { number: '500+', label: 'Clientes Satisfechos' },
-    { number: '24/7', label: 'Servicio de Emergencia' },
-    { number: '100%', label: 'Certificado' }
+    { number: '2018', label: 'Año de Fundación' },
+    { number: '1000+', label: 'Clientes Activos' },
+    { number: '100%', label: 'Habilitado' },
+    { number: 'Familiar', label: 'Emprendimiento Local' }
   ];
+
 
   return (
     <>
@@ -109,15 +106,16 @@ function NuestraHistoria() {
             <p style={{
               fontSize: '20px',
               color: colors.textSecondary,
-              maxWidth: '700px',
+              maxWidth: '800px',
               margin: '0 auto',
               lineHeight: '1.6',
               transition: 'color 0.3s ease'
             }}>
-              Más de 15 años protegiendo hogares y empresas en Santa Fe. 
-              Conocé nuestra trayectoria y compromiso con la seguridad.
+              Emprendimiento familiar fundado en 2018, dedicado a la seguridad contra incendios en Romang y zona. 
+              Conocé nuestra historia y compromiso con la comunidad.
             </p>
           </div>
+
 
           {/* Stats */}
           <div style={{
@@ -168,6 +166,7 @@ function NuestraHistoria() {
             ))}
           </div>
 
+
           {/* Timeline */}
           <div style={{
             marginBottom: '64px'
@@ -179,8 +178,9 @@ function NuestraHistoria() {
               marginBottom: '48px',
               textAlign: 'center'
             }}>
-              Nuestra Trayectoria
+              Nuestro Camino
             </h2>
+
 
             <div style={{
               position: 'relative'
@@ -195,6 +195,7 @@ function NuestraHistoria() {
                 backgroundColor: colors.border,
                 transform: 'translateX(-50%)'
               }} />
+
 
               <div style={{
                 display: 'flex',
@@ -248,6 +249,7 @@ function NuestraHistoria() {
                       </div>
                     ) : <div />}
 
+
                     {/* Punto central */}
                     <div style={{
                       width: '20px',
@@ -258,6 +260,7 @@ function NuestraHistoria() {
                       boxShadow: '0 0 0 4px ' + colors.border,
                       zIndex: 1
                     }} />
+
 
                     {/* Contenido derecha */}
                     {index % 2 !== 0 ? (
@@ -300,6 +303,7 @@ function NuestraHistoria() {
             </div>
           </div>
 
+
           {/* Values */}
           <div>
             <h2 style={{
@@ -311,6 +315,7 @@ function NuestraHistoria() {
             }}>
               Nuestros Valores
             </h2>
+
 
             <div style={{
               display: 'grid',
@@ -382,5 +387,6 @@ function NuestraHistoria() {
     </>
   );
 }
+
 
 export default NuestraHistoria;

@@ -1,11 +1,11 @@
 const API_URL = 'http://localhost:3000/api';
 
-// Helper para obtener el token del sessionStorage
+// para obtener token del sessionstorage
 const getToken = () => {
   return sessionStorage.getItem('token');
 };
 
-// ⭐ Helper para obtener headers con autenticación
+// para headers con autenticación
 const getAuthHeaders = () => {
   const token = getToken();
   return {
@@ -14,7 +14,7 @@ const getAuthHeaders = () => {
   };
 };
 
-// Helper para hacer requests con token JWT
+// para requests con token jwt
 const request = async (endpoint, options = {}) => {
   const token = getToken();
   
@@ -59,7 +59,7 @@ return data;
   }
 };
 
-// ==================== AUTH ====================
+// auth
 export const authAPI = {
   login: (credentials) => request('/auth/login', {
     method: 'POST',
@@ -71,7 +71,7 @@ export const authAPI = {
   }),
 };
 
-// ==================== CLIENTES ====================
+// clientes
 export const clientesAPI = {
   getAll: () => request('/clients'),
   getById: (id) => request(`/clients/${id}`),
@@ -89,7 +89,7 @@ export const clientesAPI = {
   }),
 };
 
-// ==================== EXTINTORES ====================
+// extintores
 export const extintoresAPI = {
   getAll: () => request('/extintores'),
   getById: (id) => request(`/extintores/${id}`),
@@ -109,7 +109,7 @@ export const extintoresAPI = {
   }),
 };
 
-// ==================== RECARGAS ====================
+// recargas
 export const recargasAPI = {
   getAll: () => request('/recargas'),
   getById: (id) => request(`/recargas/${id}`),
@@ -130,9 +130,9 @@ export const recargasAPI = {
   }),
 };
 
-// ==================== INVENTARIO ====================
+// intventario
 export const inventarioAPI = {
-  // Productos
+ 
   getAllProductos: () => request('/inventario/productos'),
   getProductoById: (id) => request(`/inventario/productos/${id}`),
   getProductosBajoStock: () => request('/inventario/productos/bajo-stock'),
@@ -149,7 +149,6 @@ export const inventarioAPI = {
     method: 'DELETE',
   }),
 
-  // Compras
   getAllCompras: () => request('/inventario/compras'),
   getCompraById: (id) => request(`/inventario/compras/${id}`),
   getComprasByProducto: (productoId) => request(`/inventario/compras/producto/${productoId}`),
@@ -169,9 +168,8 @@ export const inventarioAPI = {
   getStats: () => request('/inventario/stats'),
 };
 
-// ==================== COMPROBANTES ====================
+// comprobantes
 export const comprobantesAPI = {
-  // Crear comprobante
   create: async (comprobanteData) => {
     return request('/comprobantes', {
       method: 'POST',
@@ -179,44 +177,36 @@ export const comprobantesAPI = {
     });
   },
 
-  // Obtener todos los comprobantes
   getAll: async () => {
     return request('/comprobantes');
   },
 
-  // Obtener comprobante por ID
   getById: async (id) => {
     return request(`/comprobantes/${id}`);
   },
 
-  // Obtener por número
   getByNumero: async (numero) => {
     return request(`/comprobantes/numero/${numero}`);
   },
 
-  // Buscar por cliente
   getByCliente: async (nombreCliente) => {
     return request(`/comprobantes/cliente/${nombreCliente}`);
   },
 
-  // Buscar por rango de fechas
   getByDateRange: async (startDate, endDate) => {
     return request(`/comprobantes/date-range?startDate=${startDate}&endDate=${endDate}`);
   },
 
-  // Obtener estadísticas
   getStats: async () => {
     return request('/comprobantes/stats');
   },
 
-  // Anular comprobante
   anular: async (id) => {
     return request(`/comprobantes/${id}/anular`, {
       method: 'PATCH',
     });
   },
 
-  // Eliminar comprobante
   delete: async (id) => {
     return request(`/comprobantes/${id}`, {
       method: 'DELETE',
@@ -224,7 +214,7 @@ export const comprobantesAPI = {
   },
 };
 
-// ==================== DASHBOARD ====================
+// dashboard
 export const dashboardAPI = {
   getStats: async () => {
     try {
@@ -251,9 +241,8 @@ export const dashboardAPI = {
   },
 };
 
-// ==================== USUARIOS ====================
+// usuarios
 export const usuariosAPI = {
-  // Obtener todos los usuarios
   getAllUsuarios: async () => {
     const response = await fetch(`${API_URL}/usuarios`, {
       headers: getAuthHeaders(),
@@ -263,7 +252,6 @@ export const usuariosAPI = {
     return data.usuarios;
   },
 
-  // Obtener un usuario por ID
   getUsuario: async (id) => {
     const response = await fetch(`${API_URL}/usuarios/${id}`, {
       headers: getAuthHeaders(),
@@ -272,7 +260,6 @@ export const usuariosAPI = {
     return response.json();
   },
 
-  // Crear usuario (solo super_admin)
   createUsuario: async (usuarioData) => {
     const response = await fetch(`${API_URL}/usuarios`, {
       method: 'POST',
@@ -286,7 +273,6 @@ export const usuariosAPI = {
     return response.json();
   },
 
-  // Actualizar usuario
   updateUsuario: async (id, usuarioData) => {
     const response = await fetch(`${API_URL}/usuarios/${id}`, {
       method: 'PATCH',
@@ -300,7 +286,6 @@ export const usuariosAPI = {
     return response.json();
   },
 
-  // Eliminar usuario (bloquear con observación)
   deleteUsuario: async (id, observacion) => {
     const response = await fetch(`${API_URL}/usuarios/${id}`, {
       method: 'DELETE',
@@ -311,7 +296,6 @@ export const usuariosAPI = {
     return response.json();
   },
 
-  // Obtener logs de actividad (solo super_admin)
   getLogs: async () => {
     const response = await fetch(`${API_URL}/usuarios/logs`, {
       headers: getAuthHeaders(),
@@ -321,7 +305,7 @@ export const usuariosAPI = {
     return data.logs;
   },
 
-  // ⭐ NUEVO: Cambiar propia contraseña
+  // cambiar contraseña propia
   changePassword: async (currentPassword, newPassword) => {
     const response = await fetch(`${API_URL}/usuarios/cambiar-password`, {
       method: 'PATCH',
@@ -335,7 +319,7 @@ export const usuariosAPI = {
     return response.json();
   },
 
-  // ⭐ NUEVO: Admin resetea contraseña de otro usuario
+  // admin cambia contraseña de otro usuario
   adminResetPassword: async (userId, newPassword) => {
     const response = await fetch(`${API_URL}/usuarios/${userId}/reset-password`, {
       method: 'PATCH',
@@ -350,9 +334,8 @@ export const usuariosAPI = {
   },
 };
 
-// ==================== VENTAS ====================
+// ventas
 export const ventasAPI = {
-  // Crear venta
   create: async (ventaData) => {
     return request('/ventas', {
       method: 'POST',
@@ -360,32 +343,26 @@ export const ventasAPI = {
     });
   },
 
-  // Obtener todas las ventas
   getAll: async () => {
     return request('/ventas');
   },
 
-  // Obtener venta por ID
   getById: async (id) => {
     return request(`/ventas/${id}`);
   },
 
-  // Obtener ventas por cliente
   getByCliente: async (clienteId) => {
     return request(`/ventas/cliente/${clienteId}`);
   },
 
-  // Obtener ventas por rango de fechas
   getByDateRange: async (startDate, endDate) => {
     return request(`/ventas/date-range?startDate=${startDate}&endDate=${endDate}`);
   },
 
-  // Obtener estadísticas
   getStats: async () => {
     return request('/ventas/stats');
   },
 
-  // Actualizar venta
   update: async (id, ventaData) => {
     return request(`/ventas/${id}`, {
       method: 'PATCH',
@@ -393,7 +370,6 @@ export const ventasAPI = {
     });
   },
 
-  // Eliminar venta
   delete: async (id) => {
     return request(`/ventas/${id}`, {
       method: 'DELETE',
@@ -401,10 +377,8 @@ export const ventasAPI = {
   },
 };
 
-// ==================== RECURSOS EDUCATIVOS ====================
+// recursos educativos
 export const recursosEducativosAPI = {
-  // ===== ADMIN =====
-  // Crear recurso
   create: async (recursoData) => {
     return request('/recursos-educativos', {
       method: 'POST',
@@ -412,22 +386,18 @@ export const recursosEducativosAPI = {
     });
   },
  
-  // Obtener todos (admin)
   getAll: async () => {
     return request('/recursos-educativos');
   },
  
-  // Obtener por ID
   getById: async (id) => {
     return request(`/recursos-educativos/${id}`);
   },
  
-  // Obtener estadísticas
   getStats: async () => {
     return request('/recursos-educativos/stats');
   },
- 
-  // Actualizar recurso
+
   update: async (id, recursoData) => {
     return request(`/recursos-educativos/${id}`, {
       method: 'PATCH',
@@ -435,15 +405,14 @@ export const recursosEducativosAPI = {
     });
   },
  
-  // Eliminar recurso
   delete: async (id) => {
     return request(`/recursos-educativos/${id}`, {
       method: 'DELETE',
     });
   },
  
-  // ===== PÚBLICO =====
-  // Obtener recursos públicos con filtros
+  // en parte publica
+  // obtener los recursos publicos con los filtros
   getPublic: async (filters = {}) => {
     const params = new URLSearchParams();
     
@@ -458,12 +427,10 @@ export const recursosEducativosAPI = {
     return request(`/recursos-educativos/public${queryString ? '?' + queryString : ''}`);
   },
  
-  // Obtener filtros disponibles
   getFilters: async () => {
     return request('/recursos-educativos/public/filters');
   },
  
-  // Obtener recurso público por ID
   getPublicById: async (id) => {
     return request(`/recursos-educativos/public/${id}`);
   },

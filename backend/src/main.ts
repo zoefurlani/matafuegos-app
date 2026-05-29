@@ -6,10 +6,8 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // ⭐ PREFIJO GLOBAL API
   app.setGlobalPrefix('api');
 
-  // ⭐ CORS
   app.enableCors({
     origin: ['http://localhost:5173', 'http://localhost:5174'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -17,14 +15,12 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
-  // Validación global
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
   }));
 
-  // Swagger
   const config = new DocumentBuilder()
     .setTitle('API ZD Matafuegos')
     .setDescription('Sistema de gestión de recarga de extintores')
@@ -39,7 +35,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(process.env.PORT || 3000);
-  console.log(`✅ Aplicación ejecutándose en http://localhost:${process.env.PORT || 3000}`);
-  console.log(`📚 Documentación Swagger: http://localhost:${process.env.PORT || 3000}/docs`);
+  console.log(`Aplicación ejecutándose en http://localhost:${process.env.PORT || 3000}`);
+  console.log(`Documentación Swagger: http://localhost:${process.env.PORT || 3000}/docs`);
 }
 bootstrap();

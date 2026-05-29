@@ -34,8 +34,6 @@ function RecursosEducativosPage() {
     capacidad: '',
     aplicacion: '',
     contenidoDetallado: '',
-    imagenUrl: '',
-    archivoPdfUrl: '',
     orden: 0,
     estado: 'activo',
   });
@@ -48,11 +46,13 @@ function RecursosEducativosPage() {
     try {
       setLoading(true);
       const [recursosData, statsData] = await Promise.all([
-        recursosEducativosAPI.getAll(),
-        recursosEducativosAPI.getStats(),
-      ]);
+  recursosEducativosAPI.getAll(),
+  recursosEducativosAPI.getStats(),
+]);
+const statsFixed = { total: recursosData.length };
+setStats(statsFixed);
       setRecursos(recursosData);
-      setStats(statsData);
+      setStats({ total: recursosData.length });
     } catch (error) {
       console.error('Error al cargar datos:', error);
       toast.error('Error al cargar los datos');
@@ -98,8 +98,6 @@ function RecursosEducativosPage() {
       capacidad: recurso.capacidad || '',
       aplicacion: recurso.aplicacion || '',
       contenidoDetallado: recurso.contenidoDetallado,
-      imagenUrl: recurso.imagenUrl || '',
-      archivoPdfUrl: recurso.archivoPdfUrl || '',
       orden: recurso.orden,
       estado: recurso.estado,
     });
@@ -130,8 +128,6 @@ function RecursosEducativosPage() {
       capacidad: '',
       aplicacion: '',
       contenidoDetallado: '',
-      imagenUrl: '',
-      archivoPdfUrl: '',
       orden: 0,
       estado: 'activo',
     });
@@ -410,29 +406,6 @@ function RecursosEducativosPage() {
                     style={{ ...inputStyle, minHeight: '120px', resize: 'vertical' }}
                     placeholder="Descripción completa del recurso educativo..."
                   />
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                  <div>
-                    <label style={labelStyle}>URL Imagen</label>
-                    <input
-                      type="text"
-                      value={formData.imagenUrl}
-                      onChange={(e) => setFormData({ ...formData, imagenUrl: e.target.value })}
-                      style={inputStyle}
-                      placeholder="/img/recurso.jpg"
-                    />
-                  </div>
-                  <div>
-                    <label style={labelStyle}>URL PDF</label>
-                    <input
-                      type="text"
-                      value={formData.archivoPdfUrl}
-                      onChange={(e) => setFormData({ ...formData, archivoPdfUrl: e.target.value })}
-                      style={inputStyle}
-                      placeholder="/pdf/ficha-tecnica.pdf"
-                    />
-                  </div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>

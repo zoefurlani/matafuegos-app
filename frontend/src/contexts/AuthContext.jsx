@@ -1,9 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
 
-
 const AuthContext = createContext();
-
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,13 +11,13 @@ export function AuthProvider({ children }) {
 
 
   useEffect(() => {
-    // Verificar si hay sesión guardada
+    // para ver si hay sesion guardada
     const savedToken = sessionStorage.getItem('token');
     const savedUser = sessionStorage.getItem('user');
     const loginTime = sessionStorage.getItem('loginTime');
     
     if (savedToken && savedUser && loginTime) {
-      // Verificar que no hayan pasado más de 8 horas
+      // verificar que no hayan pasado mas de 8 horas
       const now = new Date().getTime();
       const elapsed = now - parseInt(loginTime);
       const EIGHT_HOURS = 8 * 60 * 60 * 1000;
@@ -35,21 +33,18 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-
   const login = async (email, password) => {
     try {
-      // Llamar al endpoint real de login
       const response = await authAPI.login({ email, password });
       
       console.log('Login response:', response);
       
-      // ⭐ CORREGIDO: El backend devuelve { access_token, usuario: { email, username, rol } }
       const access_token = response.access_token;
       const userData = {
         id: response.usuario?.id,
         email: response.usuario?.email || email,
         username: response.usuario?.username || 'admin',
-        rol: response.usuario?.rol || 'usuario' // ⭐ CORREGIDO: response.usuario.rol
+        rol: response.usuario?.rol || 'usuario' 
       };
       
       if (!access_token) {
@@ -60,12 +55,10 @@ export function AuthProvider({ children }) {
       console.log('Token recibido:', access_token);
       console.log('Usuario con rol:', userData);
       
-      // Guardar en estado
       setToken(access_token);
       setUser(userData);
       setIsAuthenticated(true);
       
-      // Guardar en sessionStorage
       sessionStorage.setItem('token', access_token);
       sessionStorage.setItem('user', JSON.stringify(userData));
       sessionStorage.setItem('loginTime', new Date().getTime().toString());
@@ -79,7 +72,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-
   const logout = () => {
     setToken(null);
     setUser(null);
@@ -88,7 +80,6 @@ export function AuthProvider({ children }) {
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('loginTime');
   };
-
 
   return (
     <AuthContext.Provider value={{ 
@@ -103,7 +94,6 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-
 
 export function useAuth() {
   const context = useContext(AuthContext);

@@ -493,7 +493,7 @@ function ComprobantesPage() {
                         value={formData.clienteDireccion}
                         onChange={(e) => setFormData({ ...formData, clienteDireccion: e.target.value })}
                         style={inputStyle}
-                        placeholder="Calle Falsa 123"
+                        placeholder="Calle 123"
                         readOnly={formData.clienteId !== ''}
                       />
                     </div>

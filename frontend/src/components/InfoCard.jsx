@@ -68,10 +68,10 @@ function InfoCard({ title, description, image, link }) {
           display: 'inline-flex',
           alignItems: 'center',
           gap: '8px',
-          color: '#ef4444',
+          color: '#eae4e4',
           fontSize: '14px',
           fontWeight: 'bold',
-          backgroundColor: 'white',
+          backgroundColor: '#ef4444',
           padding: '8px 16px',
           borderRadius: '8px',
           width: 'fit-content'

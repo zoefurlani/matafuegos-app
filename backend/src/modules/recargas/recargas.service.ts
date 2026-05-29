@@ -8,17 +8,16 @@ import { UpdateRecargaDto } from './dto/update-recarga.dto';
 
 @Injectable()
 export class RecargasService {
-  // ⭐ Mapeo de campos de recarga a IDs de productos
   private readonly PRODUCTO_IDS = {
-    polvoKg: 1,      // Polvo Químico ABC
-    manometros: 2,   // Manómetro 14x35
-    orings: 4,       // Oring
-    vastagos: 6,     // Vástago
-    valvulas: 7,     // Válvula
-    mangueras: 8,    // Manguera
-    boquillas: 9,    // Boquilla
-    seguros: 10,     // Seguro
-    etiquetas: 11    // Etiqueta
+    polvoKg: 1,      
+    manometros: 2,   
+    orings: 4,       
+    vastagos: 6,     
+    valvulas: 7,     
+    mangueras: 8,    
+    boquillas: 9,    
+    seguros: 10,     
+    etiquetas: 11    
   };
 
   constructor(
@@ -32,15 +31,15 @@ export class RecargasService {
     console.log('🔵 [CREATE] Iniciando creación de recarga...');
     console.log('📦 Datos recibidos:', createRecargaDto);
     
-    // ⭐ PASO 1: Verificar stock ANTES de guardar
+    // verificar stock antes de guardar
     await this.verificarStock(createRecargaDto);
 
-    // ⭐ PASO 2: Si hay stock, crear la recarga
+    // si hay stock, crea la recarga
     const recarga = this.recargasRepository.create(createRecargaDto);
     const recargaGuardada = await this.recargasRepository.save(recarga);
     console.log('✅ Recarga guardada con ID:', recargaGuardada.id);
 
-    // ⭐ PASO 3: Descontar del inventario
+    // descuenta del inventario
     console.log('🔽 Descontando inventario...');
     await this.descontarInventario(createRecargaDto);
     console.log('✅ Inventario descontado');

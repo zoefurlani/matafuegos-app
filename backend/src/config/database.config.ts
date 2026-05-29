@@ -8,7 +8,7 @@ import { Producto } from '../database/entities/producto.entity';
 import { Compra } from '../database/entities/compra.entity';
 import { LogActividad } from '../database/entities/log-actividad.entity';
 import { Testimonio } from '../database/entities/testimonio.entity'; 
-import { Venta } from '../modules/ventas/venta.entity';  // ✅ CAMBIO AQUÍ
+import { Venta } from '../modules/ventas/venta.entity';  
 import { Comprobante } from '../modules/comprobantes/comprobantes.entity';
 import { RecursoEducativo } from '../modules/recursos-educativos/recurso-educativo.entity';
 
@@ -34,6 +34,6 @@ export const getDatabaseConfig = (
     Comprobante, 
     RecursoEducativo
   ],
-  synchronize: false,  // ✅ CAMBIO: true → false (IMPORTANTE para no perder datos)
-  logging: true,        // ✅ CAMBIO: false → true (para ver errores)
+  synchronize: false,  
+  logging: false,       
 });

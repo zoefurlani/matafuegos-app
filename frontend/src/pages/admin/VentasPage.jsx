@@ -406,7 +406,7 @@ function VentasPage() {
 
                   <div style={{ padding: '16px', backgroundColor: '#dbeafe', borderRadius: '8px', border: '1px solid #3b82f6' }}>
                     <p style={{ fontSize: '14px', fontWeight: 'bold', color: '#1e40af', margin: '0 0 8px 0' }}>
-                      💡 Al registrar esta venta:
+                       Al registrar esta venta:
                     </p>
                     <ul style={{ fontSize: '13px', color: '#1e3a8a', margin: 0, paddingLeft: '20px' }}>
                       <li>Se descontará del inventario automáticamente</li>
