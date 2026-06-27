@@ -12,11 +12,13 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/ToastContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const recursosEducativosAPI = api.recursosEducativosAPI;
 
 function RecursosEducativosPage() {
   const toast = useToast();
+  const { user } = useAuth();
   const [recursos, setRecursos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,12 +47,10 @@ function RecursosEducativosPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [recursosData, statsData] = await Promise.all([
-  recursosEducativosAPI.getAll(),
-  recursosEducativosAPI.getStats(),
-]);
-const statsFixed = { total: recursosData.length };
-setStats(statsFixed);
+      const [recursosData] = await Promise.all([
+        recursosEducativosAPI.getAll(),
+        recursosEducativosAPI.getStats(),
+      ]);
       setRecursos(recursosData);
       setStats({ total: recursosData.length });
     } catch (error) {
@@ -277,13 +277,15 @@ setStats(statsFixed);
                       >
                         <Edit2 size={16} color="#2563eb" />
                       </button>
-                      <button
-                        onClick={() => handleDelete(recurso.id)}
-                        style={{ padding: '8px', backgroundColor: '#fee2e2', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-                        title="Eliminar"
-                      >
-                        <Trash2 size={16} color="#dc2626" />
-                      </button>
+                      {user?.rol === 'super_admin' && (
+                        <button
+                          onClick={() => handleDelete(recurso.id)}
+                          style={{ padding: '8px', backgroundColor: '#fee2e2', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                          title="Eliminar"
+                        >
+                          <Trash2 size={16} color="#dc2626" />
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -414,7 +416,7 @@ setStats(statsFixed);
                     <input
                       type="number"
                       value={formData.orden}
-                      onChange={(e) => setFormData({ ...formData, orden: parseInt(e.target.value) })}
+                      onChange={(e) => setFormData({ ...formData, orden: parseInt(e.target.value) || 0 })}
                       style={inputStyle}
                       min="0"
                     />

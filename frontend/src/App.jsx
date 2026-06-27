@@ -19,7 +19,6 @@ function App() {
         <ToastProvider>
           <Router>
             <Routes>
-              {/* Rutas Públicas */}
               <Route path="/" element={<HomePage />} />
               <Route path="/centro-conocimiento" element={<Navigate to="/guia-tecnica" replace />} />
               <Route path="/mantenimiento" element={<Mantenimiento />} />
@@ -28,10 +27,8 @@ function App() {
               <Route path="/nuestra-historia" element={<NuestraHistoria />} />
               <Route path="/guia-tecnica" element={<GuiaTecnicaPage />} />
               
-              {/* Login */}
               <Route path="/login" element={<LoginPage />} />
               
-              {/* Rutas Protegidas de Admin */}
               <Route 
                 path="/admin-zd-m8k3x7p2/*" 
                 element={
@@ -49,3 +46,4 @@ function App() {
 }
 
 export default App;
+

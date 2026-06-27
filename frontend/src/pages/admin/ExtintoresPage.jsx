@@ -142,10 +142,12 @@ function ExtintoresPage() {
   };
 
 
-  // ============ FUNCIONES PARA SERVICIO MÚLTIPLE ============
-
-
   const handleAgregarExtintorServicio = () => {
+    const hoy = new Date().toISOString().split('T')[0];
+    const proximoAnio = new Date();
+    proximoAnio.setFullYear(proximoAnio.getFullYear() + 1);
+    const vencimiento = proximoAnio.toISOString().split('T')[0];
+
     setExtintoresServicio([
       ...extintoresServicio,
       {
@@ -154,8 +156,8 @@ function ExtintoresPage() {
         tipo: 'ABC',
         capacidad: '',
         marca: '',
-        fechaUltimaRecarga: new Date().toISOString().split('T')[0],
-        fechaVencimiento: '',
+        fechaUltimaRecarga: hoy,
+        fechaVencimiento: vencimiento,
         estado: 'activo',
         ubicacion: '',
         observaciones: ''
@@ -165,11 +167,19 @@ function ExtintoresPage() {
 
 
   const handleUpdateExtintorServicio = (id, field, value) => {
-    setExtintoresServicio(extintoresServicio.map(ext =>
-      ext.id === id ? { ...ext, [field]: value } : ext
-    ));
+    setExtintoresServicio(extintoresServicio.map(ext => {
+      if (ext.id === id) {
+        const updated = { ...ext, [field]: value };
+        if (field === 'fechaUltimaRecarga' && value) {
+          const fecha = new Date(value);
+          fecha.setFullYear(fecha.getFullYear() + 1);
+          updated.fechaVencimiento = fecha.toISOString().split('T')[0];
+        }
+        return updated;
+      }
+      return ext;
+    }));
   };
-
 
   const handleEliminarExtintorServicio = (id) => {
     setExtintoresServicio(extintoresServicio.filter(ext => ext.id !== id));
@@ -237,7 +247,7 @@ function ExtintoresPage() {
         }
 
 
-        toast.info(`✅ Se registraron ${extintoresServicio.length} extintor(es) correctamente`);
+        toast.success(` Se registraron ${extintoresServicio.length} extintor(es) correctamente`);
       }
       
       setShowServicioModal(false);
@@ -247,7 +257,7 @@ function ExtintoresPage() {
       fetchData();
     } catch (error) {
       console.error('Error al guardar:', error);
-      alert('❌ Error al guardar: ' + error.message);
+      alert('Error al guardar: ' + error.message);
     }
   };
 

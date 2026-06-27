@@ -11,7 +11,7 @@ export class ComprobantesService {
     private comprobantesRepository: Repository<Comprobante>,
   ) {}
 
-  // ===== GENERAR NÚMERO DE COMPROBANTE =====
+  // para generar num d ecomprobante
   private async generarNumeroComprobante(): Promise<string> {
     const ultimoComprobante = await this.comprobantesRepository.find({
       order: { id: 'DESC' },
@@ -27,7 +27,7 @@ export class ComprobantesService {
     return `COMP-${proximoNumero.toString().padStart(5, '0')}`;
   }
 
-  // ===== CREAR COMPROBANTE ===== ✅ CORREGIDO
+  // crear comprobante
   async create(createComprobanteDto: CreateComprobanteDto): Promise<Comprobante> {
     // Generar número automático
     const numero = await this.generarNumeroComprobante();
@@ -36,7 +36,6 @@ export class ComprobantesService {
       ...createComprobanteDto,
       numero,
       estado: 'activo',
-      // ✅ AGREGAR LAS RELACIONES:
       cliente: createComprobanteDto.clienteId 
         ? { id: createComprobanteDto.clienteId }
         : undefined,
@@ -48,14 +47,14 @@ export class ComprobantesService {
     return await this.comprobantesRepository.save(comprobante);
   }
 
-  // ===== OBTENER TODOS LOS COMPROBANTES =====
+  // p obtener todos los comprobantes
   async findAll(): Promise<Comprobante[]> {
     return await this.comprobantesRepository.find({
       order: { createdAt: 'DESC' },
     });
   }
 
-  // ===== OBTENER POR ID =====
+  // obtener por ID
   async findOne(id: number): Promise<Comprobante> {
     const comprobante = await this.comprobantesRepository.findOne({
       where: { id },
@@ -68,7 +67,7 @@ export class ComprobantesService {
     return comprobante;
   }
 
-  // ===== OBTENER POR NÚMERO =====
+  // obtener por numero
   async findByNumero(numero: string): Promise<Comprobante> {
     const comprobante = await this.comprobantesRepository.findOne({
       where: { numero },
@@ -81,7 +80,7 @@ export class ComprobantesService {
     return comprobante;
   }
 
-  // ===== BUSCAR POR CLIENTE =====
+  // buscar por cliente
   async findByCliente(nombreCliente: string): Promise<Comprobante[]> {
     return await this.comprobantesRepository
       .createQueryBuilder('comprobante')
@@ -90,7 +89,7 @@ export class ComprobantesService {
       .getMany();
   }
 
-  // ===== BUSCAR POR RANGO DE FECHAS =====
+  // buscar por rango de fechas
   async findByDateRange(startDate: string, endDate: string): Promise<Comprobante[]> {
     return await this.comprobantesRepository
       .createQueryBuilder('comprobante')
@@ -102,7 +101,7 @@ export class ComprobantesService {
       .getMany();
   }
 
-  // ===== ANULAR COMPROBANTE =====
+  // anular comprobantes
   async anular(id: number): Promise<Comprobante> {
     const comprobante = await this.findOne(id);
 
@@ -114,13 +113,12 @@ export class ComprobantesService {
     return await this.comprobantesRepository.save(comprobante);
   }
 
-  // ===== ELIMINAR COMPROBANTE =====
+  // eliminar comprobante
   async remove(id: number): Promise<void> {
     const comprobante = await this.findOne(id);
     await this.comprobantesRepository.remove(comprobante);
   }
 
-  // ===== ESTADÍSTICAS =====
   async getStats() {
     const totalComprobantes = await this.comprobantesRepository.count({
       where: { estado: 'activo' },

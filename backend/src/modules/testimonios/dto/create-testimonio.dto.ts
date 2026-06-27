@@ -20,5 +20,5 @@ export class CreateTestimonioDto {
   @IsInt()
   @Min(1)
   @Max(5)
-  ratings!: number;
+  rating!: number;
 }

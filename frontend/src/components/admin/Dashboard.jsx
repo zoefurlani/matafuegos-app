@@ -36,7 +36,6 @@ function Dashboard() {
   const [extintoresCriticos, setExtintoresCriticos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Estados para los modales
   const [modalData, setModalData] = useState(null);
   const [clientesDetalle, setClientesDetalle] = useState([]);
   const [extintoresDetalle, setExtintoresDetalle] = useState([]);
@@ -65,11 +64,11 @@ function Dashboard() {
       const mesActual = ahora.getMonth();
       const añoActual = ahora.getFullYear();
 
-      // Calcular mes anterior
+      // calcular mes anterior
       const mesAnterior = mesActual === 0 ? 11 : mesActual - 1;
       const añoMesAnterior = mesActual === 0 ? añoActual - 1 : añoActual;
 
-      // ===== CLIENTES =====
+      // clientes
       const clientesEsteMes = clientes.filter(c => {
         const fecha = new Date(c.createdAt);
         return fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual;
@@ -83,7 +82,7 @@ function Dashboard() {
       const clientesTrend = calcularTendencia(clientesEsteMes.length, clientesMesAnterior.length);
       setClientesDetalle(clientesEsteMes);
 
-      // ===== EXTINTORES =====
+      // extintores
       const extintoresActivos = extintores.filter(e => e.estado === 'activo');
       
       const extintoresEsteMes = extintores.filter(e => {
@@ -99,7 +98,7 @@ function Dashboard() {
       const extintoresTrend = calcularTendencia(extintoresEsteMes.length, extintoresMesAnterior.length);
       setExtintoresDetalle(extintoresEsteMes);
 
-      // ===== RECARGAS =====
+      // recargas
       const recargasDelMes = recargas.filter(r => {
         const fecha = new Date(r.fechaRecarga);
         return fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual;
@@ -113,7 +112,7 @@ function Dashboard() {
       const recargasTrend = calcularTendencia(recargasDelMes.length, recargasMesAnterior.length);
       setRecargasDetalle(recargasDelMes);
 
-      // ===== INGRESOS =====
+      // ingresos
       const ingresosEsteMes = recargasDelMes
         .filter(r => r.estado === 'completada')
         .reduce((sum, r) => sum + Number(r.precioTotal || 0), 0);
@@ -125,7 +124,7 @@ function Dashboard() {
       const ingresosTrend = calcularTendencia(ingresosEsteMes, ingresosMesAnterior);
       setIngresosDetalle(recargasDelMes.filter(r => r.estado === 'completada'));
 
-      // ===== ALERTAS =====
+      // alertas
       const vencidos = extintores.filter(e => {
         const vencimiento = new Date(e.fechaVencimiento);
         return vencimiento < ahora;
@@ -186,7 +185,7 @@ function Dashboard() {
     return Math.round(cambio);
   };
 
-  // Funciones para abrir modales
+  // funciones para abrir modales
   const abrirModalClientes = () => {
     setModalData({
       titulo: 'Clientes Nuevos del Mes',
@@ -254,7 +253,6 @@ function Dashboard() {
 
   return (
     <div>
-      {/* Header */}
       <div style={{ marginBottom: '32px' }}>
         <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#111827', marginBottom: '8px' }}>
           Dashboard
@@ -264,7 +262,6 @@ function Dashboard() {
         </p>
       </div>
 
-      {/* Stats principales - 4 columnas */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '32px' }}>
         <StatCard
           icon={Users}
@@ -304,7 +301,6 @@ function Dashboard() {
         />
       </div>
 
-      {/* Alertas y estado - 3 columnas */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '32px' }}>
         <AlertCard
           icon={AlertTriangle}
@@ -332,9 +328,7 @@ function Dashboard() {
         />
       </div>
 
-      {/* Sección inferior - 2 columnas */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-        {/* Últimas Recargas */}
         <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div style={{ width: '40px', height: '40px', backgroundColor: '#ede9fe', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -378,7 +372,6 @@ function Dashboard() {
           )}
         </div>
 
-        {/* Extintores Críticos */}
         <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
             <div style={{ width: '40px', height: '40px', backgroundColor: '#fee2e2', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -433,7 +426,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Indicador de tasa de mantenimiento */}
       <div style={{ 
         backgroundColor: 'white', 
         borderRadius: '12px', 
@@ -471,8 +463,6 @@ function Dashboard() {
           }}></div>
         </div>
       </div>
-
-      {/* Modal de detalles */}
       {modalData && (
         <DetalleModal
           datos={modalData}
@@ -483,7 +473,7 @@ function Dashboard() {
   );
 }
 
-// Componente de tarjeta de estadística (con onClick)
+// tarjeta de estadistica
 function StatCard({ icon: Icon, iconColor, iconBg, label, value, trend, onClick }) {
   const isPositive = trend > 0;
   const isNeutral = trend === 0;
@@ -549,7 +539,7 @@ function StatCard({ icon: Icon, iconColor, iconBg, label, value, trend, onClick 
   );
 }
 
-// Componente de tarjeta de alerta (con onClick)
+// tarjeta de alerta
 function AlertCard({ icon: Icon, label, value, color, borderColor, onClick }) {
   return (
     <div 
@@ -592,7 +582,7 @@ function AlertCard({ icon: Icon, label, value, color, borderColor, onClick }) {
   );
 }
 
-// Modal de detalles
+// modal de detalles
 function DetalleModal({ datos, onClose }) {
   return (
     <div style={{
@@ -617,7 +607,6 @@ function DetalleModal({ datos, onClose }) {
         overflow: 'hidden',
         boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
       }}>
-        {/* Header */}
         <div style={{
           padding: '24px',
           borderBottom: '2px solid #e5e7eb',
@@ -647,8 +636,6 @@ function DetalleModal({ datos, onClose }) {
             <X size={24} />
           </button>
         </div>
-
-        {/* Contenido */}
         <div style={{ padding: '24px', maxHeight: 'calc(80vh - 100px)', overflowY: 'auto' }}>
           {datos.datos.length === 0 ? (
             <p style={{ textAlign: 'center', color: '#6b7280', padding: '40px' }}>
@@ -827,7 +814,6 @@ function ModalContent({ tipo, datos }) {
                 <p><strong>Stock mínimo:</strong> {Number(producto.stockMinimo).toFixed(2)} {producto.unidadMedida}</p>
                 <p><strong>Categoría:</strong> {producto.categoria}</p>
               </div>
-              {/* Barra de progreso */}
               <div style={{ width: '100%', height: '8px', backgroundColor: '#e5e7eb', borderRadius: '4px', overflow: 'hidden' }}>
                 <div style={{
                   width: `${Math.min(porcentajeStock, 100)}%`,

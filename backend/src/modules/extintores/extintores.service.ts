@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Extintor } from 'src/database/entities/extintor.entity';
@@ -15,9 +15,9 @@ export class ExtintoresService {
     private clientsRepository: Repository<Client>,
   ) {}
 
-  // Crear extintor
+  // p crear extintor
   async create(createExtintorDto: CreateExtintorDto) {
-    // Verificar que el cliente existe
+    // verificar que existe
     const cliente = await this.clientsRepository.findOne({
       where: { id: createExtintorDto.clienteId },
     });
@@ -25,17 +25,6 @@ export class ExtintoresService {
     if (!cliente) {
       throw new NotFoundException(
         `Cliente con ID ${createExtintorDto.clienteId} no encontrado`,
-      );
-    }
-
-    // Verificar que el número de equipo no exista
-    const extintorExistente = await this.extintoresRepository.findOne({
-      where: { numeroEquipo: createExtintorDto.numeroEquipo },
-    });
-
-    if (extintorExistente) {
-      throw new ConflictException(
-        'Ya existe un extintor con ese número de equipo',
       );
     }
 
@@ -48,7 +37,7 @@ export class ExtintoresService {
     };
   }
 
-  // Obtener todos los extintores
+  // obtener todos los extintores
   async findAll() {
     const extintores = await this.extintoresRepository.find({
       relations: ['cliente'],
@@ -61,7 +50,7 @@ export class ExtintoresService {
     };
   }
 
-  // Obtener extintores por cliente
+  // extintores por cliente
   async findByClient(clienteId: number) {
     const cliente = await this.clientsRepository.findOne({
       where: { id: clienteId },
@@ -86,7 +75,7 @@ export class ExtintoresService {
     };
   }
 
-  // Obtener un extintor por ID
+  // extintor por ID
   async findOne(id: number) {
     const extintor = await this.extintoresRepository.findOne({
       where: { id },
@@ -100,7 +89,7 @@ export class ExtintoresService {
     return extintor;
   }
 
-  // Buscar por número de equipo
+  // por número de equipo
   async findByNumeroEquipo(numeroEquipo: string) {
     const extintor = await this.extintoresRepository.findOne({
       where: { numeroEquipo },
@@ -116,7 +105,7 @@ export class ExtintoresService {
     return extintor;
   }
 
-  // Obtener extintores vencidos o por vencer
+  // para extintores vencidos o por vencer
   async findExpiringSoon(dias: number = 30) {
     const fechaLimite = new Date();
     fechaLimite.setDate(fechaLimite.getDate() + dias);
@@ -136,27 +125,9 @@ export class ExtintoresService {
     };
   }
 
-  // Actualizar extintor
   async update(id: number, updateExtintorDto: UpdateExtintorDto) {
     const extintor = await this.findOne(id);
 
-    // Si se actualiza el número de equipo, verificar que no exista
-    if (
-      updateExtintorDto.numeroEquipo &&
-      updateExtintorDto.numeroEquipo !== extintor.numeroEquipo
-    ) {
-      const extintorConNumero = await this.extintoresRepository.findOne({
-        where: { numeroEquipo: updateExtintorDto.numeroEquipo },
-      });
-
-      if (extintorConNumero) {
-        throw new ConflictException(
-          'Ya existe un extintor con ese número de equipo',
-        );
-      }
-    }
-
-    // Si se actualiza el cliente, verificar que existe
     if (updateExtintorDto.clienteId) {
       const cliente = await this.clientsRepository.findOne({
         where: { id: updateExtintorDto.clienteId },
@@ -178,7 +149,7 @@ export class ExtintoresService {
     };
   }
 
-  // Eliminar extintor
+  // eliminar extintor
   async remove(id: number) {
     const extintor = await this.findOne(id);
     await this.extintoresRepository.remove(extintor);

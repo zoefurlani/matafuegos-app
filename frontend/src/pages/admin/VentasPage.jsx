@@ -9,13 +9,16 @@ import {
   User,
   Trash2,
   TrendingUp,
-  X
+  X,
+  Edit2
 } from 'lucide-react';
 import { ventasAPI, clientesAPI, inventarioAPI } from '../../services/api';
 import { useToast } from '../../contexts/ToastContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 function VentasPage() {
   const toast = useToast();
+  const { user } = useAuth();
   const [ventas, setVentas] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [productos, setProductos] = useState([]);
@@ -23,15 +26,21 @@ function VentasPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCliente, setFilterCliente] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingVenta, setEditingVenta] = useState(null);
   const [stats, setStats] = useState(null);
 
-  // Formulario de nueva venta
   const [formData, setFormData] = useState({
     clienteId: '',
     productoId: '',
     cantidad: 1,
     precioUnitario: 0,
     numeroEquipo: '',
+    observaciones: '',
+  });
+
+  const [editFormData, setEditFormData] = useState({
+    precioUnitario: 0,
     observaciones: '',
   });
 
@@ -51,7 +60,6 @@ function VentasPage() {
       
       setVentas(ventasData);
       setClientes(clientesData);
-      // Filtrar solo extintores del inventario
       setProductos(productosData.filter(p => p.categoria === 'Matafuegos'));
       setStats(statsData);
     } catch (error) {
@@ -97,6 +105,34 @@ function VentasPage() {
       console.error('Error al registrar venta:', error);
       toast.error(error.message || 'Error al registrar la venta');
     }
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await ventasAPI.update(editingVenta.id, {
+        precioUnitario: parseFloat(editFormData.precioUnitario),
+        observaciones: editFormData.observaciones,
+      });
+
+      toast.success('Venta actualizada correctamente');
+      setShowEditModal(false);
+      setEditingVenta(null);
+      fetchData();
+    } catch (error) {
+      console.error('Error al actualizar venta:', error);
+      toast.error(error.message || 'Error al actualizar la venta');
+    }
+  };
+
+  const handleEdit = (venta) => {
+    setEditingVenta(venta);
+    setEditFormData({
+      precioUnitario: venta.precioUnitario,
+      observaciones: venta.observaciones || '',
+    });
+    setShowEditModal(true);
   };
 
   const resetForm = () => {
@@ -288,13 +324,24 @@ function VentasPage() {
                     <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#059669' }}>${venta.precioTotal?.toLocaleString('es-AR')}</span>
                   </td>
                   <td style={cellStyle}>
-                    <button 
-                      onClick={() => handleEliminar(venta.id)} 
-                      style={{ padding: '8px', backgroundColor: '#fee2e2', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-                      title="Eliminar venta (solo < 24hs)"
-                    >
-                      <Trash2 size={16} color="#dc2626" />
-                    </button>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button
+                        onClick={() => handleEdit(venta)}
+                        style={{ padding: '8px', backgroundColor: '#dbeafe', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                        title="Editar"
+                      >
+                        <Edit2 size={16} color="#2563eb" />
+                      </button>
+                      {user?.rol === 'super_admin' && (
+                        <button 
+                          onClick={() => handleEliminar(venta.id)} 
+                          style={{ padding: '8px', backgroundColor: '#fee2e2', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+                          title="Eliminar venta (solo < 24hs)"
+                        >
+                          <Trash2 size={16} color="#dc2626" />
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -322,12 +369,7 @@ function VentasPage() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   <div>
                     <label style={labelStyle}>Cliente *</label>
-                    <select 
-                      required 
-                      value={formData.clienteId} 
-                      onChange={(e) => setFormData({ ...formData, clienteId: e.target.value })} 
-                      style={inputStyle}
-                    >
+                    <select required value={formData.clienteId} onChange={(e) => setFormData({ ...formData, clienteId: e.target.value })} style={inputStyle}>
                       <option value="">Seleccionar cliente...</option>
                       {clientes.map(cliente => (
                         <option key={cliente.id} value={cliente.id}>{cliente.nombre}</option>
@@ -337,12 +379,7 @@ function VentasPage() {
 
                   <div>
                     <label style={labelStyle}>Producto (Extintor) *</label>
-                    <select 
-                      required 
-                      value={formData.productoId} 
-                      onChange={(e) => handleProductoChange(e.target.value)} 
-                      style={inputStyle}
-                    >
+                    <select required value={formData.productoId} onChange={(e) => handleProductoChange(e.target.value)} style={inputStyle}>
                       <option value="">Seleccionar extintor...</option>
                       {productos.map(producto => (
                         <option key={producto.id} value={producto.id}>
@@ -355,59 +392,27 @@ function VentasPage() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                     <div>
                       <label style={labelStyle}>Cantidad *</label>
-                      <input 
-                        type="number" 
-                        required 
-                        min="1" 
-                        value={formData.cantidad} 
-                        onChange={(e) => setFormData({ ...formData, cantidad: e.target.value })} 
-                        style={inputStyle} 
-                      />
+                      <input type="number" required min="1" value={formData.cantidad} onChange={(e) => setFormData({ ...formData, cantidad: e.target.value })} style={inputStyle} />
                     </div>
-
                     <div>
                       <label style={labelStyle}>Precio Unitario *</label>
-                      <input 
-                        type="number" 
-                        required 
-                        min="0" 
-                        step="0.01" 
-                        value={formData.precioUnitario} 
-                        onChange={(e) => setFormData({ ...formData, precioUnitario: e.target.value })} 
-                        style={inputStyle} 
-                      />
+                      <input type="number" required min="0" step="0.01" value={formData.precioUnitario} onChange={(e) => setFormData({ ...formData, precioUnitario: e.target.value })} style={inputStyle} />
                     </div>
                   </div>
 
                   <div>
                     <label style={labelStyle}>N° de Equipo del Extintor *</label>
-                    <input 
-                      type="text" 
-                      required 
-                      value={formData.numeroEquipo} 
-                      onChange={(e) => setFormData({ ...formData, numeroEquipo: e.target.value })} 
-                      style={inputStyle} 
-                      placeholder="Ej: ABC-001, 5664"
-                    />
-                    <p style={{ fontSize: '13px', color: '#6b7280', marginTop: '6px' }}>
-                      Será el número único del extintor en el sistema
-                    </p>
+                    <input type="text" required value={formData.numeroEquipo} onChange={(e) => setFormData({ ...formData, numeroEquipo: e.target.value })} style={inputStyle} placeholder="Ej: ABC-001, 5664" />
+                    <p style={{ fontSize: '13px', color: '#6b7280', marginTop: '6px' }}>Será el número único del extintor en el sistema</p>
                   </div>
 
                   <div>
                     <label style={labelStyle}>Observaciones</label>
-                    <textarea 
-                      value={formData.observaciones} 
-                      onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })} 
-                      style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }} 
-                      placeholder="Notas adicionales sobre la venta"
-                    />
+                    <textarea value={formData.observaciones} onChange={(e) => setFormData({ ...formData, observaciones: e.target.value })} style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }} placeholder="Notas adicionales sobre la venta" />
                   </div>
 
                   <div style={{ padding: '16px', backgroundColor: '#dbeafe', borderRadius: '8px', border: '1px solid #3b82f6' }}>
-                    <p style={{ fontSize: '14px', fontWeight: 'bold', color: '#1e40af', margin: '0 0 8px 0' }}>
-                       Al registrar esta venta:
-                    </p>
+                    <p style={{ fontSize: '14px', fontWeight: 'bold', color: '#1e40af', margin: '0 0 8px 0' }}>Al registrar esta venta:</p>
                     <ul style={{ fontSize: '13px', color: '#1e3a8a', margin: 0, paddingLeft: '20px' }}>
                       <li>Se descontará del inventario automáticamente</li>
                       <li>Se creará el extintor en el sistema del cliente</li>
@@ -418,18 +423,70 @@ function VentasPage() {
               </div>
 
               <div style={{ padding: '24px', borderTop: '2px solid #e5e7eb', flexShrink: 0, display: 'flex', gap: '12px', justifyContent: 'flex-end', backgroundColor: 'white', borderRadius: '0 0 16px 16px' }}>
-                <button 
-                  type="button" 
-                  onClick={() => setShowModal(false)} 
-                  style={{ padding: '12px 24px', backgroundColor: '#f3f4f6', color: '#374151', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
-                >
+                <button type="button" onClick={() => setShowModal(false)} style={{ padding: '12px 24px', backgroundColor: '#f3f4f6', color: '#374151', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
                   Cancelar
                 </button>
-                <button 
-                  type="submit" 
-                  style={{ padding: '12px 24px', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}
-                >
+                <button type="submit" style={{ padding: '12px 24px', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
                   Registrar Venta
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Editar Venta */}
+      {showEditModal && editingVenta && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
+          <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
+            <div style={{ padding: '24px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#ef4444', color: 'white', borderRadius: '16px 16px 0 0' }}>
+              <div>
+                <h2 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>Editar Venta</h2>
+                <p style={{ fontSize: '14px', margin: '4px 0 0 0', opacity: 0.9 }}>Equipo #{editingVenta.numeroEquipo}</p>
+              </div>
+              <button onClick={() => { setShowEditModal(false); setEditingVenta(null); }} style={{ padding: '8px', backgroundColor: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '6px', cursor: 'pointer', color: 'white' }}>
+                <X size={24} />
+              </button>
+            </div>
+
+            <form onSubmit={handleEditSubmit}>
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div>
+                  <label style={labelStyle}>Precio Unitario *</label>
+                  <input
+                    type="number"
+                    required
+                    min="0"
+                    step="0.01"
+                    value={editFormData.precioUnitario}
+                    onChange={(e) => setEditFormData({ ...editFormData, precioUnitario: e.target.value })}
+                    style={inputStyle}
+                  />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Observaciones</label>
+                  <textarea
+                    value={editFormData.observaciones}
+                    onChange={(e) => setEditFormData({ ...editFormData, observaciones: e.target.value })}
+                    style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }}
+                    placeholder="Notas adicionales sobre la venta"
+                  />
+                </div>
+
+                <div style={{ padding: '12px', backgroundColor: '#fef3c7', borderRadius: '8px', border: '1px solid #f59e0b' }}>
+                  <p style={{ fontSize: '13px', color: '#92400e', margin: 0 }}>
+                    Solo se puede modificar el precio unitario y las observaciones de la venta.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ padding: '24px', borderTop: '2px solid #e5e7eb', display: 'flex', gap: '12px', justifyContent: 'flex-end', backgroundColor: 'white', borderRadius: '0 0 16px 16px' }}>
+                <button type="button" onClick={() => { setShowEditModal(false); setEditingVenta(null); }} style={{ padding: '12px 24px', backgroundColor: '#f3f4f6', color: '#374151', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+                  Cancelar
+                </button>
+                <button type="submit" style={{ padding: '12px 24px', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
+                  Actualizar Venta
                 </button>
               </div>
             </form>
