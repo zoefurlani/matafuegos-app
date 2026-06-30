@@ -85,7 +85,6 @@ function GuiaTecnicaPage() {
     setTimeout(() => fetchData(), 100);
   };
 
-  // ==================== SELECCIÓN ====================
 
   const toggleSeleccion = (recursoId) => {
     setSeleccionados(prev => 
@@ -103,7 +102,6 @@ function GuiaTecnicaPage() {
     }
   };
 
-  // ==================== FUNCIONES DE EXPORTACIÓN ====================
 
   const exportarPDF = (recursosAExportar) => {
     const doc = new jsPDF();
@@ -292,7 +290,6 @@ function GuiaTecnicaPage() {
     <>
       <Navbar />
       <div style={{ minHeight: '100vh', backgroundColor: colors.background, paddingTop: '80px', transition: 'all 0.3s ease' }}>
-        {/* Header */}
         <div style={{ backgroundColor: '#ef4444', color: 'white', padding: '48px 24px', textAlign: 'center' }} className="guia-header">
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginBottom: '16px' }} className="header-content">
@@ -305,13 +302,11 @@ function GuiaTecnicaPage() {
           </div>
         </div>
 
-        {/* Contenido */}
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }} className="guia-container">
           
-          {/* Barra de busqueda y filtros */}
           <div style={{ backgroundColor: colors.cardBg, padding: '24px', borderRadius: '12px', boxShadow: colors.shadow, border: '2px solid ' + colors.border, marginBottom: '24px', transition: 'all 0.3s ease' }} className="search-filters-card">
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto auto', gap: '12px', alignItems: 'end' }} className="search-grid">
-              {/* Busqueda */}
+
               <div>
                 <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold', color: colors.text, transition: 'color 0.3s ease' }}>
                   Buscar
@@ -329,7 +324,6 @@ function GuiaTecnicaPage() {
                 </div>
               </div>
 
-              {/* Boton Filtros */}
               <button
                 onClick={() => setShowFiltros(!showFiltros)}
                 className="btn-filtros"
@@ -352,7 +346,6 @@ function GuiaTecnicaPage() {
                 <span className="btn-text">Filtros {filtrosActivos > 0 && '(' + filtrosActivos + ')'}</span>
               </button>
 
-              {/* Boton Buscar */}
               <button
                 onClick={handleFiltrar}
                 className="btn-buscar"
@@ -364,11 +357,9 @@ function GuiaTecnicaPage() {
               </button>
             </div>
 
-            {/* Panel de Filtros */}
             {showFiltros && (
               <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '2px solid ' + colors.border, transition: 'all 0.3s ease' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '16px' }} className="filters-grid">
-                  {/* Categoria */}
                   <div>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold', color: colors.text, transition: 'color 0.3s ease' }}>
                       Categoria
@@ -385,7 +376,6 @@ function GuiaTecnicaPage() {
                     </select>
                   </div>
 
-                  {/* Tipo de Fuego */}
                   <div>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold', color: colors.text, transition: 'color 0.3s ease' }}>
                       Tipo de Fuego
@@ -402,7 +392,6 @@ function GuiaTecnicaPage() {
                     </select>
                   </div>
 
-                  {/* Tipo de Extintor */}
                   <div>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold', color: colors.text, transition: 'color 0.3s ease' }}>
                       Tipo de Extintor
@@ -419,7 +408,6 @@ function GuiaTecnicaPage() {
                     </select>
                   </div>
 
-                  {/* Aplicacion */}
                   <div>
                     <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold', color: colors.text, transition: 'color 0.3s ease' }}>
                       Aplicacion
@@ -449,7 +437,6 @@ function GuiaTecnicaPage() {
             )}
           </div>
 
-          {/* Barra de seleccion y descarga */}
           {recursos.length > 0 && (
             <div style={{ 
               backgroundColor: colors.cardBg, 
@@ -464,7 +451,6 @@ function GuiaTecnicaPage() {
               flexWrap: 'wrap',
               transition: 'all 0.3s ease'
             }}>
-              {/* Checkbox seleccionar todos */}
               <button
                 onClick={toggleSeleccionTodos}
                 style={{ 
@@ -497,7 +483,6 @@ function GuiaTecnicaPage() {
                 <span>{seleccionados.length === recursos.length ? 'Deseleccionar todos' : 'Seleccionar todos'}</span>
               </button>
 
-              {/* Contador de seleccionados */}
               {seleccionados.length > 0 && (
                 <div style={{ 
                   padding: '10px 16px', 
@@ -511,7 +496,6 @@ function GuiaTecnicaPage() {
                 </div>
               )}
 
-              {/* Selector de formato */}
               {seleccionados.length > 0 && (
                 <>
                   <select
@@ -535,7 +519,6 @@ function GuiaTecnicaPage() {
                     <option value="word">📝 Word</option>
                   </select>
 
-                  {/* Boton descargar */}
                   <button
                     onClick={handleDescargarSeleccionados}
                     style={{ 
@@ -563,7 +546,6 @@ function GuiaTecnicaPage() {
             </div>
           )}
 
-          {/* Resultados */}
           {loading ? (
             <div style={{ display: 'flex', justifyContent: 'center', padding: '48px' }}>
               <div style={{ width: '60px', height: '60px', border: '6px solid ' + colors.border, borderTop: '6px solid #ef4444', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
@@ -611,7 +593,6 @@ function GuiaTecnicaPage() {
                       }
                     }}
                   >
-                    {/* Checkbox de seleccion */}
                     <div 
                       onClick={(e) => {
                         e.stopPropagation();
@@ -672,7 +653,6 @@ function GuiaTecnicaPage() {
                       )}
                     </div>
 
-                    {/* Boton ver detalles */}
                     <button
                       onClick={() => setRecursoDetalle(recurso)}
                       style={{ 
@@ -699,7 +679,6 @@ function GuiaTecnicaPage() {
           )}
         </div>
 
-        {/* Modal Detalle */}
         {recursoDetalle && (
           <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '20px' }} onClick={() => setRecursoDetalle(null)}>
             <div style={{ backgroundColor: colors.cardBg, borderRadius: '16px', width: '100%', maxWidth: '800px', maxHeight: '90vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'all 0.3s ease' }} onClick={(e) => e.stopPropagation()} className="modal-content">

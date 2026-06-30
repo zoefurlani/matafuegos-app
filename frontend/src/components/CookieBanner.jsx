@@ -99,7 +99,7 @@ function CookieBanner() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <div>
                   <h4 style={{ fontSize: '16px', fontWeight: 'bold', color: colors.text, margin: '0 0 4px 0' }}>
-                    🔒 Cookies Esenciales
+                    Cookies Esenciales
                   </h4>
                   <p style={{ fontSize: '13px', color: colors.textSecondary, margin: 0 }}>
                     Necesarias para el funcionamiento básico del sitio (modo oscuro, preferencias).
@@ -122,7 +122,7 @@ function CookieBanner() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <div style={{ flex: 1 }}>
                   <h4 style={{ fontSize: '16px', fontWeight: 'bold', color: colors.text, margin: '0 0 4px 0' }}>
-                    📊 Cookies de Análisis
+                    Cookies de Análisis
                   </h4>
                   <p style={{ fontSize: '13px', color: colors.textSecondary, margin: 0 }}>
                     Nos ayudan a entender cómo usas el sitio para mejorarlo (Google Analytics).
@@ -166,7 +166,7 @@ function CookieBanner() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <div style={{ flex: 1 }}>
                   <h4 style={{ fontSize: '16px', fontWeight: 'bold', color: colors.text, margin: '0 0 4px 0' }}>
-                    🎯 Cookies de Marketing
+                    Cookies de Marketing
                   </h4>
                   <p style={{ fontSize: '13px', color: colors.textSecondary, margin: 0 }}>
                     Usadas para mostrarte contenido relevante (actualmente no las usamos).

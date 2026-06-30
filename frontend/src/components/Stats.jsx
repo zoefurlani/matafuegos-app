@@ -8,10 +8,10 @@ function Stats() {
   const { colors } = useTheme();
 
   const finalValues = {
-    exp: 8,           // ⭐ Desde 2018
-    clients: 1000,    // ⭐ 1000+ clientes
-    services: 5000,   // ⭐ 5000+ servicios/recargas
-    certified: 100    // ⭐ 100% Cumplimiento normativo
+    exp: 8,           
+    clients: 1000,   
+    services: 5000,   
+    certified: 100  
   };
 
   useEffect(() => {

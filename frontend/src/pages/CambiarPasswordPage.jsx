@@ -23,7 +23,7 @@ function CambiarPasswordPage() {
     setError('');
     setSuccess(false);
 
-    // Validaciones
+    // validaciones
     if (!currentPassword || !newPassword || !confirmPassword) {
       setError('Por favor completa todos los campos');
       return;
@@ -53,7 +53,7 @@ function CambiarPasswordPage() {
       setNewPassword('');
       setConfirmPassword('');
       
-      // Redirigir al dashboard después de 2 segundos
+      // redirigir al dashboard 
       setTimeout(() => {
         navigate('/admin-zd-m8k3x7p2/dashboard');
       }, 2000);
@@ -70,7 +70,6 @@ function CambiarPasswordPage() {
         maxWidth: '600px',
         margin: '0 auto'
       }}>
-        {/* Header */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -121,7 +120,6 @@ function CambiarPasswordPage() {
           </div>
         </div>
 
-        {/* Card */}
         <div style={{
           backgroundColor: 'white',
           borderRadius: '16px',
@@ -129,7 +127,6 @@ function CambiarPasswordPage() {
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
           border: '1px solid #e5e7eb'
         }}>
-          {/* Success Message */}
           {success && (
             <div style={{
               padding: '16px',
@@ -148,7 +145,6 @@ function CambiarPasswordPage() {
             </div>
           )}
 
-          {/* Error Message */}
           {error && (
             <div style={{
               padding: '16px',
@@ -168,7 +164,6 @@ function CambiarPasswordPage() {
           )}
 
           <form onSubmit={handleSubmit}>
-            {/* Contraseña Actual */}
             <div style={{ marginBottom: '24px' }}>
               <label style={{
                 display: 'block',
@@ -236,7 +231,6 @@ function CambiarPasswordPage() {
               </div>
             </div>
 
-            {/* Nueva Contraseña */}
             <div style={{ marginBottom: '24px' }}>
               <label style={{
                 display: 'block',
@@ -304,7 +298,6 @@ function CambiarPasswordPage() {
               </div>
             </div>
 
-            {/* Confirmar Nueva Contraseña */}
             <div style={{ marginBottom: '32px' }}>
               <label style={{
                 display: 'block',
@@ -372,7 +365,6 @@ function CambiarPasswordPage() {
               </div>
             </div>
 
-            {/* Botón Submit */}
             <button
               type="submit"
               disabled={loading || success}
@@ -408,7 +400,6 @@ function CambiarPasswordPage() {
             </button>
           </form>
 
-          {/* Recomendaciones de seguridad */}
           <div style={{
             marginTop: '24px',
             padding: '16px',

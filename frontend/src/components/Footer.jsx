@@ -457,7 +457,7 @@ function Footer() {
         <ScrollToTopButton />
       </footer>
 
-      {/* Modal */}
+      {/* modal */}
       {activeModal && (
         <div style={modalOverlayStyle} onClick={closeModal}>
           <div style={modalCardStyle} onClick={function(e) { e.stopPropagation(); }} className="modal-content">

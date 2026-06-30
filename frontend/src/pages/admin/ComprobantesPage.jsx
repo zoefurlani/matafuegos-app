@@ -13,7 +13,7 @@ import {
   TrendingUp,
   Download
 } from 'lucide-react';
-import { comprobantesAPI, clientesAPI } from '../../services/api'; // ← CORREGIDO: clientesAPI (con "e")
+import { comprobantesAPI, clientesAPI } from '../../services/api'; 
 import { useToast } from '../../contexts/ToastContext';
 
 function ComprobantesPage() {
@@ -26,7 +26,6 @@ function ComprobantesPage() {
   const [stats, setStats] = useState(null);
   const [vistaPrevia, setVistaPrevia] = useState(null);
 
-  // Formulario de nuevo comprobante
   const [formData, setFormData] = useState({
     fecha: new Date().toISOString().split('T')[0],
     clienteId: '',
@@ -37,7 +36,6 @@ function ComprobantesPage() {
     observaciones: '',
   });
 
-  // Items del comprobante
   const [items, setItems] = useState([]);
   const [nuevoItem, setNuevoItem] = useState({
     tipoOperacion: 'Recarga',
@@ -70,7 +68,7 @@ function ComprobantesPage() {
 
   const fetchClientes = async () => {
     try {
-      const data = await clientesAPI.getAll(); // ← CORREGIDO: clientesAPI (con "e")
+      const data = await clientesAPI.getAll(); 
       setClientes(data.clientes || data);
     } catch (error) {
       console.error('Error al cargar clientes:', error);
@@ -233,7 +231,6 @@ function ComprobantesPage() {
 
   return (
     <div>
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#111827', marginBottom: '8px' }}>Comprobantes</h1>
@@ -250,7 +247,6 @@ function ComprobantesPage() {
         </button>
       </div>
 
-      {/* Estadísticas */}
       {stats && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '24px' }}>
           <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
@@ -291,7 +287,6 @@ function ComprobantesPage() {
         </div>
       )}
 
-      {/* Filtros */}
       <div style={{ backgroundColor: 'white', padding: '16px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '24px' }}>
         <div style={{ position: 'relative' }}>
           <Search size={20} color="#6b7280" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)' }} />
@@ -305,7 +300,6 @@ function ComprobantesPage() {
         </div>
       </div>
 
-      {/* Tabla de comprobantes */}
       <div style={{ backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
         {comprobantesFiltrados.length === 0 ? (
           <div style={{ padding: '48px', textAlign: 'center', color: '#6b7280' }}>
@@ -391,7 +385,6 @@ function ComprobantesPage() {
         )}
       </div>
 
-      {/* Modal Nuevo Comprobante */}
       {showModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: '900px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
@@ -407,11 +400,9 @@ function ComprobantesPage() {
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
               <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>
-                {/* Datos del Cliente */}
                 <div style={{ marginBottom: '24px' }}>
                   <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827', marginBottom: '16px' }}>Datos del Cliente</h3>
                   
-                  {/* SELECTOR DE CLIENTE */}
                   <div style={{ marginBottom: '16px' }}>
                     <label style={labelStyle}>Seleccionar Cliente *</label>
                     <select
@@ -511,11 +502,9 @@ function ComprobantesPage() {
                   </div>
                 </div>
 
-                {/* Items del Comprobante */}
                 <div style={{ marginBottom: '24px' }}>
                   <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827', marginBottom: '16px' }}>Items</h3>
                   
-                  {/* Agregar Item */}
                   <div style={{ backgroundColor: '#f9fafb', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
                     <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr 100px 120px 80px', gap: '12px', alignItems: 'end' }}>
                       <div>
@@ -572,7 +561,6 @@ function ComprobantesPage() {
                     </div>
                   </div>
 
-                  {/* Lista de Items */}
                   {items.length > 0 && (
                     <div style={{ border: '2px solid #e5e7eb', borderRadius: '8px', overflow: 'hidden' }}>
                       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -621,7 +609,6 @@ function ComprobantesPage() {
                   )}
                 </div>
 
-                {/* Observaciones */}
                 <div>
                   <label style={labelStyle}>Observaciones</label>
                   <textarea
@@ -653,7 +640,6 @@ function ComprobantesPage() {
         </div>
       )}
 
-      {/* Modal Vista Previa */}
       {vistaPrevia && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: '800px', maxHeight: '90vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
@@ -664,13 +650,11 @@ function ComprobantesPage() {
               </button>
             </div>
             <div style={{ padding: '32px' }}>
-              {/* Encabezado */}
               <div style={{ textAlign: 'center', marginBottom: '24px', padding: '16px', backgroundColor: '#fee2e2', borderRadius: '8px' }}>
                 <h1 style={{ fontSize: '20px', fontWeight: 'bold', color: '#dc2626', margin: '0 0 8px 0' }}>COMPROBANTE NO VÁLIDO COMO FACTURA</h1>
                 <p style={{ fontSize: '14px', color: '#991b1b', margin: 0 }}>Este documento no tiene validez fiscal</p>
               </div>
 
-              {/* Datos ZD */}
               <div style={{ marginBottom: '24px', padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
                 <h2 style={{ fontSize: '22px', fontWeight: 'bold', color: '#111827', margin: '0 0 8px 0' }}>ZD MATAFUEGOS</h2>
                 <p style={{ fontSize: '14px', color: '#374151', margin: '4px 0' }}>Furlani Nelson Pedro</p>
@@ -679,7 +663,6 @@ function ComprobantesPage() {
                 <p style={{ fontSize: '14px', color: '#374151', margin: '4px 0' }}>Habilitación Municipal N° 70/2018</p>
               </div>
 
-              {/* Datos del Comprobante */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
                 <div>
                   <p style={{ fontSize: '12px', color: '#6b7280', margin: '0 0 4px 0' }}>COMPROBANTE</p>
@@ -691,7 +674,6 @@ function ComprobantesPage() {
                 </div>
               </div>
 
-              {/* Datos del Cliente */}
               <div style={{ marginBottom: '24px', padding: '16px', border: '2px solid #e5e7eb', borderRadius: '8px' }}>
                 <p style={{ fontSize: '12px', color: '#6b7280', margin: '0 0 8px 0' }}>CLIENTE</p>
                 <p style={{ fontSize: '16px', fontWeight: 'bold', color: '#111827', margin: '0 0 8px 0' }}>{vistaPrevia.clienteNombre}</p>
@@ -700,7 +682,6 @@ function ComprobantesPage() {
                 {vistaPrevia.clienteTelefono && <p style={{ fontSize: '14px', color: '#374151', margin: '4px 0' }}>Tel: {vistaPrevia.clienteTelefono}</p>}
               </div>
 
-              {/* Items */}
               <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '24px' }}>
                 <thead style={{ backgroundColor: '#f9fafb' }}>
                   <tr>
@@ -728,7 +709,6 @@ function ComprobantesPage() {
                 </tbody>
               </table>
 
-              {/* Total */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
                 <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px', minWidth: '200px' }}>
                   <p style={{ fontSize: '14px', color: '#6b7280', margin: '0 0 8px 0', textAlign: 'right' }}>TOTAL</p>
@@ -736,7 +716,6 @@ function ComprobantesPage() {
                 </div>
               </div>
 
-              {/* Observaciones */}
               {vistaPrevia.observaciones && (
                 <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
                   <p style={{ fontSize: '12px', color: '#6b7280', margin: '0 0 8px 0' }}>OBSERVACIONES</p>

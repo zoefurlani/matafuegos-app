@@ -22,19 +22,17 @@ function ExtintoresPage() {
   const toast = useToast();
   const [extintores, setExtintores] = useState([]);
   const [clientes, setClientes] = useState([]);
-  const [clientesConEquipos, setClientesConEquipos] = useState([]); // NUEVO
+  const [clientesConEquipos, setClientesConEquipos] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCliente, setFilterCliente] = useState('');
   const [editingExtintor, setEditingExtintor] = useState(null);
   
-  // Estados para Servicio Múltiple (ahora único)
   const [showServicioModal, setShowServicioModal] = useState(false);
   const [servicioClienteId, setServicioClienteId] = useState('');
   const [extintoresServicio, setExtintoresServicio] = useState([]);
 
 
-  // Cargar extintores y clientes al iniciar
   useEffect(() => {
     fetchData();
   }, []);
@@ -49,8 +47,7 @@ function ExtintoresPage() {
       ]);
       setExtintores(extintoresData);
       setClientes(clientesData);
-      
-      // NUEVO: Cargar clientes con sus números de equipo
+
       await fetchClientesConEquipos();
     } catch (error) {
       console.error('Error al cargar datos:', error);
@@ -61,14 +58,9 @@ function ExtintoresPage() {
   };
 
 
-  // NUEVO: Función para cargar clientes con números de equipo
   const fetchClientesConEquipos = async () => {
     try {
-      // Si tienes el endpoint nuevo en el backend:
-      // const response = await clientesAPI.getAllWithEquipos();
-      // setClientesConEquipos(response);
-      
-      // Mientras tanto, calculamos manualmente:
+  
       const clientesConNumerosEquipo = await Promise.all(
         clientes.map(async (cliente) => {
           try {
@@ -96,8 +88,6 @@ function ExtintoresPage() {
     }
   };
 
-
-  // Actualizar clientesConEquipos cuando cambien extintores o clientes
   useEffect(() => {
     if (clientes.length > 0 && extintores.length >= 0) {
       fetchClientesConEquipos();
@@ -105,7 +95,6 @@ function ExtintoresPage() {
   }, [extintores, clientes]);
 
 
-  // Abrir modal para editar extintor
   const handleEditarExtintor = (extintor) => {
     setEditingExtintor(extintor);
     setServicioClienteId(extintor.clienteId || extintor.cliente?.id || '');
@@ -124,8 +113,6 @@ function ExtintoresPage() {
     setShowServicioModal(true);
   };
 
-
-  // Eliminar extintor
   const handleEliminarExtintor = async (id, numeroEquipo) => {
     const confirmed = await toast.confirm(`¿Estás seguro de eliminar el extintor "${numeroEquipo}"?`);
     if (!confirmed) return;
@@ -140,7 +127,6 @@ function ExtintoresPage() {
       toast.error('Error al eliminar el extintor');
     }
   };
-
 
   const handleAgregarExtintorServicio = () => {
     const hoy = new Date().toISOString().split('T')[0];
@@ -165,7 +151,6 @@ function ExtintoresPage() {
     ]);
   };
 
-
   const handleUpdateExtintorServicio = (id, field, value) => {
     setExtintoresServicio(extintoresServicio.map(ext => {
       if (ext.id === id) {
@@ -185,19 +170,16 @@ function ExtintoresPage() {
     setExtintoresServicio(extintoresServicio.filter(ext => ext.id !== id));
   };
 
-
   const handleGuardarServicio = async () => {
     if (!servicioClienteId) {
       toast.warning('Debes seleccionar un cliente');
       return;
     }
 
-
     if (extintoresServicio.length === 0) {
       toast.warning('Debes agregar al menos un extintor');
       return;
     }
-
 
     for (const extintor of extintoresServicio) {
       if (!extintor.numeroEquipo || !extintor.capacidad) {
@@ -206,10 +188,9 @@ function ExtintoresPage() {
       }
     }
 
-
     try {
       if (editingExtintor) {
-        // Modo edición
+
         const extintor = extintoresServicio[0];
         const dataToSend = {
           numeroEquipo: extintor.numeroEquipo,
@@ -227,7 +208,7 @@ function ExtintoresPage() {
         await extintoresAPI.update(editingExtintor.id, dataToSend);
         toast.success('Extintor actualizado correctamente');
       } else {
-        // Modo creación
+
         for (const extintor of extintoresServicio) {
           const dataToSend = {
             numeroEquipo: extintor.numeroEquipo,
@@ -242,10 +223,8 @@ function ExtintoresPage() {
             clienteId: parseInt(servicioClienteId)
           };
 
-
           await extintoresAPI.create(dataToSend);
         }
-
 
         toast.success(` Se registraron ${extintoresServicio.length} extintor(es) correctamente`);
       }
@@ -261,7 +240,6 @@ function ExtintoresPage() {
     }
   };
 
-
   const getClienteNombre = (extintor) => {
     if (extintor.cliente) {
       return extintor.cliente.nombre;
@@ -269,7 +247,6 @@ function ExtintoresPage() {
     const cliente = clientes.find(c => c.id === extintor.clienteId);
     return cliente ? cliente.nombre : 'Sin cliente';
   };
-
 
   const getEstadoVencimiento = (fechaVencimiento) => {
     if (!fechaVencimiento) return { text: 'Sin fecha', color: '#6b7280', icon: AlertTriangle };
@@ -290,13 +267,10 @@ function ExtintoresPage() {
     }
   };
 
-
-  // NUEVO: Obtener los números de equipo del cliente seleccionado
   const getClienteEquipos = (clienteId) => {
     const cliente = clientesConEquipos.find(c => c.id === parseInt(clienteId));
     return cliente?.numerosEquipo || [];
   };
-
 
   const extintoresFiltrados = extintores.filter(extintor => {
     const matchSearch = 
@@ -312,7 +286,6 @@ function ExtintoresPage() {
     return matchSearch && matchCliente;
   });
 
-
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
@@ -321,7 +294,6 @@ function ExtintoresPage() {
       </div>
     );
   }
-
 
   return (
     <div>
@@ -340,7 +312,6 @@ function ExtintoresPage() {
           Registrar Extintores
         </button>
       </div>
-
 
       <div style={{ backgroundColor: 'white', padding: '16px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '24px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '16px' }}>
@@ -485,8 +456,7 @@ function ExtintoresPage() {
                     );
                   })}
                 </select>
-                
-                {/* NUEVO: Mostrar equipos existentes del cliente seleccionado */}
+
                 {servicioClienteId && getClienteEquipos(servicioClienteId).length > 0 && (
                   <div style={{ marginTop: '12px', padding: '12px', backgroundColor: '#dbeafe', borderRadius: '8px', border: '1px solid #3b82f6' }}>
                     <p style={{ fontSize: '14px', fontWeight: 'bold', color: '#1e40af', marginBottom: '6px' }}>
@@ -513,7 +483,6 @@ function ExtintoresPage() {
                 )}
               </div>
 
-
               <div style={{ marginBottom: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#111827' }}>Extintores ({extintoresServicio.length})</h3>
@@ -523,7 +492,6 @@ function ExtintoresPage() {
                     </button>
                   )}
                 </div>
-
 
                 {extintoresServicio.length === 0 ? (
                   <div style={{ padding: '48px', textAlign: 'center', backgroundColor: '#f9fafb', borderRadius: '12px', border: '2px dashed #d1d5db' }}>
@@ -559,7 +527,6 @@ function ExtintoresPage() {
                 )}
               </div>
 
-
               <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', paddingTop: '24px', borderTop: '2px solid #e5e7eb' }}>
                 <button type="button" onClick={() => { setShowServicioModal(false); setServicioClienteId(''); setExtintoresServicio([]); setEditingExtintor(null); }} style={{ padding: '12px 24px', backgroundColor: '#f3f4f6', color: '#374151', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>
                   Cancelar
@@ -575,7 +542,6 @@ function ExtintoresPage() {
     </div>
   );
 }
-
 
 const headerStyle = { padding: '16px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' };
 const cellStyle = { padding: '16px', fontSize: '14px' };

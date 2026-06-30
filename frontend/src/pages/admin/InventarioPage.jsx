@@ -19,26 +19,22 @@ import { useToast } from '../../contexts/ToastContext';
 
 function InventarioPage() {
   const toast = useToast();
-  // ===== ESTADOS PRINCIPALES =====
   const [productos, setProductos] = useState([]);
   const [compras, setCompras] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('productos'); // productos | compras
+  const [activeTab, setActiveTab] = useState('productos'); 
 
-  // ===== FILTROS =====
   const [searchProductos, setSearchProductos] = useState('');
   const [filterCategoria, setFilterCategoria] = useState('');
   const [filterEstadoProducto, setFilterEstadoProducto] = useState('activo');
   const [searchCompras, setSearchCompras] = useState('');
   const [filterProductoCompras, setFilterProductoCompras] = useState('');
 
-  // ===== MODALES =====
   const [showModalProducto, setShowModalProducto] = useState(false);
   const [showModalCompra, setShowModalCompra] = useState(false);
   const [editingProducto, setEditingProducto] = useState(null);
   const [editingCompra, setEditingCompra] = useState(null);
 
-  // ===== FORM PRODUCTO =====
   const [formProducto, setFormProducto] = useState({
     nombre: '',
     categoria: 'polvo',
@@ -50,7 +46,6 @@ function InventarioPage() {
     estado: 'activo'
   });
 
-  // ===== FORM COMPRA =====
   const [formCompra, setFormCompra] = useState({
     productoId: '',
     cantidad: 0,
@@ -82,7 +77,6 @@ function InventarioPage() {
     }
   };
 
-  // ===== PRODUCTO CRUD =====
   const handleNuevoProducto = () => {
     setEditingProducto(null);
     setFormProducto({
@@ -134,7 +128,7 @@ function InventarioPage() {
       fetchData();
     } catch (error) {
       console.error('Error:', error);
-      alert('❌ Error: ' + error.message);
+      alert(' Error: ' + error.message);
     }
   };
 
@@ -146,11 +140,10 @@ function InventarioPage() {
       toast.success('Producto eliminado correctamente');
       fetchData();
     } catch (error) {
-      alert('❌ Error al eliminar: ' + error.message);
+      alert(' Error al eliminar: ' + error.message);
     }
   };
 
-  // ===== COMPRA CRUD =====
   const handleNuevaCompra = () => {
     setEditingCompra(null);
     setFormCompra({
@@ -212,11 +205,10 @@ function InventarioPage() {
       toast.success('Compra eliminada correctamente');
       fetchData();
     } catch (error) {
-      alert('❌ Error al eliminar: ' + error.message);
+      alert(' Error al eliminar: ' + error.message);
     }
   };
 
-  // ===== HELPERS =====
   const getProductoNombre = (compra) => {
     if (compra.producto) return compra.producto.nombre;
     const producto = productos.find(p => p.id === compra.productoId);
@@ -235,7 +227,6 @@ function InventarioPage() {
     accesorio: { color: '#f59e0b', bg: '#fef3c7' }
   };
 
-  // ===== FILTROS APLICADOS =====
   const productosFiltrados = productos.filter(p => {
     const matchSearch = p.nombre.toLowerCase().includes(searchProductos.toLowerCase());
     const matchCategoria = !filterCategoria || p.categoria === filterCategoria;
@@ -251,7 +242,6 @@ function InventarioPage() {
     return matchSearch && matchProducto;
   });
 
-  // ===== ESTADÍSTICAS =====
   const stats = {
     totalProductos: productos.filter(p => p.estado === 'activo').length,
     bajoStock: productos.filter(p => p.estado === 'activo' && Number(p.stockActual) <= Number(p.stockMinimo)).length,
@@ -269,7 +259,6 @@ function InventarioPage() {
 
   return (
     <div>
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#111827', marginBottom: '8px' }}>Inventario</h1>
@@ -291,7 +280,6 @@ function InventarioPage() {
         </button>
       </div>
 
-      {/* Estadísticas - SIN VALOR DEL INVENTARIO */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
         {[
           { icon: Package, iconColor: '#3b82f6', bg: '#dbeafe', label: 'Productos Activos', value: stats.totalProductos },
@@ -312,7 +300,6 @@ function InventarioPage() {
         ))}
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: '0', marginBottom: '24px', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
         {['productos', 'compras'].map(tab => (
           <button
@@ -331,10 +318,8 @@ function InventarioPage() {
         ))}
       </div>
 
-      {/* ==================== TAB PRODUCTOS ==================== */}
       {activeTab === 'productos' && (
         <>
-          {/* Filtros Productos */}
           <div style={{ backgroundColor: 'white', padding: '16px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '24px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 220px 200px', gap: '16px' }}>
               <div style={{ position: 'relative' }}>
@@ -361,7 +346,6 @@ function InventarioPage() {
             </div>
           </div>
 
-          {/* Tabla Productos */}
           <div style={{ backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
             {productosFiltrados.length === 0 ? (
               <div style={{ padding: '48px', textAlign: 'center', color: '#6b7280' }}>
@@ -436,10 +420,8 @@ function InventarioPage() {
         </>
       )}
 
-      {/* ==================== TAB COMPRAS ==================== */}
       {activeTab === 'compras' && (
         <>
-          {/* Filtros Compras */}
           <div style={{ backgroundColor: 'white', padding: '16px', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '24px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '16px' }}>
               <div style={{ position: 'relative' }}>
@@ -459,7 +441,6 @@ function InventarioPage() {
             </div>
           </div>
 
-          {/* Tabla Compras */}
           <div style={{ backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
             {comprasFiltradas.length === 0 ? (
               <div style={{ padding: '48px', textAlign: 'center', color: '#6b7280' }}>
@@ -529,7 +510,6 @@ function InventarioPage() {
         </>
       )}
 
-      {/* ==================== MODAL PRODUCTO ==================== */}
       {showModalProducto && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: '700px', maxHeight: '90vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
@@ -544,7 +524,6 @@ function InventarioPage() {
               </button>
             </div>
 
-            {/* Formulario */}
             <form onSubmit={handleGuardarProducto} style={{ padding: '24px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div>
@@ -610,11 +589,10 @@ function InventarioPage() {
         </div>
       )}
 
-      {/* ==================== MODAL COMPRA ==================== */}
       {showModalCompra && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: '700px', maxHeight: '90vh', overflow: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
-            {/* Header */}
+
             <div style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#ef4444', color: 'white', borderRadius: '16px 16px 0 0' }}>
               <div>
                 <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: 0 }}>{editingCompra ? 'Editar Compra' : 'Nueva Compra'}</h2>
@@ -625,7 +603,6 @@ function InventarioPage() {
               </button>
             </div>
 
-            {/* Formulario */}
             <form onSubmit={handleGuardarCompra} style={{ padding: '24px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div>
@@ -690,7 +667,6 @@ function InventarioPage() {
   );
 }
 
-// ===== ESTILOS =====
 const headerStyle = { padding: '16px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' };
 const cellStyle = { padding: '16px', fontSize: '14px' };
 const labelStyle = { display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold', color: '#374151' };

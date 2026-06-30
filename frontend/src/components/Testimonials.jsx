@@ -119,7 +119,6 @@ const Testimonials = () => {
 
   return (
     <div style={{ marginBottom: '64px' }}>
-      {/* Toast */}
       {toast.show && (
         <div style={{
           position: 'fixed',
@@ -137,7 +136,6 @@ const Testimonials = () => {
         </div>
       )}
 
-      {/* Modal de confirmación de eliminación */}
       {showDeleteModal && (
         <div style={{
           position: 'fixed',
@@ -299,7 +297,6 @@ const Testimonials = () => {
         </button>
       </div>
 
-      {/* Filtro */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -347,7 +344,7 @@ const Testimonials = () => {
         ))}
       </div>
 
-      {/* Formulario */}
+
       {showForm && (
         <div style={{
           backgroundColor: colors.cardBg,
@@ -540,7 +537,6 @@ const Testimonials = () => {
         </div>
       )}
 
-      {/* Lista */}
       {filteredTestimonials.length === 0 ? (
         <div style={{
           textAlign: 'center',

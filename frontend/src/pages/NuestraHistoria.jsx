@@ -76,7 +76,6 @@ function NuestraHistoria() {
           margin: '0 auto',
           padding: '48px 32px'
         }}>
-          {/* Header */}
           <div style={{
             textAlign: 'center',
             marginBottom: '64px'
@@ -117,7 +116,6 @@ function NuestraHistoria() {
           </div>
 
 
-          {/* Stats */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -167,7 +165,6 @@ function NuestraHistoria() {
           </div>
 
 
-          {/* Timeline */}
           <div style={{
             marginBottom: '64px'
           }}>
@@ -185,7 +182,6 @@ function NuestraHistoria() {
             <div style={{
               position: 'relative'
             }}>
-              {/* Línea vertical */}
               <div style={{
                 position: 'absolute',
                 left: '50%',
@@ -212,7 +208,6 @@ function NuestraHistoria() {
                       alignItems: 'center'
                     }}
                   >
-                    {/* Contenido izquierda */}
                     {index % 2 === 0 ? (
                       <div style={{
                         backgroundColor: colors.cardBg,
@@ -249,8 +244,6 @@ function NuestraHistoria() {
                       </div>
                     ) : <div />}
 
-
-                    {/* Punto central */}
                     <div style={{
                       width: '20px',
                       height: '20px',
@@ -261,8 +254,6 @@ function NuestraHistoria() {
                       zIndex: 1
                     }} />
 
-
-                    {/* Contenido derecha */}
                     {index % 2 !== 0 ? (
                       <div style={{
                         backgroundColor: colors.cardBg,
@@ -304,7 +295,6 @@ function NuestraHistoria() {
           </div>
 
 
-          {/* Values */}
           <div>
             <h2 style={{
               fontSize: '36px',

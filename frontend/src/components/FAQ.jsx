@@ -8,7 +8,6 @@ function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
   const [ref, isVisible] = useScrollAnimation(0.2);
 
-  // ⭐ Solo 3 preguntas
   const faqs = [
     {
       question: '¿Cada cuánto debo recargar mi matafuego?',

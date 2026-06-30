@@ -136,7 +136,6 @@ function WorkProcess() {
                 e.currentTarget.style.boxShadow = colors.shadow;
               }}
               >
-                {/* Ícono */}
                 <div style={{
                   width: '80px',
                   height: '80px',
@@ -159,7 +158,6 @@ function WorkProcess() {
                   <Icon size={40} color="white" />
                 </div>
 
-                {/* Contenido */}
                 <h3 style={{
                   fontSize: '20px',
                   fontWeight: 'bold',

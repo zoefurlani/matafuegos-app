@@ -63,7 +63,6 @@ function CentroConocimiento() {
     }
   ];
 
-  // ⭐ 3 Recursos oficiales - Gobierno Nacional
   const recursos = [
     {
       nombre: 'Guía de Prevención de Incendios',
@@ -99,7 +98,6 @@ function CentroConocimiento() {
           margin: '0 auto',
           padding: '48px 32px'
         }}>
-          {/* Header */}
           <div style={{
             textAlign: 'center',
             marginBottom: '64px'
@@ -137,7 +135,6 @@ function CentroConocimiento() {
             </p>
           </div>
 
-          {/* ⭐ Articles - UNO DEBAJO DEL OTRO (VERTICAL) */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
@@ -232,7 +229,6 @@ function CentroConocimiento() {
             })}
           </div>
 
-          {/* ⭐ Download Section - 3 Recursos Oficiales */}
           <div style={{
             backgroundColor: '#ef4444',
             padding: '48px 32px',
@@ -270,7 +266,6 @@ function CentroConocimiento() {
                 Accedé a guías y manuales del Gobierno Nacional
               </p>
               
-              {/* Grid de recursos */}
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',

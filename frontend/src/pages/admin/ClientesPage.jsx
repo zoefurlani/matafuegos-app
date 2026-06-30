@@ -170,7 +170,6 @@ function ClientesPage() {
 
   return (
     <div>
-      {/* Header */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -223,8 +222,6 @@ function ClientesPage() {
         </button>
       </div>
 
-
-      {/* Buscador */}
       <div style={{
         backgroundColor: 'white',
         padding: '16px',
@@ -264,8 +261,6 @@ function ClientesPage() {
         </div>
       </div>
 
-
-      {/* Lista de clientes */}
       <div style={{
         backgroundColor: 'white',
         borderRadius: '12px',
@@ -422,8 +417,6 @@ function ClientesPage() {
         )}
       </div>
 
-
-      {/* Modal de formulario */}
       {showModal && (
         <div style={{
           position: 'fixed',
@@ -448,7 +441,6 @@ function ClientesPage() {
             boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
             
           }}>
-            {/* Header del modal */}
             <div style={{
               padding: '24px',
               borderBottom: '1px solid #e5e7eb',
@@ -477,11 +469,8 @@ function ClientesPage() {
               </button>
             </div>
 
-
-            {/* Formulario */}
             <form onSubmit={handleGuardarCliente} style={{ padding: '24px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {/* Nombre */}
                 <div>
                   <label style={labelStyle}>
                     Nombre *
@@ -496,8 +485,6 @@ function ClientesPage() {
                   />
                 </div>
 
-
-                {/* CUIT con formato automático */}
                 <div>
                   <label style={labelStyle}>
                     CUIT
@@ -529,8 +516,6 @@ function ClientesPage() {
                   </p>
                 </div>
 
-
-                {/* Teléfono y Email en fila */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                   <div>
                     <label style={labelStyle}>
@@ -558,8 +543,6 @@ function ClientesPage() {
                   </div>
                 </div>
 
-
-                {/* Dirección */}
                 <div>
                   <label style={labelStyle}>
                     Dirección
@@ -573,8 +556,6 @@ function ClientesPage() {
                   />
                 </div>
 
-
-                {/* Observaciones */}
                 <div>
                   <label style={labelStyle}>
                     Observaciones
@@ -588,8 +569,6 @@ function ClientesPage() {
                 </div>
               </div>
 
-
-              {/* Botones */}
               <div style={{
                 display: 'flex',
                 gap: '12px',

@@ -32,7 +32,7 @@ function Certifications() {
     fontSize: '40px',
     fontWeight: 'bold',
     color: colors.text,
-    marginBottom: '0' // ⭐ Sin subtítulo
+    marginBottom: '0' 
   };
 
   const gridStyle = {
@@ -79,7 +79,6 @@ return (
               e.currentTarget.style.boxShadow = colors.shadow;
             }}
           >
-            {/* Logo a la izquierda */}
             <div style={{
               width: '100px',
               height: '100px',
@@ -104,7 +103,6 @@ return (
               <Icon size={48} color={cert.color} />
             </div>
 
-            {/* Texto a la derecha */}
             <div style={{ flex: 1 }}>
               <h3 style={{
                 fontSize: '22px',

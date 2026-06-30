@@ -38,7 +38,6 @@ const Ubicacion = () => {
             Encuéntranos y contáctanos
           </p>
 
-          {/* Tarjetas de contacto */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -159,7 +158,6 @@ const Ubicacion = () => {
             </div>
           </div>
 
-          {/* Mapa de Google Maps */}
           <div style={{
             backgroundColor: colors.cardBg,
             padding: '24px',

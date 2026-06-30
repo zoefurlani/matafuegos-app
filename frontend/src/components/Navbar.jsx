@@ -19,7 +19,6 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Cerrar menú móvil al cambiar de ruta
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
@@ -65,7 +64,6 @@ function Navbar() {
             alignItems: 'center',
             height: '80px'
           }}>
-            {/* Logo */}
             <div 
               onClick={() => handleNavigation('/')}
               style={{
@@ -117,13 +115,11 @@ function Navbar() {
               </div>
             </div>
 
-            {/* Desktop Menu + Action Buttons */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: '4px'
             }}>
-              {/* Menu Items - Hidden on mobile */}
               <div style={{
                 display: 'none',
                 gap: '4px'
@@ -160,14 +156,12 @@ function Navbar() {
                 ))}
               </div>
 
-              {/* Action Buttons */}
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
                 marginLeft: '12px'
               }}>
-                {/* Contact Button */}
                 <a
                   href="https://mail.google.com/mail/?view=cm&fs=1&to=zdmatafuegos@gmail.com"
                   target="_blank"
@@ -199,7 +193,6 @@ function Navbar() {
                   <Mail size={24} color="white" />
                 </a>
 
-                {/* Theme Toggle */}
                 <button
                   onClick={toggleTheme}
                   style={{
@@ -231,7 +224,6 @@ function Navbar() {
                   )}
                 </button>
 
-                {/* Mobile Menu Button */}
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   style={{
@@ -260,7 +252,6 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
       <div style={{
         position: 'fixed',
         top: '80px',
@@ -314,7 +305,6 @@ function Navbar() {
         </div>
       </div>
 
-      {/* CSS para responsive */}
       <style>{`
         /* Por defecto: ocultar menú desktop, mostrar hamburguesa */
         .desktop-menu {

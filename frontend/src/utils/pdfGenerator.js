@@ -3,7 +3,6 @@ import html2canvas from 'html2canvas';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from 'docx';
 import { saveAs } from 'file-saver';
 
-// ===== FUNCIÓN PARA PDF CON HTML =====
 export const generatePDFFromHTML = async (titulo, htmlContent) => {
   const container = document.createElement('div');
   container.style.position = 'absolute';
@@ -88,7 +87,6 @@ export const generatePDFFromHTML = async (titulo, htmlContent) => {
   }
 };
 
-// Función auxiliar para formatear HTML
 const formatHTMLContent = (htmlContent) => {
   return htmlContent
     .replace(/<h2>/g, '<h2 style="font-size: 20px; font-weight: bold; color: #1f2937; margin-top: 20px; margin-bottom: 12px; border-bottom: 2px solid #ef4444; padding-bottom: 6px;">')
@@ -101,7 +99,6 @@ const formatHTMLContent = (htmlContent) => {
     .replace(/<strong>/g, '<strong style="color: #1f2937; font-weight: 600;">');
 };
 
-// ===== FUNCIÓN PARA PDF SIMPLE =====
 export const generateSimplePDF = (titulo, contenido) => {
   const pdf = new jsPDF('p', 'mm', 'a4');
   const pageWidth = pdf.internal.pageSize.getWidth();
@@ -177,7 +174,6 @@ export const generateSimplePDF = (titulo, contenido) => {
   return true;
 };
 
-// ===== FUNCIÓN PARA WORD =====
 export const generateWordDocument = async (titulo, htmlContent) => {
   try {
     const tempDiv = document.createElement('div');
@@ -333,7 +329,6 @@ export const generateWordDocument = async (titulo, htmlContent) => {
   }
 };
 
-// ===== FUNCIÓN PARA CSV =====
 export const generateCSV = (titulo, htmlContent) => {
   try {
     const tempDiv = document.createElement('div');

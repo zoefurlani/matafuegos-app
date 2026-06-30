@@ -5,24 +5,22 @@ import { useToast } from '../../contexts/ToastContext';
 
 function UsuariosPage() {
   const toast = useToast();
-  
-  // Estados
+
   const [usuarios, setUsuarios] = useState([]);
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('usuarios'); // usuarios | logs
+  const [activeTab, setActiveTab] = useState('usuarios'); 
   const [showModal, setShowModal] = useState(false);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
-  const [showBlockModal, setShowBlockModal] = useState(false); // ⭐ NUEVO
+  const [showBlockModal, setShowBlockModal] = useState(false); 
   const [editingUser, setEditingUser] = useState(null);
   const [resetPasswordUser, setResetPasswordUser] = useState(null);
-  const [blockingUser, setBlockingUser] = useState(null); // ⭐ NUEVO
+  const [blockingUser, setBlockingUser] = useState(null); 
   const [showPassword, setShowPassword] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [blockObservacion, setBlockObservacion] = useState(''); // ⭐ NUEVO
+  const [blockObservacion, setBlockObservacion] = useState(''); 
 
-  // Form
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -75,7 +73,7 @@ function UsuariosPage() {
     setFormData({
       username: usuario.username,
       email: usuario.email,
-      password: '', // No mostrar contraseña
+      password: '', 
       rol: usuario.rol,
       estado: usuario.estado
     });
@@ -109,10 +107,9 @@ function UsuariosPage() {
   const handleGuardar = async (e) => {
     e.preventDefault();
     try {
-      // Validar contraseña solo si es nuevo usuario o si se está cambiando
       const dataToSend = { ...formData };
       if (editingUser && !dataToSend.password) {
-        delete dataToSend.password; // No enviar si está vacía
+        delete dataToSend.password; 
       }
 
       if (editingUser) {
@@ -202,7 +199,6 @@ function UsuariosPage() {
 
   return (
     <div>
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#111827', marginBottom: '8px' }}>Gestión de Usuarios</h1>
@@ -224,7 +220,6 @@ function UsuariosPage() {
         </button>
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', gap: '0', marginBottom: '24px', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
         <button
           onClick={() => setActiveTab('usuarios')}
@@ -252,7 +247,6 @@ function UsuariosPage() {
         </button>
       </div>
 
-      {/* Contenido */}
       {activeTab === 'usuarios' && (
         <div style={{ backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
           {usuarios.length === 0 ? (
@@ -345,7 +339,6 @@ function UsuariosPage() {
         </div>
       )}
 
-      {/* Modal Editar/Crear Usuario */}
       {showModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: '500px', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
@@ -371,7 +364,6 @@ function UsuariosPage() {
                   <input type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} style={inputStyle} placeholder="usuario@ejemplo.com" />
                 </div>
 
-                {/* Solo mostrar campo contraseña al CREAR usuario */}
                 {!editingUser && (
                   <div>
                     <label style={labelStyle}>Contraseña *</label>
@@ -422,7 +414,6 @@ function UsuariosPage() {
         </div>
       )}
 
-      {/* Modal Resetear Contraseña */}
       {showResetPasswordModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: '450px', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
@@ -471,7 +462,6 @@ function UsuariosPage() {
         </div>
       )}
 
-      {/* ⭐ NUEVO: Modal Bloquear Usuario con Observación */}
       {showBlockModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: '500px', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>

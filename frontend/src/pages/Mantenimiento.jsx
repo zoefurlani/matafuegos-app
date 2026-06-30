@@ -66,7 +66,6 @@ function Mantenimiento() {
           margin: '0 auto',
           padding: '48px 32px'
         }} className="mantenimiento-container">
-          {/* Header */}
           <div style={{
             textAlign: 'center',
             marginBottom: '64px'
@@ -104,7 +103,6 @@ function Mantenimiento() {
             </p>
           </div>
 
-          {/* Alert Box */}
           <div style={{
             backgroundColor: colors.cardBg,
             border: '2px solid #ef4444',
@@ -137,7 +135,6 @@ function Mantenimiento() {
             </div>
           </div>
 
-          {/* Services Grid */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -243,7 +240,6 @@ function Mantenimiento() {
             })}
           </div>
 
-          {/* Botón único centrado */}
           <div style={{
             display: 'flex',
             justifyContent: 'center',
@@ -279,7 +275,6 @@ function Mantenimiento() {
             </button>
           </div>
 
-          {/* Schedule Timeline */}
           <div style={{
             backgroundColor: colors.cardBg,
             padding: '48px 32px',
@@ -361,7 +356,6 @@ function Mantenimiento() {
             </p>
           </div>
 
-          {/* Vida Útil del Matafuego */}
           <div style={{
             backgroundColor: colors.cardBg,
             padding: '48px 32px',

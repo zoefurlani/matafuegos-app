@@ -35,7 +35,6 @@ export function ToastProvider({ children }) {
   const warning = (message, duration) => addToast(message, 'warning', duration);
   const info = (message, duration) => addToast(message, 'info', duration);
 
-  // Nueva función para confirmaciones
   const confirm = (message, options = {}) => {
     return new Promise((resolve) => {
       setConfirmModal({
@@ -116,7 +115,7 @@ function Toast({ toast, onRemove }) {
   return (
     <div
       style={{
-        backgroundColor: bg,  // ⭐ Usa el color de fondo del tipo
+        backgroundColor: bg, 
         borderRadius: '12px',
         boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
         padding: '16px',
@@ -142,26 +141,24 @@ function Toast({ toast, onRemove }) {
         }
       `}</style>
 
-      {/* Icono */}
+
       <div style={{
         width: '40px',
         height: '40px',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)', // ⭐ Blanco semi-transparente
+        backgroundColor: 'rgba(255, 255, 255, 0.2)', 
         borderRadius: '50%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0
       }}>
-        <Icon size={24} color="#ffffff" /> {/* ⭐ Icono blanco */}
+        <Icon size={24} color="#ffffff" /> 
       </div>
 
-      {/* Mensaje */}
-      <div style={{ flex: 1, fontSize: '15px', color: '#ffffff', fontWeight: '500' }}> {/* ⭐ Texto blanco */}
+      <div style={{ flex: 1, fontSize: '15px', color: '#ffffff', fontWeight: '500' }}> 
         {toast.message}
       </div>
 
-      {/* Botón cerrar */}
       <button
         onClick={() => onRemove(toast.id)}
         style={{
@@ -169,14 +166,14 @@ function Toast({ toast, onRemove }) {
           backgroundColor: 'transparent',
           border: 'none',
           cursor: 'pointer',
-          color: '#ffffff',  // ⭐ Icono blanco
+          color: '#ffffff',  
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           borderRadius: '4px',
           transition: 'background-color 0.2s ease'
         }}
-        onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'} // ⭐ Hover blanco
+        onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'} 
         onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
       >
         <X size={18} />
@@ -185,7 +182,6 @@ function Toast({ toast, onRemove }) {
   );
 }
 
-// Componente de diálogo de confirmación
 function ConfirmModal({ message, title, confirmText, cancelText, onConfirm, onCancel }) {
   return (
     <div style={{
@@ -221,7 +217,6 @@ function ConfirmModal({ message, title, confirmText, cancelText, onConfirm, onCa
         boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5)',
         animation: 'scaleIn 0.3s ease-out'
       }}>
-        {/* Título */}
         <h3 style={{
           fontSize: '22px',
           fontWeight: 'bold',
@@ -232,7 +227,6 @@ function ConfirmModal({ message, title, confirmText, cancelText, onConfirm, onCa
           {title}
         </h3>
 
-        {/* Mensaje */}
         <p style={{
           fontSize: '16px',
           color: '#e2e8f0',
@@ -243,7 +237,6 @@ function ConfirmModal({ message, title, confirmText, cancelText, onConfirm, onCa
           {message}
         </p>
 
-        {/* Botones */}
         <div style={{
           display: 'flex',
           gap: '12px',

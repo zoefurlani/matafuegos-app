@@ -170,7 +170,6 @@ function ManualUsuario() {
             </div>
           </div>
 
-          {/* Steps */}
           <div style={{
             marginBottom: '64px'
           }}>
@@ -303,13 +302,11 @@ function ManualUsuario() {
             </div>
           </div>
 
-          {/* Do's and Don'ts */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '32px'
           }} className="dos-donts-grid">
-            {/* Do's */}
             <div style={{
               backgroundColor: colors.cardBg,
               padding: '32px',
@@ -359,7 +356,6 @@ function ManualUsuario() {
               </ul>
             </div>
 
-            {/* Don'ts */}
             <div style={{
               backgroundColor: colors.cardBg,
               padding: '32px',

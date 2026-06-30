@@ -49,7 +49,7 @@ function WhatsAppButton() {
             </div>
             <div className="whatsapp-popup-body">
               <div className="whatsapp-message">
-                <p>👋 ¡Hola! ¿En qué podemos ayudarte?</p>
+                <p> ¡Hola! ¿En qué podemos ayudarte?</p>
               </div>
               <p style={{ fontSize: '12px', color: '#6b7280', margin: '12px 0 16px' }}>
                 Estamos disponibles para responder tus consultas sobre matafuegos y mantenimiento 
@@ -65,14 +65,11 @@ function WhatsAppButton() {
           </div>
         )}
 
-        {/* ⭐ NUEVO: Contenedor con texto + botón (SE MUEVE JUNTO) */}
         <div className="whatsapp-container">
-          {/* Texto al lado del botón */}
           <div className="whatsapp-text">
             Contactanos por WhatsApp
           </div>
 
-          {/* Botón con logo de WhatsApp */}
           <button 
             className="whatsapp-btn"
             onClick={() => setIsOpen(!isOpen)}

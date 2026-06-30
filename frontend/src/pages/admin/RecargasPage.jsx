@@ -32,11 +32,9 @@ function RecargasPage() {
   const [showModal, setShowModal] = useState(false);
   const [editingRecarga, setEditingRecarga] = useState(null);
   
-  // ⭐ Estado para modo múltiple
   const [modoMultiple, setModoMultiple] = useState(false);
   const [recargasLista, setRecargasLista] = useState([]);
   
-  // Datos comunes (cliente, fecha, observaciones)
   const [datosComunes, setDatosComunes] = useState({
     clienteId: '',
     fechaRecarga: new Date().toISOString().split('T')[0],
@@ -45,7 +43,6 @@ function RecargasPage() {
     estado: 'completada'
   });
   
-  // Formulario para un extintor individual
   const [formData, setFormData] = useState({
     extintorId: '',
     polvoKg: 0,
@@ -95,13 +92,12 @@ function RecargasPage() {
     }
   };
 
-  // Filtrar extintores disponibles (no agregados aún)
   useEffect(() => {
     if (datosComunes.clienteId) {
       const extintoresCliente = extintores.filter(
         ext => ext.clienteId === parseInt(datosComunes.clienteId) || ext.cliente?.id === parseInt(datosComunes.clienteId)
       );
-      // Excluir los ya agregados a la lista
+
       const extintoresDisponibles = extintoresCliente.filter(
         ext => !recargasLista.some(r => r.extintorId === ext.id.toString())
       );
@@ -111,7 +107,6 @@ function RecargasPage() {
     }
   }, [datosComunes.clienteId, extintores, recargasLista]);
 
-  // Calcular fecha próxima recarga
   useEffect(() => {
     if (datosComunes.fechaRecarga) {
       const [year, month, day] = datosComunes.fechaRecarga.split('-');
@@ -123,7 +118,6 @@ function RecargasPage() {
     }
   }, [datosComunes.fechaRecarga]);
 
-  // Calcular precio total automáticamente
   useEffect(() => {
     const totalRepuestos = 
       Number(formData.precioPolvo || 0) +
@@ -569,7 +563,6 @@ function RecargasPage() {
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
           <div style={{ backgroundColor: 'white', borderRadius: '16px', width: '100%', maxWidth: modoMultiple ? '1200px' : '900px', maxHeight: '90vh', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column' }}>
             
-            {/* Header */}
             <div style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#ef4444', color: 'white', flexShrink: 0 }}>
               <div>
                 <h2 style={{ fontSize: '22px', fontWeight: 'bold', margin: 0 }}>
@@ -585,16 +578,13 @@ function RecargasPage() {
               </button>
             </div>
 
-            {/* Contenido con scroll */}
             <div style={{ flex: 1, overflow: 'auto', padding: '24px' }}>
               {modoMultiple ? (
-                // ⭐ MODO MÚLTIPLE: Layout de 2 columnas
+
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '24px', minHeight: '100%' }}>
-                  
-                  {/* Columna izquierda: Formulario */}
+
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                    
-                    {/* Datos comunes */}
+
                     <div style={{ padding: '16px', backgroundColor: '#f0fdf4', borderRadius: '8px', border: '2px solid #86efac' }}>
                       <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                         <ListChecks size={18} color="#10b981" />
@@ -630,7 +620,6 @@ function RecargasPage() {
                       </div>
                     </div>
 
-                    {/* Formulario extintor */}
                     <div style={{ padding: '16px', backgroundColor: '#fef3c7', borderRadius: '8px', border: '2px dashed #fbbf24' }}>
                       <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827', marginBottom: '12px' }}>
                         ➕ Agregar Extintor
@@ -649,7 +638,6 @@ function RecargasPage() {
                           {datosComunes.clienteId && extintoresDelCliente.length === 0 && (<p style={{ fontSize: '11px', color: '#f59e0b', marginTop: '4px' }}>No quedan extintores disponibles</p>)}
                         </div>
 
-                        {/* Mano de Obra */}
                         <div style={{ padding: '12px', backgroundColor: '#dbeafe', borderRadius: '6px' }}>
                           <label style={{ ...labelStyle, marginBottom: '6px', fontSize: '13px' }}> Precio de Recarga ($) *</label>
                           <input type="number" step="0.01" min="0" value={formData.precioManoObra} 
@@ -657,7 +645,6 @@ function RecargasPage() {
                             style={inputStyle} placeholder="Ingrese el precio" />
                         </div>
 
-                        {/* Repuestos */}
                         <div>
                           <label style={{ ...labelStyle, marginBottom: '8px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <Package size={16} />
@@ -688,13 +675,11 @@ function RecargasPage() {
                           </div>
                         </div>
 
-                        {/* Total */}
                         <div style={{ padding: '12px', backgroundColor: '#d1fae5', borderRadius: '6px', textAlign: 'center' }}>
                           <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '2px' }}>Total Extintor</p>
                           <p style={{ fontSize: '28px', fontWeight: 'bold', color: '#10b981' }}>${Number(formData.precioTotal).toFixed(2)}</p>
                         </div>
 
-                        {/* Botón agregar */}
                         <button 
                           type="button"
                           onClick={handleAgregarExtintorALista}
@@ -721,7 +706,6 @@ function RecargasPage() {
                     </div>
                   </div>
 
-                  {/* Columna derecha: Lista */}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', height: 'fit-content', position: 'sticky', top: 0 }}>
                     <div style={{ padding: '12px', backgroundColor: '#f9fafb', borderRadius: '8px', border: '2px solid #e5e7eb' }}>
                       <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#111827', marginBottom: '4px' }}>
@@ -765,7 +749,6 @@ function RecargasPage() {
                           ))}
                         </div>
 
-                        {/* Total acumulado */}
                         <div style={{ padding: '16px', backgroundColor: '#10b981', color: 'white', borderRadius: '8px', textAlign: 'center' }}>
                           <p style={{ fontSize: '12px', opacity: 0.9, marginBottom: '4px' }}> TOTAL ACUMULADO</p>
                           <p style={{ fontSize: '32px', fontWeight: 'bold' }}>${totalAcumulado.toFixed(2)}</p>
@@ -775,7 +758,7 @@ function RecargasPage() {
                   </div>
                 </div>
               ) : (
-                // ⭐ MODO SIMPLE: Editar una sola recarga
+
                 <form onSubmit={handleGuardarRecargaSimple}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     
@@ -923,7 +906,6 @@ function RecargasPage() {
               )}
             </div>
 
-            {/* Footer con botones (solo en modo múltiple) */}
             {modoMultiple && (
               <div style={{ padding: '20px', borderTop: '2px solid #e5e7eb', backgroundColor: '#f9fafb', flexShrink: 0 }}>
                 <div style={{ display: 'flex', gap: '12px', justifyContent: 'space-between', alignItems: 'center' }}>
